@@ -18,6 +18,8 @@ template_dir = os.path.join(base_dir, 'templates')
 static_dir = os.path.join(base_dir, 'static')
 
 from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__, 
             template_folder=template_dir,
@@ -31,6 +33,13 @@ else:
     app.config.from_object(config['development'])
 
 csrf = CSRFProtect(app)
+
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
 
 # Database connection helper
 def get_db_connection():
@@ -125,6 +134,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("10 per minute; 50 per hour")
 def login():
     """Login page for admin, donor, and hospital"""
     if request.method == 'POST':
