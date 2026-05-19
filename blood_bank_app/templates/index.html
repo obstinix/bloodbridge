@@ -16,10 +16,10 @@
                     to ensure timely availability of blood for those in need.
                 </p>
                 <div class="d-flex gap-3">
-                    <a href="{{ url_for('register_donor') }}" class="btn btn-light btn-lg">
+                    <a href="{{ url_for('auth.register_donor') }}" class="btn btn-light btn-lg">
                         <i class="bi bi-person-plus me-2"></i>Register as Donor
                     </a>
-                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">
                         <i class="bi bi-box-arrow-in-right me-2"></i>Login
                     </a>
                 </div>
@@ -168,10 +168,10 @@
     <div class="container text-center">
         <h2 class="display-5 fw-bold mb-3">Ready to Make a Difference?</h2>
         <p class="lead mb-4">Join our community of life-savers today</p>
-        <a href="{{ url_for('register_donor') }}" class="btn btn-light btn-lg me-3">
+        <a href="{{ url_for('auth.register_donor') }}" class="btn btn-light btn-lg me-3">
             <i class="bi bi-person-plus me-2"></i>Register as Donor
         </a>
-        <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">
             <i class="bi bi-box-arrow-in-right me-2"></i>Login
         </a>
     </div>

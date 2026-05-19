@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ url_for('dashboard_hospital') }}" class="btn btn-outline-secondary me-md-2">
+                        <a href="{{ url_for('hospital.dashboard_hospital') }}" class="btn btn-outline-secondary me-md-2">
                             <i class="bi bi-arrow-left me-2"></i>Cancel
                         </a>
                         <button type="submit" class="btn btn-danger">
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Submitting...';
         submitBtn.disabled = true;
         
-        fetch('{{ url_for("add_request") }}', {
+        fetch('{{ url_for("hospital.add_request") }}', {
             method: 'POST',
             body: formData
         })
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 alert('Blood request submitted successfully! You will be notified of the status.');
-                window.location.href = '{{ url_for("dashboard_hospital") }}';
+                window.location.href = '{{ url_for("hospital.dashboard_hospital") }}';
             } else {
                 alert('Error: ' + data.message);
             }

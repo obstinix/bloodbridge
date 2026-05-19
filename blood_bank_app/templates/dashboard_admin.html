@@ -145,7 +145,7 @@
                                 </td>
                                 <td>
                                     {% if request[5] == 'Pending' %}
-                                    <a href="{{ url_for('approve_request', request_id=request[0]) }}" 
+                                    <a href="{{ url_for('admin.approve_request', request_id=request[0]) }}" 
                                        class="btn btn-sm btn-success" 
                                        onclick="return confirm('Approve this request?')">
                                         <i class="bi bi-check"></i>
@@ -209,7 +209,7 @@
                                 </td>
                                 <td>
                                     {% if donation[5] == 'Pending' %}
-                                    <a href="{{ url_for('approve_donation', donation_id=donation[0]) }}" 
+                                    <a href="{{ url_for('admin.approve_donation', donation_id=donation[0]) }}" 
                                        class="btn btn-sm btn-success" 
                                        onclick="return confirm('Approve this donation?')">
                                         <i class="bi bi-check"></i>
@@ -244,7 +244,7 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-3 col-sm-6">
-                        <a href="{{ url_for('donor_list') }}" class="btn btn-outline-primary w-100">
+                        <a href="{{ url_for('admin.donor_list') }}" class="btn btn-outline-primary w-100">
                             <i class="bi bi-people me-2"></i>View All Donors
                         </a>
                     </div>
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const formData = new FormData(this);
         
-        fetch('{{ url_for("add_donor") }}', {
+        fetch('{{ url_for("admin.add_donor") }}', {
             method: 'POST',
             body: formData
         })
