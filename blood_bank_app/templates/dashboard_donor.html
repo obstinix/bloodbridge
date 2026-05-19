@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}Donor Dashboard - Blood Bank Management System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 fw-bold text-danger">
+        <i class="bi bi-person-circle me-2"></i>My Profile
+    </h1>
+    <div class="text-muted">
+        Welcome, {{ donor_info[0] }}!
+    </div>
+</div>
+
+<!-- Donor Information Card -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-fill me-2"></i>Personal Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row g-3">
+                            <div class="col-sm-4">
+                                <strong>Name:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ donor_info[0] }}
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                <strong>Blood Group:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-danger fs-6">{{ donor_info[1] }}</span>
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                <strong>Contact:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ donor_info[2] }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row g-3">
+                            <div class="col-sm-4">
+                                <strong>Address:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ donor_info[3] }}
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                <strong>Member Since:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ donor_info[4].strftime('%B %d, %Y') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-droplet-fill text-success display-6"></i>
+                </div>
+                <h3 class="fw-bold text-success">{{ stats[0] }}</h3>
+                <p class="text-muted mb-0">Total Donations</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-heart-pulse text-primary display-6"></i>
+                </div>
+                <h3 class="fw-bold text-primary">{{ stats[1] }} ml</h3>
+                <p class="text-muted mb-0">Blood Donated</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-award text-warning display-6"></i>
+                </div>
+                <h3 class="fw-bold text-warning">
+                    {% if stats[0] >= 10 %}Gold
+                    {% elif stats[0] >= 5 %}Silver
+                    {% elif stats[0] >= 1 %}Bronze
+                    {% else %}New
+                    {% endif %}
+                </h3>
+                <p class="text-muted mb-0">Donor Level</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Donation History -->
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-clock-history me-2"></i>Donation History
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if donation_history %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Donation ID</th>
+                                <th>Blood Group</th>
+                                <th>Quantity</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for donation in donation_history %}
+                            <tr>
+                                <td>#{{ donation[0] }}</td>
+                                <td>
+                                    <span class="badge bg-danger">{{ donation[1] }}</span>
+                                </td>
+                                <td>{{ donation[2] }} ml</td>
+                                <td>{{ donation[3] }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if donation[4] == 'Pending' %}bg-warning
+                                        {% elif donation[4] == 'Approved' %}bg-success
+                                        {% elif donation[4] == 'Rejected' %}bg-danger
+                                        {% else %}bg-info{% endif %}">
+                                        {{ donation[4] }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if donation[5] %}
+                                        <small class="text-muted">{{ donation[5] }}</small>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-droplet display-1"></i>
+                    <h4 class="mt-3">No Donations Yet</h4>
+                    <p>Your donation history will appear here once you start donating blood.</p>
+                    <div class="mt-4">
+                        <button class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#scheduleDonationModal">
+                            <i class="bi bi-plus-circle me-2"></i>Schedule Donation
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Donation Modal -->
+<div class="modal fade" id="scheduleDonationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-calendar-plus me-2"></i>Schedule Blood Donation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="scheduleDonationForm">
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Note:</strong> This will create a donation record that needs to be approved by an administrator.
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="donation_quantity" class="form-label">Donation Quantity (ml) *</label>
+                        <input type="number" class="form-control" id="donation_quantity" name="quantity" 
+                               min="50" max="500" value="350" required>
+                        <div class="form-text">Standard donation is 350ml. Range: 50-500ml</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="donation_date" class="form-label">Donation Date *</label>
+                        <input type="date" class="form-control" id="donation_date" name="date" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="donation_notes" class="form-label">Additional Notes</label>
+                        <textarea class="form-control" id="donation_notes" name="notes" rows="3" 
+                                  placeholder="Any additional information about your donation..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Schedule Donation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Blood Donation Tips -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightbulb me-2"></i>Blood Donation Tips
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-success">Before Donation:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Eat a healthy meal before donating</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Drink plenty of water</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Get a good night's sleep</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Avoid alcohol 24 hours before</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-success">After Donation:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Rest for 10-15 minutes</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Drink extra fluids</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Avoid heavy lifting for 24 hours</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Eat iron-rich foods</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('donation_date').setAttribute('min', today);
+    
+    // Set default date to today
+    document.getElementById('donation_date').value = today;
+
+    // Schedule donation form submission
+    document.getElementById('scheduleDonationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        formData.append('blood_group', '{{ donor_info[1] }}'); // Add blood group from donor info
+        
+        fetch('{{ url_for("add_donation") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Donation scheduled successfully! It will be reviewed by an administrator.');
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while scheduling the donation.');
+        });
+    });
+});
+</script>
+{% endblock %}

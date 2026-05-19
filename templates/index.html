@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Blood Bank Management System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section bg-gradient text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="bi bi-droplet-fill me-3"></i>Blood Bank Management System
+                </h1>
+                <p class="lead mb-4">
+                    A comprehensive platform for managing blood donations, requests, and inventory 
+                    to ensure timely availability of blood for those in need.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('register_donor') }}" class="btn btn-light btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Register as Donor
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="bi bi-heart-pulse display-1 text-danger"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold text-danger">Why Choose Our System?</h2>
+            <p class="lead text-muted">Comprehensive features for efficient blood bank management</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-people-fill text-danger display-6"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Donor Management</h5>
+                    <p class="card-text text-muted">
+                        Complete donor registration, profile management, and donation history tracking.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-hospital text-danger display-6"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Hospital Integration</h5>
+                    <p class="card-text text-muted">
+                        Seamless blood request management and real-time inventory tracking for hospitals.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-graph-up text-danger display-6"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Real-time Analytics</h5>
+                    <p class="card-text text-muted">
+                        Live inventory monitoring, donation statistics, and comprehensive reporting.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section -->
+<div class="bg-light py-5 mt-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="bg-white rounded-3 p-4 shadow-sm">
+                    <i class="bi bi-droplet-fill text-danger display-4 mb-3"></i>
+                    <h3 class="fw-bold text-danger">8</h3>
+                    <p class="text-muted mb-0">Blood Groups</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="bg-white rounded-3 p-4 shadow-sm">
+                    <i class="bi bi-people-fill text-primary display-4 mb-3"></i>
+                    <h3 class="fw-bold text-primary">500+</h3>
+                    <p class="text-muted mb-0">Active Donors</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="bg-white rounded-3 p-4 shadow-sm">
+                    <i class="bi bi-hospital text-success display-4 mb-3"></i>
+                    <h3 class="fw-bold text-success">50+</h3>
+                    <p class="text-muted mb-0">Partner Hospitals</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <div class="bg-white rounded-3 p-4 shadow-sm">
+                    <i class="bi bi-heart-pulse text-warning display-4 mb-3"></i>
+                    <h3 class="fw-bold text-warning">1000+</h3>
+                    <p class="text-muted mb-0">Lives Saved</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h2 class="display-5 fw-bold text-danger">How It Works</h2>
+            <p class="lead text-muted">Simple steps to make a difference</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4 text-center">
+            <div class="position-relative">
+                <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <span class="fw-bold">1</span>
+                </div>
+                <h5 class="fw-bold">Register</h5>
+                <p class="text-muted">Sign up as a donor or hospital to get started with our platform.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4 text-center">
+            <div class="position-relative">
+                <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <span class="fw-bold">2</span>
+                </div>
+                <h5 class="fw-bold">Donate/Request</h5>
+                <p class="text-muted">Donors can schedule donations, hospitals can request blood when needed.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-4 text-center">
+            <div class="position-relative">
+                <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <span class="fw-bold">3</span>
+                </div>
+                <h5 class="fw-bold">Save Lives</h5>
+                <p class="text-muted">Our system ensures timely blood availability to save precious lives.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="bg-danger text-white py-5">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-3">Ready to Make a Difference?</h2>
+        <p class="lead mb-4">Join our community of life-savers today</p>
+        <a href="{{ url_for('register_donor') }}" class="btn btn-light btn-lg me-3">
+            <i class="bi bi-person-plus me-2"></i>Register as Donor
+        </a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+</style>
+{% endblock %}

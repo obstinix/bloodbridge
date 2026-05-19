@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}Hospital Dashboard - Blood Bank Management System{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 fw-bold text-danger">
+        <i class="bi bi-hospital me-2"></i>Hospital Dashboard
+    </h1>
+    <div class="text-muted">
+        Welcome, {{ hospital_info[0] }}!
+    </div>
+</div>
+
+<!-- Hospital Information Card -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-hospital me-2"></i>Hospital Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row g-3">
+                            <div class="col-sm-4">
+                                <strong>Hospital Name:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ hospital_info[0] }}
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                <strong>Location:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ hospital_info[1] }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row g-3">
+                            <div class="col-sm-4">
+                                <strong>Contact:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ hospital_info[2] }}
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                <strong>Member Since:</strong>
+                            </div>
+                            <div class="col-sm-8">
+                                {{ hospital_info[3].strftime('%B %d, %Y') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blood Availability Status -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-droplet-fill me-2"></i>Current Blood Availability
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    {% for blood_group, quantity in blood_availability %}
+                    <div class="col-md-3 col-sm-6">
+                        <div class="d-flex align-items-center p-3 border rounded-3
+                            {% if quantity == 0 %}border-danger bg-danger bg-opacity-10
+                            {% elif quantity < 50 %}border-warning bg-warning bg-opacity-10
+                            {% elif quantity < 100 %}border-info bg-info bg-opacity-10
+                            {% else %}border-success bg-success bg-opacity-10{% endif %}">
+                            <div class="me-3">
+                                <i class="bi bi-droplet-fill 
+                                    {% if quantity == 0 %}text-danger
+                                    {% elif quantity < 50 %}text-warning
+                                    {% elif quantity < 100 %}text-info
+                                    {% else %}text-success{% endif %} display-6"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold fs-5">{{ blood_group }}</div>
+                                <div class="text-muted">{{ quantity }} ml</div>
+                                <small class="text-muted">
+                                    {% if quantity == 0 %}Critical
+                                    {% elif quantity < 50 %}Low
+                                    {% elif quantity < 100 %}Moderate
+                                    {% else %}Good{% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightning me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4 col-sm-6">
+                        <a href="{{ url_for('request_blood') }}" class="btn btn-danger w-100">
+                            <i class="bi bi-plus-circle me-2"></i>Request Blood
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <button class="btn btn-outline-info w-100" onclick="location.reload()">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh Status
+                        </button>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <button class="btn btn-outline-warning w-100" onclick="exportRequests()">
+                            <i class="bi bi-download me-2"></i>Export Requests
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Request History -->
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="bi bi-clock-history me-2"></i>Blood Request History
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if request_history %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Blood Group</th>
+                                <th>Quantity</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Admin Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in request_history %}
+                            <tr>
+                                <td>#{{ request[0] }}</td>
+                                <td>
+                                    <span class="badge bg-danger">{{ request[1] }}</span>
+                                </td>
+                                <td>{{ request[2] }} ml</td>
+                                <td>{{ request[3] }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if request[4] == 'Pending' %}bg-warning
+                                        {% elif request[4] == 'Approved' %}bg-success
+                                        {% elif request[4] == 'Rejected' %}bg-danger
+                                        {% elif request[4] == 'Fulfilled' %}bg-info
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ request[4] }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if request[5] %}
+                                        <small class="text-muted">{{ request[5] }}</small>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-inbox display-1"></i>
+                    <h4 class="mt-3">No Requests Yet</h4>
+                    <p>Your blood request history will appear here once you start making requests.</p>
+                    <div class="mt-4">
+                        <a href="{{ url_for('request_blood') }}" class="btn btn-danger btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i>Make First Request
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emergency Contact Information -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-telephone me-2"></i>Emergency Contact
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-danger">Blood Bank Emergency Line:</h6>
+                        <p class="mb-2">
+                            <i class="bi bi-phone me-2"></i>
+                            <strong>+1 (555) 123-4567</strong>
+                        </p>
+                        <p class="text-muted small">Available 24/7 for urgent blood requests</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-danger">Administrator Contact:</h6>
+                        <p class="mb-2">
+                            <i class="bi bi-envelope me-2"></i>
+                            <strong>admin@bloodbank.com</strong>
+                        </p>
+                        <p class="text-muted small">For non-emergency inquiries and support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function exportRequests() {
+    // Simple export functionality - in production, this would generate a proper report
+    alert('Export functionality would be implemented here. This would generate a report of all your blood requests.');
+}
+
+// Auto-refresh blood availability every 30 seconds
+setInterval(function() {
+    // In a real application, this would make an AJAX call to refresh the data
+    // For now, we'll just show a subtle indicator
+    const refreshBtn = document.querySelector('button[onclick="location.reload()"]');
+    if (refreshBtn) {
+        refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refreshing...';
+        setTimeout(() => {
+            refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refresh Status';
+        }, 1000);
+    }
+}, 30000);
+</script>
+{% endblock %}

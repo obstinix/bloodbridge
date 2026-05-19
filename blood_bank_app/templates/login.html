@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Blood Bank Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-droplet-fill text-danger display-4 mb-3"></i>
+                    <h2 class="fw-bold text-danger">Login</h2>
+                    <p class="text-muted">Access your account to manage blood donations and requests</p>
+                </div>
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="user_type" class="form-label fw-semibold">Login As</label>
+                        <select class="form-select" id="user_type" name="user_type" required>
+                            <option value="">Select user type</option>
+                            <option value="admin">Administrator</option>
+                            <option value="donor">Donor</option>
+                            <option value="hospital">Hospital</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold">
+                            <span id="username-label">Username/Contact</span>
+                        </label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                        <div class="form-text" id="username-help">
+                            Enter your username for admin or contact number for donor/hospital
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="bi bi-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                        <div class="form-text">
+                            <strong>Demo credentials:</strong><br>
+                            Admin: username: admin, password: admin123<br>
+                            Donor: contact: 1234567890 (no password required)<br>
+                            Hospital: contact: 555-0101 (no password required)
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <p class="mb-3">Don't have an account?</p>
+                    <a href="{{ url_for('register_donor') }}" class="btn btn-outline-danger">
+                        <i class="bi bi-person-plus me-2"></i>Register as Donor
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userTypeSelect = document.getElementById('user_type');
+    const usernameLabel = document.getElementById('username-label');
+    const usernameHelp = document.getElementById('username-help');
+    const passwordField = document.getElementById('password');
+    const passwordGroup = passwordField.closest('.mb-4');
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    // Toggle password visibility
+    togglePassword.addEventListener('click', function() {
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        toggleIcon.classList.toggle('bi-eye');
+        toggleIcon.classList.toggle('bi-eye-slash');
+    });
+
+    // Update form based on user type
+    userTypeSelect.addEventListener('change', function() {
+        const userType = this.value;
+        
+        if (userType === 'admin') {
+            usernameLabel.textContent = 'Username';
+            usernameHelp.textContent = 'Enter your admin username';
+            passwordGroup.style.display = 'block';
+            passwordField.required = true;
+        } else if (userType === 'donor' || userType === 'hospital') {
+            usernameLabel.textContent = 'Contact Number';
+            usernameHelp.textContent = 'Enter your registered contact number';
+            passwordGroup.style.display = 'none';
+            passwordField.required = false;
+        } else {
+            usernameLabel.textContent = 'Username/Contact';
+            usernameHelp.textContent = 'Enter your username for admin or contact number for donor/hospital';
+            passwordGroup.style.display = 'block';
+            passwordField.required = true;
+        }
+    });
+});
+</script>
+{% endblock %}

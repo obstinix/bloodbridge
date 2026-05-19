@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Register as Donor - Blood Bank Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus text-danger display-4 mb-3"></i>
+                    <h2 class="fw-bold text-danger">Register as Donor</h2>
+                    <p class="text-muted">Join our community of life-savers and help those in need</p>
+                </div>
+
+                <form method="POST" id="donorForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label fw-semibold">Full Name *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="age" class="form-label fw-semibold">Age *</label>
+                            <input type="number" class="form-control" id="age" name="age" min="18" max="65" required>
+                            <div class="form-text">Must be between 18 and 65 years</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="gender" class="form-label fw-semibold">Gender *</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="blood_group" class="form-label fw-semibold">Blood Group *</label>
+                            <select class="form-select" id="blood_group" name="blood_group" required>
+                                <option value="">Select blood group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contact" class="form-label fw-semibold">Contact Number *</label>
+                        <input type="tel" class="form-control" id="contact" name="contact" required>
+                        <div class="form-text">This will be used for login and notifications</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="address" class="form-label fw-semibold">Address *</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                    </div>
+
+                    <!-- Eligibility Information -->
+                    <div class="alert alert-info">
+                        <h6 class="fw-bold mb-2">
+                            <i class="bi bi-info-circle me-2"></i>Eligibility Requirements
+                        </h6>
+                        <ul class="mb-0 small">
+                            <li>Age between 18-65 years</li>
+                            <li>Weight at least 50 kg</li>
+                            <li>No serious medical conditions</li>
+                            <li>Not pregnant or breastfeeding</li>
+                            <li>No recent tattoos or piercings (within 6 months)</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Register as Donor
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <p class="mb-3">Already have an account?</p>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-danger">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('donorForm');
+    const ageField = document.getElementById('age');
+    const contactField = document.getElementById('contact');
+
+    // Validate age in real-time
+    ageField.addEventListener('input', function() {
+        const age = parseInt(this.value);
+        if (age < 18 || age > 65) {
+            this.setCustomValidity('Age must be between 18 and 65 years');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+    // Format contact number
+    contactField.addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, '');
+        if (value.length > 10) {
+            value = value.substring(0, 10);
+        }
+        this.value = value;
+    });
+
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+        const age = parseInt(ageField.value);
+        if (age < 18 || age > 65) {
+            e.preventDefault();
+            alert('Age must be between 18 and 65 years');
+            ageField.focus();
+            return false;
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Request Blood - Blood Bank Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-plus-circle text-danger display-4 mb-3"></i>
+                    <h2 class="fw-bold text-danger">Request Blood</h2>
+                    <p class="text-muted">Submit a blood request for your hospital</p>
+                </div>
+
+                <!-- Blood Availability Status -->
+                <div class="alert alert-info mb-4">
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-info-circle me-2"></i>Current Blood Availability
+                    </h6>
+                    <div class="row g-2">
+                        {% for blood_group, quantity in blood_availability %}
+                        <div class="col-md-3 col-sm-6">
+                            <div class="d-flex align-items-center p-2 border rounded
+                                {% if quantity == 0 %}border-danger bg-danger bg-opacity-10
+                                {% elif quantity < 50 %}border-warning bg-warning bg-opacity-10
+                                {% elif quantity < 100 %}border-info bg-info bg-opacity-10
+                                {% else %}border-success bg-success bg-opacity-10{% endif %}">
+                                <div class="me-2">
+                                    <i class="bi bi-droplet-fill 
+                                        {% if quantity == 0 %}text-danger
+                                        {% elif quantity < 50 %}text-warning
+                                        {% elif quantity < 100 %}text-info
+                                        {% else %}text-success{% endif %}"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold small">{{ blood_group }}</div>
+                                    <div class="text-muted small">{{ quantity }} ml</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <form method="POST" id="bloodRequestForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="blood_group" class="form-label fw-semibold">Blood Group Required *</label>
+                            <select class="form-select" id="blood_group" name="blood_group" required>
+                                <option value="">Select blood group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="quantity" class="form-label fw-semibold">Quantity Required (ml) *</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" 
+                                   min="1" max="1000" step="0.1" required>
+                            <div class="form-text">Enter the amount of blood needed in milliliters</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label fw-semibold">Required Date *</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                        <div class="form-text">When do you need the blood?</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="urgency" class="form-label fw-semibold">Urgency Level</label>
+                        <select class="form-select" id="urgency" name="urgency">
+                            <option value="Normal">Normal - Can wait 24-48 hours</option>
+                            <option value="Urgent">Urgent - Needed within 12 hours</option>
+                            <option value="Critical">Critical - Needed immediately</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="patient_info" class="form-label fw-semibold">Patient Information (Optional)</label>
+                        <textarea class="form-control" id="patient_info" name="patient_info" rows="3" 
+                                  placeholder="Brief description of patient condition or reason for blood requirement..."></textarea>
+                        <div class="form-text">This information helps in prioritizing urgent requests</div>
+                    </div>
+
+                    <!-- Emergency Contact -->
+                    <div class="alert alert-warning">
+                        <h6 class="fw-bold mb-2">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Emergency Requests
+                        </h6>
+                        <p class="mb-2">For critical/emergency blood requirements:</p>
+                        <ul class="mb-0 small">
+                            <li>Call our emergency line: <strong>+1 (555) 123-4567</strong></li>
+                            <li>Email: <strong>emergency@bloodbank.com</strong></li>
+                            <li>Mark urgency as "Critical" above</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('dashboard_hospital') }}" class="btn btn-outline-secondary me-md-2">
+                            <i class="bi bi-arrow-left me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-send me-2"></i>Submit Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Request Guidelines -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightbulb me-2"></i>Request Guidelines
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-success">Before Submitting:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Check blood availability above</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Verify blood group compatibility</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Ensure accurate quantity estimation</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Provide realistic required date</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-success">After Submission:</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Request will be reviewed by admin</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>You'll receive status updates</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Approved requests update inventory</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Track progress in your dashboard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('bloodRequestForm');
+    const bloodGroupSelect = document.getElementById('blood_group');
+    const quantityInput = document.getElementById('quantity');
+    const dateInput = document.getElementById('date');
+    const urgencySelect = document.getElementById('urgency');
+
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+    dateInput.value = today;
+
+    // Update urgency based on date selection
+    dateInput.addEventListener('change', function() {
+        const selectedDate = new Date(this.value);
+        const today = new Date();
+        const diffTime = selectedDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays <= 0) {
+            urgencySelect.value = 'Critical';
+        } else if (diffDays <= 1) {
+            urgencySelect.value = 'Urgent';
+        } else {
+            urgencySelect.value = 'Normal';
+        }
+    });
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        // Show loading state
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Submitting...';
+        submitBtn.disabled = true;
+        
+        fetch('{{ url_for("add_request") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Blood request submitted successfully! You will be notified of the status.');
+                window.location.href = '{{ url_for("dashboard_hospital") }}';
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the request.');
+        })
+        .finally(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+
+    // Real-time availability check
+    bloodGroupSelect.addEventListener('change', function() {
+        const selectedGroup = this.value;
+        if (selectedGroup) {
+            // In a real application, this would check actual availability
+            // For now, we'll just show a message
+            const quantityInput = document.getElementById('quantity');
+            quantityInput.focus();
+        }
+    });
+});
+</script>
+{% endblock %}
