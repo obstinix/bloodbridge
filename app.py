@@ -11,9 +11,12 @@ from datetime import datetime, date
 import os
 from config import config
 
+from flask_wtf.csrf import CSRFProtect
+
 # Initialize Flask app
 app = Flask(__name__)
 app.config.from_object(config['development'])
+csrf = CSRFProtect(app)
 
 # Database connection helper
 def get_db_connection():

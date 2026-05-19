@@ -17,6 +17,8 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 template_dir = os.path.join(base_dir, 'templates')
 static_dir = os.path.join(base_dir, 'static')
 
+from flask_wtf.csrf import CSRFProtect
+
 app = Flask(__name__, 
             template_folder=template_dir,
             static_folder=static_dir)
@@ -27,6 +29,8 @@ if config_name == 'production':
     app.config.from_object(config['production'])
 else:
     app.config.from_object(config['development'])
+
+csrf = CSRFProtect(app)
 
 # Database connection helper
 def get_db_connection():

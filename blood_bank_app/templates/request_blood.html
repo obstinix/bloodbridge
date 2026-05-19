@@ -44,6 +44,7 @@
                 </div>
 
                 <form method="POST" id="bloodRequestForm">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="blood_group" class="form-label fw-semibold">Blood Group Required *</label>
