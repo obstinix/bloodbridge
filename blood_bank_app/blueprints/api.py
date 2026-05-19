@@ -222,3 +222,50 @@ def handle_requests():
         except Exception as e:
             db.session.rollback()
             return jsonify({'success': False, 'message': str(e)}), 500
+
+@api_bp.route('/donations/<int:donation_id>/approve', methods=['POST'])
+@jwt_required
+def approve_donation_api(donation_id):
+    if request.user_info.get('role') != 'admin':
+        return jsonify({'success': False, 'message': 'Access denied'}), 403
+    try:
+        don = Donation.query.filter_by(Donation_ID=donation_id, Status='Pending').first()
+        if not don:
+            return jsonify({'success': False, 'message': 'Donation not found or already processed'}), 404
+            
+        don.Status = 'Approved'
+        if update_blood_inventory(don.Blood_Group, don.Quantity, 'add'):
+            db.session.commit()
+            return jsonify({'success': True, 'message': 'Donation approved successfully', 'data': don.to_dict()})
+        else:
+            db.session.rollback()
+            return jsonify({'success': False, 'message': 'Inventory update failed'}), 500
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+@api_bp.route('/requests/<int:request_id>/approve', methods=['POST'])
+@jwt_required
+def approve_request_api(request_id):
+    if request.user_info.get('role') != 'admin':
+        return jsonify({'success': False, 'message': 'Access denied'}), 403
+    try:
+        req = Request.query.filter_by(Request_ID=request_id, Status='Pending').first()
+        if not req:
+            return jsonify({'success': False, 'message': 'Request not found or already processed'}), 404
+            
+        # Check if enough blood is available
+        inventory = BloodInventory.query.filter_by(Blood_Group=req.Blood_Group).first()
+        if not inventory or float(inventory.Available_Quantity) < float(req.Quantity):
+            return jsonify({'success': False, 'message': 'Insufficient blood available in inventory'}), 400
+            
+        req.Status = 'Approved'
+        if update_blood_inventory(req.Blood_Group, req.Quantity, 'subtract'):
+            db.session.commit()
+            return jsonify({'success': True, 'message': 'Request approved successfully', 'data': req.to_dict()})
+        else:
+            db.session.rollback()
+            return jsonify({'success': False, 'message': 'Inventory update failed'}), 500
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
