@@ -128,11 +128,11 @@ def login():
                     return redirect(url_for('dashboard_admin'))
             
             elif user_type == 'donor':
-                # Donor login (using contact number as username)
-                cursor.execute("SELECT Donor_ID, Name, Contact FROM Donor WHERE Contact = %s", (username,))
+                # Donor login (using contact number as username + password check)
+                cursor.execute("SELECT Donor_ID, Name, password_hash FROM Donor WHERE Contact = %s AND Is_Active = TRUE", (username,))
                 user = cursor.fetchone()
                 
-                if user:
+                if user and user[2] and bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
                     session['user_id'] = user[0]
                     session['username'] = user[1]
                     session['role'] = 'donor'
@@ -141,11 +141,11 @@ def login():
                     return redirect(url_for('dashboard_donor'))
             
             elif user_type == 'hospital':
-                # Hospital login (using contact number as username)
-                cursor.execute("SELECT Hospital_ID, Name, Contact FROM Hospital WHERE Contact = %s", (username,))
+                # Hospital login (using contact number as username + password check)
+                cursor.execute("SELECT Hospital_ID, Name, password_hash FROM Hospital WHERE Contact = %s AND Is_Active = TRUE", (username,))
                 user = cursor.fetchone()
                 
-                if user:
+                if user and user[2] and bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
                     session['user_id'] = user[0]
                     session['username'] = user[1]
                     session['role'] = 'hospital'
@@ -153,7 +153,7 @@ def login():
                     flash('Login successful!', 'success')
                     return redirect(url_for('dashboard_hospital'))
             
-            flash('Invalid credentials', 'error')
+            flash('Invalid credentials. Please try again.', 'error')
             
         except Error as e:
             flash('Database error', 'error')
@@ -176,6 +176,16 @@ def register_donor():
         blood_group = request.form['blood_group']
         contact = request.form['contact']
         address = request.form['address']
+        password = request.form['password']
+        confirm = request.form['confirm_password']
+        
+        if password != confirm:
+            flash('Passwords do not match.', 'error')
+            return render_template('register_donor.html')
+        if len(password) < 8:
+            flash('Password must be at least 8 characters.', 'error')
+            return render_template('register_donor.html')
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         
         # Validate age
         if age < app.config['MIN_DONOR_AGE'] or age > app.config['MAX_DONOR_AGE']:
@@ -198,9 +208,9 @@ def register_donor():
             
             # Insert new donor
             cursor.execute("""
-                INSERT INTO Donor (Name, Age, Gender, Blood_Group, Contact, Address) 
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """, (name, age, gender, blood_group, contact, address))
+                INSERT INTO Donor (Name, Age, Gender, Blood_Group, Contact, Address, password_hash) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (name, age, gender, blood_group, contact, address, password_hash))
             
             conn.commit()
             flash('Registration successful! You can now login.', 'success')
@@ -419,10 +429,11 @@ def add_donor():
             return jsonify({'success': False, 'message': 'Contact number already registered'})
         
         # Insert new donor
+        default_hash = bcrypt.hashpw(b'changeme123', bcrypt.gensalt()).decode('utf-8')
         cursor.execute("""
-            INSERT INTO Donor (Name, Age, Gender, Blood_Group, Contact, Address) 
-            VALUES (%s, %s, %s, %s, %s, %s)
-        """, (name, age, gender, blood_group, contact, address))
+            INSERT INTO Donor (Name, Age, Gender, Blood_Group, Contact, Address, password_hash) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (name, age, gender, blood_group, contact, address, default_hash))
         
         conn.commit()
         if 'cursor' in locals() and cursor:
