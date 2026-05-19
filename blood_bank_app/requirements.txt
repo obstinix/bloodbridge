@@ -10,4 +10,9 @@ python-dotenv==1.0.0
 bcrypt==4.0.1
 Flask-WTF>=1.2.0
 Flask-Limiter>=3.5.0
+Flask-SQLAlchemy>=3.1.1
+Flask-Migrate>=4.0.5
+PyJWT>=2.8.0
+Flask-Cors>=4.0.0
+
 
