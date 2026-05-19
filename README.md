@@ -1,6 +1,9 @@
-# Blood Bank Management System
+# BloodBridge
+
+> *Connecting Donors. Saving Lives.*
 
 A comprehensive full-stack web application for managing blood donations, requests, and inventory using Python Flask and MySQL.
+
 
 ## 🏗️ Project Overview
 
@@ -118,16 +121,24 @@ EXIT;
 
 ### 5. Configuration
 
-Update the database configuration in `config.py` if needed:
+Create a `.env` file in the root directory (you can copy `.env.example` as a template):
 
-```python
-# Database configuration
-MYSQL_HOST = 'localhost'
-MYSQL_USER = 'root'
-MYSQL_PASSWORD = 'your_password'
-MYSQL_DATABASE = 'blood_bank_db'
-MYSQL_PORT = 3306
+```bash
+copy .env.example .env
 ```
+
+Update the environment variables in `.env` with your database credentials and secret key:
+
+```env
+MYSQL_HOST=localhost
+MYSQL_USER=root
+MYSQL_PASSWORD=your_password
+MYSQL_DATABASE=blood_bank_db
+MYSQL_PORT=3306
+SECRET_KEY=your_secret_key
+FLASK_DEBUG=True
+```
+
 
 ### 6. Run the Application
 
@@ -145,11 +156,12 @@ The application will be available at `http://localhost:5000`
 
 ### Demo Donor Account
 - **Contact**: `1234567890`
-- **Password**: Not required (contact-based login)
+- **Password**: `changeme123`
 
 ### Demo Hospital Account
 - **Contact**: `555-0101`
-- **Password**: Not required (contact-based login)
+- **Password**: `changeme123`
+
 
 ## 📁 Project Structure
 
@@ -209,15 +221,15 @@ The system uses a normalized database design with the following main tables:
 
 ### For Donors
 
-1. **Register** as a new donor
-2. **Login** using contact number
+1. **Register** as a new donor with a secure password
+2. **Login** using contact number and password
 3. **View Profile** - Check personal information and donation history
 4. **Schedule Donations** - Submit new donation requests
 5. **Track Status** - Monitor approval status of donations
 
 ### For Hospitals
 
-1. **Login** using hospital contact number
+1. **Login** using hospital contact number and password
 2. **View Dashboard** - Check blood availability and request history
 3. **Request Blood** - Submit new blood requests
 4. **Track Requests** - Monitor status of submitted requests
@@ -330,11 +342,13 @@ CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
 
 ## 🔒 Security Considerations
 
-- **Password Hashing**: Uses bcrypt for secure password storage
-- **Session Security**: Secure session management with proper timeouts
-- **SQL Injection**: Uses parameterized queries
-- **XSS Protection**: Input validation and output escaping
-- **CSRF Protection**: Consider adding CSRF tokens for production
+- **Password Hashing**: Secure password storage with bcrypt (salting and hashing) for all user roles
+- **Session Security**: Secure session management with environment-configurable secret key
+- **SQL Injection**: Parameterized SQL queries used for all database transactions
+- **XSS Protection**: HTML output escaping and template validation via Flask/Jinja2
+- **CSRF Protection**: Comprehensive CSRF protection integrated via Flask-WTF across all forms
+- **Rate Limiting**: Login rate limiting implemented using Flask-Limiter to prevent brute-force attacks
+
 
 ## 🐛 Troubleshooting
 
