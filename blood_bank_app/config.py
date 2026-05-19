@@ -1,36 +1,22 @@
-"""
-Configuration file for Blood Bank Management System
-Contains database configuration and application settings
-"""
-
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
 class Config:
-    """Base configuration class"""
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key-change-in-production'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or '9ef05be0f745cd120d57e2d93e157778'
+    MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')
+    MYSQL_USER = os.getenv('MYSQL_USER', 'root')
+    MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'password')
+    MYSQL_DATABASE = os.getenv('MYSQL_DATABASE', 'blood_bank_db')
+    MYSQL_PORT = int(os.getenv('MYSQL_PORT', 3306))
     
-    # Database configuration
-    MYSQL_HOST = os.environ.get('MYSQL_HOST') or 'localhost'
-    MYSQL_USER = os.environ.get('MYSQL_USER') or 'root'
-    MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD') or ''
-    MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE') or 'blood_bank_db'
-    MYSQL_PORT = int(os.environ.get('MYSQL_PORT') or 3306)
-    
-    # Session configuration
     PERMANENT_SESSION_LIFETIME = timedelta(hours=24)
-    
-    # Application settings
-    DEBUG = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
-    
-    # Blood bank specific settings
-    MAX_DONATION_QUANTITY = 500  # Maximum blood donation in ml
+    SESSION_LIFETIME = timedelta(hours=24)
     MIN_DONOR_AGE = 18
     MAX_DONOR_AGE = 65
+    MAX_DONATION_QUANTITY = 500
     
     # Blood group compatibility for inventory management
     BLOOD_GROUP_COMPATIBILITY = {
@@ -45,14 +31,11 @@ class Config:
     }
 
 class DevelopmentConfig(Config):
-    """Development configuration"""
     DEBUG = True
 
 class ProductionConfig(Config):
-    """Production configuration"""
     DEBUG = False
 
-# Configuration dictionary
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
