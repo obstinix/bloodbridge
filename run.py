@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Blood Bank Management System - Startup Script
+BloodBridge - Startup Script
 Run this file to start the application
 """
 
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     
     # Print startup information
     print("=" * 60)
-    print("🩸 Blood Bank Management System")
+    print("🩸 BloodBridge")
     print("=" * 60)
     print("🚀 Starting application...")
     print("🌐 Server will be available at: http://localhost:5000")
