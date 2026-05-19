@@ -46,8 +46,8 @@
                         <div class="form-text">
                             <strong>Demo credentials:</strong><br>
                             Admin: username: admin, password: admin123<br>
-                            Donor: contact: 1234567890 (no password required)<br>
-                            Hospital: contact: 555-0101 (no password required)
+                            Donor: contact: 1234567890, password: changeme123<br>
+                            Hospital: contact: 555-0101, password: changeme123
                         </div>
                     </div>
 
@@ -98,19 +98,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (userType === 'admin') {
             usernameLabel.textContent = 'Username';
             usernameHelp.textContent = 'Enter your admin username';
-            passwordGroup.style.display = 'block';
-            passwordField.required = true;
         } else if (userType === 'donor' || userType === 'hospital') {
             usernameLabel.textContent = 'Contact Number';
             usernameHelp.textContent = 'Enter your registered contact number';
-            passwordGroup.style.display = 'none';
-            passwordField.required = false;
         } else {
             usernameLabel.textContent = 'Username/Contact';
             usernameHelp.textContent = 'Enter your username for admin or contact number for donor/hospital';
-            passwordGroup.style.display = 'block';
-            passwordField.required = true;
         }
+        passwordGroup.style.display = 'block';
+        passwordField.required = true;
     });
 });
 </script>

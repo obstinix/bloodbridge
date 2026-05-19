@@ -66,6 +66,20 @@
                         <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label fw-semibold">Password *</label>
+                            <input type="password" class="form-control" id="password" name="password" minlength="8" required>
+                            <div class="form-text">Minimum 8 characters</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="confirm_password" class="form-label fw-semibold">Confirm Password *</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            <div class="form-text">Re-enter your password to confirm</div>
+                        </div>
+                    </div>
+
                     <!-- Eligibility Information -->
                     <div class="alert alert-info">
                         <h6 class="fw-bold mb-2">
@@ -127,6 +141,20 @@ document.addEventListener('DOMContentLoaded', function() {
         this.value = value;
     });
 
+    const passwordField = document.getElementById('password');
+    const confirmField = document.getElementById('confirm_password');
+
+    function validatePassword() {
+        if (passwordField.value !== confirmField.value) {
+            confirmField.setCustomValidity("Passwords don't match");
+        } else {
+            confirmField.setCustomValidity('');
+        }
+    }
+
+    passwordField.addEventListener('change', validatePassword);
+    confirmField.addEventListener('keyup', validatePassword);
+
     // Form submission validation
     form.addEventListener('submit', function(e) {
         const age = parseInt(ageField.value);
@@ -134,6 +162,20 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             alert('Age must be between 18 and 65 years');
             ageField.focus();
+            return false;
+        }
+
+        if (passwordField.value !== confirmField.value) {
+            e.preventDefault();
+            alert("Passwords do not match");
+            confirmField.focus();
+            return false;
+        }
+
+        if (passwordField.value.length < 8) {
+            e.preventDefault();
+            alert("Password must be at least 8 characters long");
+            passwordField.focus();
             return false;
         }
     });
