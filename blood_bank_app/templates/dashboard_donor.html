@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(this);
         formData.append('blood_group', '{{ donor_info[1] }}'); // Add blood group from donor info
         
-        fetch('{{ url_for("add_donation") }}', {
+        fetch('{{ url_for("donor.add_donation") }}', {
             method: 'POST',
             body: formData
         })

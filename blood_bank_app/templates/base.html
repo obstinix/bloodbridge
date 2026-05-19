@@ -36,29 +36,29 @@
                     {% if session.user_id %}
                         {% if session.role == 'admin' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('dashboard_admin') }}">
+                                <a class="nav-link" href="{{ url_for('admin.dashboard_admin') }}">
                                     <i class="bi bi-speedometer2 me-1"></i>Admin Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('donor_list') }}">
+                                <a class="nav-link" href="{{ url_for('admin.donor_list') }}">
                                     <i class="bi bi-people me-1"></i>Donor List
                                 </a>
                             </li>
                         {% elif session.role == 'donor' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('dashboard_donor') }}">
+                                <a class="nav-link" href="{{ url_for('donor.dashboard_donor') }}">
                                     <i class="bi bi-person-circle me-1"></i>My Profile
                                 </a>
                             </li>
                         {% elif session.role == 'hospital' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('dashboard_hospital') }}">
+                                <a class="nav-link" href="{{ url_for('hospital.dashboard_hospital') }}">
                                     <i class="bi bi-hospital me-1"></i>Hospital Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('request_blood') }}">
+                                <a class="nav-link" href="{{ url_for('hospital.request_blood') }}">
                                     <i class="bi bi-plus-circle me-1"></i>Request Blood
                                 </a>
                             </li>
@@ -73,19 +73,19 @@
                                 <i class="bi bi-person-circle me-1"></i>{{ session.username }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">
                                     <i class="bi bi-box-arrow-right me-1"></i>Logout
                                 </a></li>
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login') }}">
+                            <a class="nav-link" href="{{ url_for('auth.login') }}">
                                 <i class="bi bi-box-arrow-in-right me-1"></i>Login
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('register_donor') }}">
+                            <a class="nav-link" href="{{ url_for('auth.register_donor') }}">
                                 <i class="bi bi-person-plus me-1"></i>Register as Donor
                             </a>
                         </li>

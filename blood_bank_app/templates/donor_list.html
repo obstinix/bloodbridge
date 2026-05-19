@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const formData = new FormData(this);
         
-        fetch('{{ url_for("add_donor") }}', {
+        fetch('{{ url_for("admin.add_donor") }}', {
             method: 'POST',
             body: formData
         })
