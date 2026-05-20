@@ -236,6 +236,14 @@ def approve_donation_api(donation_id):
         don.Status = 'Approved'
         if update_blood_inventory(don.Blood_Group, don.Quantity, 'add'):
             db.session.commit()
+            
+            # Broadcast the updated inventory live over Socket.IO
+            try:
+                from blood_bank_app.sockets import broadcast_inventory_update
+                broadcast_inventory_update()
+            except Exception as e:
+                current_app.logger.error(f"Failed live broadcast: {e}")
+                
             return jsonify({'success': True, 'message': 'Donation approved successfully', 'data': don.to_dict()})
         else:
             db.session.rollback()
@@ -262,10 +270,83 @@ def approve_request_api(request_id):
         req.Status = 'Approved'
         if update_blood_inventory(req.Blood_Group, req.Quantity, 'subtract'):
             db.session.commit()
+            
+            # Broadcast the updated inventory live over Socket.IO
+            try:
+                from blood_bank_app.sockets import broadcast_inventory_update
+                broadcast_inventory_update()
+            except Exception as e:
+                current_app.logger.error(f"Failed live broadcast: {e}")
+                
             return jsonify({'success': True, 'message': 'Request approved successfully', 'data': req.to_dict()})
         else:
             db.session.rollback()
             return jsonify({'success': False, 'message': 'Inventory update failed'}), 500
     except Exception as e:
         db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+import math
+
+COMPATIBILITY_MAP = {
+    'O-': ['O-'],
+    'O+': ['O-', 'O+'],
+    'A-': ['O-', 'A-'],
+    'A+': ['A+', 'A-', 'O+', 'O-'],
+    'B-': ['O-', 'B-'],
+    'B+': ['B+', 'B-', 'O+', 'O-'],
+    'AB-': ['AB-', 'A-', 'B-', 'O-'],
+    'AB+': ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
+}
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+    R = 6371.0
+    dlat = math.radians(float(lat2) - float(lat1))
+    dlon = math.radians(float(lon2) - float(lon1))
+    a = math.sin(dlat / 2)**2 + math.cos(math.radians(float(lat1))) * math.cos(math.radians(float(lat2))) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return R * c
+
+@api_bp.route('/requests/<int:request_id>/matching-donors', methods=['GET'])
+@jwt_required
+def get_matching_donors(request_id):
+    try:
+        req = Request.query.get(request_id)
+        if not req:
+            return jsonify({'success': False, 'message': 'Request not found'}), 404
+            
+        hospital = Hospital.query.get(req.Hospital_ID)
+        if not hospital:
+            return jsonify({'success': False, 'message': 'Hospital not found'}), 404
+            
+        h_lat = hospital.Latitude or 41.878112
+        h_lon = hospital.Longitude or -87.629798
+        
+        req_group = req.Blood_Group
+        compatible_groups = COMPATIBILITY_MAP.get(req_group, [req_group])
+        
+        donors = Donor.query.filter(
+            Donor.Blood_Group.in_(compatible_groups),
+            Donor.Is_Active == True
+        ).all()
+        
+        matching_donors = []
+        for donor in donors:
+            d_lat = donor.Latitude or 41.878112
+            d_lon = donor.Longitude or -87.629798
+            dist = haversine_distance(h_lat, h_lon, d_lat, d_lon)
+            
+            donor_dict = donor.to_dict()
+            donor_dict['distance_km'] = round(dist, 2)
+            matching_donors.append(donor_dict)
+            
+        matching_donors.sort(key=lambda x: x['distance_km'])
+        
+        return jsonify({
+            'success': True,
+            'request_blood_group': req_group,
+            'hospital_coordinates': {'latitude': float(h_lat), 'longitude': float(h_lon)},
+            'data': matching_donors
+        })
+    except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500

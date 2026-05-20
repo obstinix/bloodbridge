@@ -6,7 +6,7 @@ Run this file to start the application
 
 import os
 import sys
-from app import app
+from app import app, socketio
 
 if __name__ == '__main__':
     # Set environment variables if not already set
@@ -31,11 +31,12 @@ if __name__ == '__main__':
     
     try:
         # Run the application
-        app.run(
+        socketio.run(
+            app,
             debug=True,
             host='0.0.0.0',
             port=5000,
-            threaded=True
+            allow_unsafe_werkzeug=True
         )
     except KeyboardInterrupt:
         print("\n🛑 Server stopped by user")

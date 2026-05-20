@@ -30,6 +30,8 @@ class Donor(db.Model):
     Registration_Date = db.Column(db.DateTime, default=datetime.utcnow)
     Is_Active = db.Column(db.Boolean, default=True)
     password_hash = db.Column(db.String(255), nullable=False, default='')
+    Latitude = db.Column(db.Numeric(10, 8), nullable=False, default=41.878112)
+    Longitude = db.Column(db.Numeric(11, 8), nullable=False, default=-87.629798)
 
     # Relationships
     donations = db.relationship('Donation', backref='donor', lazy=True, cascade="all, delete-orphan")
@@ -44,7 +46,9 @@ class Donor(db.Model):
             'Contact': self.Contact,
             'Address': self.Address,
             'Registration_Date': self.Registration_Date.isoformat() if self.Registration_Date else None,
-            'Is_Active': self.Is_Active
+            'Is_Active': self.Is_Active,
+            'Latitude': float(self.Latitude) if self.Latitude is not None else 41.878112,
+            'Longitude': float(self.Longitude) if self.Longitude is not None else -87.629798
         }
 
 
@@ -58,6 +62,8 @@ class Hospital(db.Model):
     Registration_Date = db.Column(db.DateTime, default=datetime.utcnow)
     Is_Active = db.Column(db.Boolean, default=True)
     password_hash = db.Column(db.String(255), nullable=False, default='')
+    Latitude = db.Column(db.Numeric(10, 8), nullable=False, default=41.878112)
+    Longitude = db.Column(db.Numeric(11, 8), nullable=False, default=-87.629798)
 
     # Relationships
     requests = db.relationship('Request', backref='hospital', lazy=True, cascade="all, delete-orphan")
@@ -69,7 +75,9 @@ class Hospital(db.Model):
             'Location': self.Location,
             'Contact': self.Contact,
             'Registration_Date': self.Registration_Date.isoformat() if self.Registration_Date else None,
-            'Is_Active': self.Is_Active
+            'Is_Active': self.Is_Active,
+            'Latitude': float(self.Latitude) if self.Latitude is not None else 41.878112,
+            'Longitude': float(self.Longitude) if self.Longitude is not None else -87.629798
         }
 
 
