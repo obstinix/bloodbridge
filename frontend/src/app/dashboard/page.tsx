@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
+import { io } from 'socket.io-client';
+
 
 type BloodGroupStat = {
   Blood_Group: string;
@@ -50,6 +52,11 @@ export default function Dashboard() {
   const [donations, setDonations] = useState<DonationRecord[]>([]);
   const [requests, setRequests] = useState<RequestRecord[]>([]);
   const [donors, setDonors] = useState<DonorRecord[]>([]);
+  
+  // Real-time geolocation donor matching states
+  const [matchingDonors, setMatchingDonors] = useState<Record<number, any[]>>({});
+  const [loadingMatches, setLoadingMatches] = useState<Record<number, boolean>>({});
+
 
   // Action form state variables
   const [showAddDonor, setShowAddDonor] = useState(false);
@@ -81,7 +88,28 @@ export default function Dashboard() {
     setRole(savedRole);
     setName(savedName || 'Vetted Entity');
     fetchDashboardData(savedToken, savedRole);
+
+    // Setup real-time Socket.IO inventory connection
+    const socket = io('http://localhost:5000');
+
+    socket.on('connect', () => {
+      console.log('🔌 Connected to real-time inventory Socket.IO server');
+    });
+
+    socket.on('inventory_update', (updatedInventory: BloodGroupStat[]) => {
+      console.log('⚡ Real-time inventory broadcast received:', updatedInventory);
+      setInventory(updatedInventory);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('❌ Disconnected from Socket.IO server');
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
+
 
   const fetchDashboardData = async (jwtToken: string, userRole: string) => {
     setLoading(true);
@@ -142,6 +170,24 @@ export default function Dashboard() {
     localStorage.removeItem('bb_username');
     window.location.href = '/';
   };
+
+  const fetchMatchingDonors = async (requestId: number) => {
+    setLoadingMatches(prev => ({ ...prev, [requestId]: true }));
+    try {
+      const res = await fetch(`http://localhost:5000/api/v1/requests/${requestId}/matching-donors`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMatchingDonors(prev => ({ ...prev, [requestId]: data.data }));
+      }
+    } catch (err) {
+      console.error('Error fetching matching donors:', err);
+    } finally {
+      setLoadingMatches(prev => ({ ...prev, [requestId]: false }));
+    }
+  };
+
 
   // Admin Actions
   const approveDonation = async (donationId: number) => {
@@ -452,17 +498,63 @@ export default function Dashboard() {
                         </tr>
                       ) : (
                         requests.filter(r => r.Status === 'Pending').map((record) => (
-                          <tr key={record.Request_ID}>
-                            <td>#{record.Request_ID}</td>
-                            <td>{record.Hospital_Name || `Hospital #${record.Hospital_ID}`}</td>
-                            <td><span className="glass-badge badge-warning">{record.Blood_Group}</span></td>
-                            <td>{record.Quantity} ml</td>
-                            <td>
-                              <button onClick={() => approveRequest(record.Request_ID)} className="btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', borderRadius: '6px', background: 'var(--success)', boxShadow: '0 4px 14px var(--success-glow)' }}>
-                                Approve
-                              </button>
-                            </td>
-                          </tr>
+                          <Fragment key={record.Request_ID}>
+                            <tr>
+                              <td>#{record.Request_ID}</td>
+                              <td>{record.Hospital_Name || `Hospital #${record.Hospital_ID}`}</td>
+                              <td><span className="glass-badge badge-warning">{record.Blood_Group}</span></td>
+                              <td>{record.Quantity} ml</td>
+                              <td>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                  <button onClick={() => approveRequest(record.Request_ID)} className="btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', borderRadius: '6px', background: 'var(--success)', boxShadow: '0 4px 14px var(--success-glow)' }}>
+                                    Approve
+                                  </button>
+                                  <button 
+                                    onClick={() => {
+                                      if (matchingDonors[record.Request_ID]) {
+                                        setMatchingDonors(prev => {
+                                          const copy = { ...prev };
+                                          delete copy[record.Request_ID];
+                                          return copy;
+                                        });
+                                      } else {
+                                        fetchMatchingDonors(record.Request_ID);
+                                      }
+                                    }}
+                                    className="btn-secondary" 
+                                    style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', borderRadius: '6px' }}
+                                  >
+                                    {loadingMatches[record.Request_ID] ? 'Loading...' : matchingDonors[record.Request_ID] ? 'Hide' : 'Matches'}
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                            {matchingDonors[record.Request_ID] && (
+                              <tr>
+                                <td colSpan={5} style={{ background: 'rgba(255, 255, 255, 0.01)', padding: '1rem' }}>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                    <h4 style={{ fontSize: '0.85rem', color: 'white', fontWeight: 600 }}>Nearby Compatible Donors:</h4>
+                                    {matchingDonors[record.Request_ID].length === 0 ? (
+                                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>No compatible active donors found in region.</p>
+                                    ) : (
+                                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem', marginTop: '0.25rem' }}>
+                                        {matchingDonors[record.Request_ID].map((d: any) => (
+                                          <div key={d.Donor_ID} style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '8px', padding: '0.75rem' }}>
+                                            <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'white' }}>{d.Name}</div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                                              <span>Blood: <strong style={{ color: 'var(--primary)' }}>{d.Blood_Group}</strong></span>
+                                              <span>Proximity: <strong style={{ color: 'var(--info)' }}>{d.distance_km} km</strong></span>
+                                            </div>
+                                            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Contact: {d.Contact}</div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </Fragment>
                         ))
                       )}
                     </tbody>
@@ -707,28 +799,75 @@ export default function Dashboard() {
                       <th>Quantity</th>
                       <th>Date</th>
                       <th>Status</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {requests.length === 0 ? (
                       <tr>
-                        <td colSpan={5} style={{ color: 'var(--text-muted)', padding: '3rem 0', textAlign: 'center' }}>
+                        <td colSpan={6} style={{ color: 'var(--text-muted)', padding: '3rem 0', textAlign: 'center' }}>
                           No blood requests recorded yet.
                         </td>
                       </tr>
                     ) : (
                       requests.map((record) => (
-                        <tr key={record.Request_ID}>
-                          <td>#{record.Request_ID}</td>
-                          <td><span className="glass-badge badge-info">{record.Blood_Group}</span></td>
-                          <td>{record.Quantity} ml</td>
-                          <td>{new Date(record.Date).toLocaleDateString()}</td>
-                          <td>
-                            <span className={`glass-badge ${record.Status === 'Approved' ? 'badge-success' : 'badge-warning'}`}>
-                              {record.Status}
-                            </span>
-                          </td>
-                        </tr>
+                        <Fragment key={record.Request_ID}>
+                          <tr>
+                            <td>#{record.Request_ID}</td>
+                            <td><span className="glass-badge badge-info">{record.Blood_Group}</span></td>
+                            <td>{record.Quantity} ml</td>
+                            <td>{new Date(record.Date).toLocaleDateString()}</td>
+                            <td>
+                              <span className={`glass-badge ${record.Status === 'Approved' ? 'badge-success' : 'badge-warning'}`}>
+                                {record.Status}
+                              </span>
+                            </td>
+                            <td>
+                              <button 
+                                onClick={() => {
+                                  if (matchingDonors[record.Request_ID]) {
+                                    setMatchingDonors(prev => {
+                                      const copy = { ...prev };
+                                      delete copy[record.Request_ID];
+                                      return copy;
+                                    });
+                                  } else {
+                                    fetchMatchingDonors(record.Request_ID);
+                                  }
+                                }}
+                                className="btn-secondary" 
+                                style={{ padding: '0.3rem 0.6rem', fontSize: '0.7rem', borderRadius: '6px' }}
+                              >
+                                {loadingMatches[record.Request_ID] ? 'Loading...' : matchingDonors[record.Request_ID] ? 'Hide' : 'Find Donors'}
+                              </button>
+                            </td>
+                          </tr>
+                          {matchingDonors[record.Request_ID] && (
+                            <tr>
+                              <td colSpan={6} style={{ background: 'rgba(255, 255, 255, 0.01)', padding: '1rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                  <h4 style={{ fontSize: '0.85rem', color: 'white', fontWeight: 600 }}>Nearby Compatible Donors:</h4>
+                                  {matchingDonors[record.Request_ID].length === 0 ? (
+                                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>No compatible active donors found in region.</p>
+                                  ) : (
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem', marginTop: '0.25rem' }}>
+                                      {matchingDonors[record.Request_ID].map((d: any) => (
+                                        <div key={d.Donor_ID} style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '8px', padding: '0.75rem' }}>
+                                          <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'white' }}>{d.Name}</div>
+                                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                                            <span>Blood: <strong style={{ color: 'var(--primary)' }}>{d.Blood_Group}</strong></span>
+                                            <span>Proximity: <strong style={{ color: 'var(--info)' }}>{d.distance_km} km</strong></span>
+                                          </div>
+                                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>Contact: {d.Contact}</div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
                       ))
                     )}
                   </tbody>
