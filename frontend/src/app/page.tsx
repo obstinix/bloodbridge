@@ -62,6 +62,11 @@ export default function Home() {
         localStorage.setItem('bb_role', data.role);
         localStorage.setItem('bb_name', data.name);
         localStorage.setItem('bb_username', username);
+        if (data.role === 'donor') {
+          localStorage.setItem('bb_donor_id', data.donor_id?.toString() || '');
+          localStorage.setItem('bb_blood_group', data.blood_group || '');
+          localStorage.setItem('bb_contact', data.contact || '');
+        }
         
         // Redirect to dashboard
         window.location.href = '/dashboard';
