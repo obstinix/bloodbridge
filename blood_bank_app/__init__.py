@@ -32,6 +32,7 @@ def create_app(config_name=None):
     from blood_bank_app.blueprints.hospital import hospital_bp
     from blood_bank_app.blueprints.api import api_bp
     from blood_bank_app.blueprints.chatbot import chatbot_bp
+    from blood_bank_app.blueprints.analytics import analytics_bp
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
@@ -39,6 +40,7 @@ def create_app(config_name=None):
     app.register_blueprint(hospital_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(chatbot_bp)
+    app.register_blueprint(analytics_bp)
     
     # Import sockets to register event handlers
     from blood_bank_app import sockets
@@ -46,6 +48,7 @@ def create_app(config_name=None):
     # Exempt API from CSRF protection as it uses JWT tokens
     csrf.exempt(api_bp)
     csrf.exempt(chatbot_bp)
+    csrf.exempt(analytics_bp)
     
     # Add home route directly to the factory
     @app.route('/')
