@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: bloodbridge-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=bloodbridge_pass
+      - MYSQL_DATABASE=blood_bank_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=supersecretkey123
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - bloodbridge-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: bloodbridge-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    depends_on:
+      - backend
+    networks:
+      - bloodbridge-net
+
+  mysql:
+    image: mysql:8.0
+    container_name: bloodbridge-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=bloodbridge_pass
+      - MYSQL_DATABASE=blood_bank_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - bloodbridge-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: bloodbridge-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - bloodbridge-net
+
+  celery_worker:
+    build: .
+    container_name: bloodbridge-celery
+    command: celery -A blood_bank_app.tasks.celery_app worker --loglevel=info
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=bloodbridge_pass
+      - MYSQL_DATABASE=blood_bank_db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=supersecretkey123
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - bloodbridge-net
+
+volumes:
+  mysql_data:
+
+networks:
+  bloodbridge-net:
+    driver: bridge
