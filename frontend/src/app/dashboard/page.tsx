@@ -2,6 +2,8 @@
 
 import { useState, useEffect, Fragment } from 'react';
 import { io } from 'socket.io-client';
+import DonorCard from '../components/ui/DonorCard';
+import AnalyticsDashboard from '../components/AnalyticsDashboard';
 
 
 type BloodGroupStat = {
@@ -425,7 +427,9 @@ export default function Dashboard() {
 
         {/* ================= ADMIN INTERFACE ================= */}
         {role === 'admin' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '2rem' }}>
+          <>
+            <AnalyticsDashboard token={token} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
             
             {/* Admin Left: Pendings queues */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -659,11 +663,21 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+          </>
         )}
 
         {/* ================= DONOR INTERFACE ================= */}
         {role === 'donor' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '2.5rem' }}>
+          <>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
+              <DonorCard 
+                donorId={parseInt(typeof window !== 'undefined' ? localStorage.getItem('bb_donor_id') || '0' : '0')} 
+                donorName={name} 
+                bloodGroup={typeof window !== 'undefined' ? localStorage.getItem('bb_blood_group') || 'O+' : 'O+'} 
+                contact={typeof window !== 'undefined' ? localStorage.getItem('bb_contact') || '' : ''} 
+              />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '2.5rem' }}>
             {/* Donor Left: Schedule Donation */}
             <div className="glass-panel" style={{ padding: '2rem' }}>
               <h3 style={{ fontSize: '1.25rem', color: 'white', marginBottom: '1.25rem', fontFamily: 'var(--font-heading)' }}>
@@ -744,6 +758,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+          </>
         )}
 
         {/* ================= HOSPITAL INTERFACE ================= */}
