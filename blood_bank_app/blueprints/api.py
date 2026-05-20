@@ -65,7 +65,7 @@ def api_login():
             user = Donor.query.filter_by(Contact=username, Is_Active=True).first()
             if user and user.password_hash and bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
                 token = generate_token(user.Donor_ID, user.Name, 'donor')
-                return jsonify({'success': True, 'token': token, 'role': 'donor', 'name': user.Name})
+                return jsonify({'success': True, 'token': token, 'role': 'donor', 'name': user.Name, 'donor_id': user.Donor_ID, 'blood_group': user.Blood_Group, 'contact': user.Contact})
                 
         elif user_type == 'hospital':
             user = Hospital.query.filter_by(Contact=username, Is_Active=True).first()
