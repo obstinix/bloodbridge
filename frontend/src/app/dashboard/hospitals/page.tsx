@@ -5,44 +5,44 @@ import { Search, Plus, Phone, FileText, ChevronRight, X, LayoutGrid, List } from
 import { Hospital } from '@/types/hospital';
 import { BloodGroup } from '@/constants/bloodGroups';
 
+const hospitals: (Hospital & { city: string })[] = [
+  {
+    id: 'H01',
+    name: 'City General Hospital',
+    address: '22 Sion Ring Rd, Sion East',
+    city: 'Mumbai',
+    location: { lat: 19.0390, lng: 72.8619 },
+    contact: '+91 22 9876 5432',
+    activeRequests: 2,
+    inventory: { 'O+': 16, 'A+': 8, 'B+': 12 },
+  },
+  {
+    id: 'H02',
+    name: 'Holy Spirit Hospital',
+    address: 'Mahakali Caves Rd, Andheri East',
+    city: 'Mumbai',
+    location: { lat: 19.1235, lng: 72.8732 },
+    contact: '+91 22 2824 8500',
+    activeRequests: 1,
+    inventory: { 'O-': 2, 'AB+': 4, 'B-': 1 },
+  },
+  {
+    id: 'H03',
+    name: 'KEM Hospital Nashik',
+    address: 'Sardar Patel Marg, GIDC',
+    city: 'Nashik',
+    location: { lat: 19.9975, lng: 73.7898 },
+    contact: '+91 253 111 2222',
+    activeRequests: 0,
+    inventory: { 'O+': 8, 'A+': 15, 'AB-': 1 },
+  },
+];
+
 export default function HospitalsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCity, setSelectedCity] = useState('all');
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
-
-  const hospitals: (Hospital & { city: string })[] = [
-    {
-      id: 'H01',
-      name: 'City General Hospital',
-      address: '22 Sion Ring Rd, Sion East',
-      city: 'Mumbai',
-      location: { lat: 19.0390, lng: 72.8619 },
-      contact: '+91 22 9876 5432',
-      activeRequests: 2,
-      inventory: { 'O+': 16, 'A+': 8, 'B+': 12 },
-    },
-    {
-      id: 'H02',
-      name: 'Holy Spirit Hospital',
-      address: 'Mahakali Caves Rd, Andheri East',
-      city: 'Mumbai',
-      location: { lat: 19.1235, lng: 72.8732 },
-      contact: '+91 22 2824 8500',
-      activeRequests: 1,
-      inventory: { 'O-': 2, 'AB+': 4, 'B-': 1 },
-    },
-    {
-      id: 'H03',
-      name: 'KEM Hospital Nashik',
-      address: 'Sardar Patel Marg, GIDC',
-      city: 'Nashik',
-      location: { lat: 19.9975, lng: 73.7898 },
-      contact: '+91 253 111 2222',
-      activeRequests: 0,
-      inventory: { 'O+': 8, 'A+': 15, 'AB-': 1 },
-    },
-  ];
 
   // Filters
   const filteredHospitals = useMemo(() => {
