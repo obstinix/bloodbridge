@@ -25,7 +25,7 @@ export const useInventoryStore = create<InventoryStore>((set) => ({
           {
             bloodGroup: bloodGroup as any,
             units,
-            expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // default 30 days
+            expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // default 30 days
             status: units < 5 ? 'Critical' : units < 20 ? 'Low' : 'Adequate',
             bloodBankId: 'default',
           },
