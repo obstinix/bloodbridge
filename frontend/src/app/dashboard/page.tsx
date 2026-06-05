@@ -163,7 +163,7 @@ export default function DashboardPage() {
   }, [rawInventory]);
 
   const totalUnitsAvailable = useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.units, 0);
+    return chartData.reduce((acc: number, curr) => acc + curr.units, 0);
   }, [chartData]);
 
   if (loading) {
