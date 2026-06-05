@@ -20,7 +20,7 @@ export default function InventoryPage() {
     { group: 'O-' as BloodGroup, units: 8, status: 'Low', trend: 'down' },
   ]);
 
-  const [logs, setLogs] = useState([
+  const [logs, setLogs] = useState<{ id: string; type: string; group: BloodGroup; units: number; source: string; date: string; }[]>([
     { id: 'L001', type: 'addition', group: 'O+', units: 4, source: 'Nashik Drive', date: '2026-06-05 14:20' },
     { id: 'L002', type: 'dispatch', group: 'A-', units: 2, source: 'Sion Hospital', date: '2026-06-05 11:05' },
     { id: 'L003', type: 'addition', group: 'B+', units: 8, source: 'Pune Camp', date: '2026-06-04 17:30' },
