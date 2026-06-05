@@ -6,10 +6,11 @@ import { Search, ShieldAlert } from 'lucide-react';
 import NotificationBell from '@/components/shared/NotificationBell';
 import ThemeToggle from '@/components/shared/ThemeToggle';
 import { useAlertStore } from '@/stores/alertStore';
+import DisasterModeToggle from '@/components/dashboard/DisasterModeToggle';
 
 export default function TopBar() {
   const pathname = usePathname();
-  const { disasterMode, toggleDisasterMode } = useAlertStore();
+  const { disasterMode } = useAlertStore();
 
   const getPageTitle = () => {
     if (pathname === '/dashboard') return 'Operations Overview';
@@ -45,20 +46,8 @@ export default function TopBar() {
           </div>
 
           {/* Disaster Mode Toggle */}
-          <div className="flex items-center gap-2 border-r border-border dark:border-border-dk pr-4">
-            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider hidden sm:inline">Disaster Mode</span>
-            <button
-              onClick={toggleDisasterMode}
-              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
-                disasterMode ? 'bg-amber-600' : 'bg-gray-200 dark:bg-slate-700'
-              }`}
-            >
-              <span
-                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
-                  disasterMode ? 'translate-x-4.5' : 'translate-x-1'
-                }`}
-              />
-            </button>
+          <div className="border-r border-border dark:border-border-dk pr-4">
+            <DisasterModeToggle />
           </div>
 
           <NotificationBell />
