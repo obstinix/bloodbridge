@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { io } from 'socket.io-client';
 import { Users, ClipboardList, FlaskConical, Siren } from 'lucide-react';
 import KPICard from '@/components/dashboard/KPICard';
