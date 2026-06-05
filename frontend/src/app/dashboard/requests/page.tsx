@@ -63,7 +63,7 @@ export default function RequestsPage() {
   const columns = ['Pending', 'Matched', 'In Transit', 'Fulfilled'] as const;
 
   // Move request step handlers
-  const handleMoveStatus = (id: string, nextStatus: typeof columns[number]) => {
+  const handleMoveStatus = (id: string, nextStatus: BloodRequest['status']) => {
     setRequests((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status: nextStatus } : r))
     );
