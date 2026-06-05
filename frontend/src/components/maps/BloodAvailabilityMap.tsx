@@ -1,27 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MapPin, Cross, Compass, Info, X, Map as MapIcon, Sliders } from 'lucide-react';
-import BloodGroupBadge from '@/components/shared/BloodGroupBadge';
+import { Compass, X } from 'lucide-react';
 import { BloodGroup } from '@/constants/bloodGroups';
-
-interface MarkerData {
-  id: string;
-  name: string;
-  type: 'bank' | 'hospital' | 'sos';
-  address: string;
-  phone: string;
-  x: string; // SVG coordinate percent
-  y: string;
-  requestsCount?: number;
-  inventory: Record<BloodGroup, number>;
-}
+import MapFilterPanel from './MapFilterPanel';
+import MapMarker, { MarkerData } from './MapMarker';
+import HeatmapOverlay from './HeatmapOverlay';
 
 export default function BloodAvailabilityMap() {
   const [selectedMarker, setSelectedMarker] = useState<MarkerData | null>(null);
   const [filterGroup, setFilterGroup] = useState<BloodGroup | 'all'>('all');
   const [filterType, setFilterType] = useState<'all' | 'bank' | 'hospital'>('all');
   const [showFilters, setShowFilters] = useState(true);
+  const [showHeatmap, setShowHeatmap] = useState(false);
 
   const markers: MarkerData[] = [
     {
@@ -88,91 +79,31 @@ export default function BloodAvailabilityMap() {
 
   return (
     <div className="h-[75vh] border border-border dark:border-border-dk rounded-card overflow-hidden bg-[#E2DCDC] dark:bg-[#0F172A] relative flex font-body">
-      {/* Collapsible Left Panel */}
-      {showFilters && (
-        <div className="absolute top-4 left-4 z-10 w-72 bg-white dark:bg-[#1E293B] border border-border dark:border-border-dk rounded-card shadow-lift p-4 flex flex-col gap-4 max-h-[calc(100%-2rem)] overflow-y-auto">
-          <div className="flex justify-between items-center">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider font-heading">
-              Map Query Coordinates
-            </h3>
-            <button onClick={() => setShowFilters(false)} className="text-gray-400 hover:text-gray-600">
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+      {/* Map filter panel */}
+      <MapFilterPanel
+        showFilters={showFilters}
+        setShowFilters={setShowFilters}
+        filterGroup={filterGroup}
+        setFilterGroup={setFilterGroup}
+        filterType={filterType}
+        setFilterType={setFilterType}
+      />
 
-          {/* Filter Type */}
-          <div>
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
-              Location Type
-            </label>
-            <div className="grid grid-cols-3 gap-1 bg-gray-100 dark:bg-slate-800 p-0.5 rounded border border-border dark:border-border-dk">
-              {(['all', 'bank', 'hospital'] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setFilterType(t)}
-                  className={`py-1 text-[9px] font-bold rounded capitalize ${
-                    filterType === t
-                      ? 'bg-white dark:bg-[#1E293B] text-[var(--color-text)] dark:text-white shadow-sm'
-                      : 'text-gray-500'
-                  }`}
-                >
-                  {t === 'all' ? 'All' : t === 'bank' ? 'Banks' : 'Hospitals'}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Filter Blood Group */}
-          <div>
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
-              Select Blood Group
-            </label>
-            <select
-              value={filterGroup}
-              onChange={(e) => setFilterGroup(e.target.value as any)}
-              className="w-full text-xs border border-border dark:border-border-dk bg-white dark:bg-[#1E293B] rounded p-2 outline-none"
-            >
-              <option value="all">All Groups</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-            </select>
-          </div>
-
-          {/* Range Distance */}
-          <div>
-            <div className="flex justify-between text-[10px] text-gray-400 font-bold uppercase mb-1">
-              <span>Proximity Range</span>
-              <span>25 km</span>
-            </div>
-            <input
-              type="range"
-              min="5"
-              max="100"
-              defaultValue="25"
-              className="w-full accent-[#A4161A]"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Button to show filters if hidden */}
-      {!showFilters && (
-        <button
-          onClick={() => setShowFilters(true)}
-          className="absolute top-4 left-4 z-10 p-2 bg-white dark:bg-[#1E293B] border border-border dark:border-border-dk rounded-card shadow-lift text-gray-500"
-        >
-          <Sliders className="w-4 h-4" />
-        </button>
-      )}
+      {/* Heatmap Toggle overlay button */}
+      <button
+        onClick={() => setShowHeatmap(!showHeatmap)}
+        className={`absolute top-4 right-16 z-10 px-3 py-1.5 border border-border dark:border-border-dk rounded-card shadow-lift text-xs font-semibold ${
+          showHeatmap ? 'bg-[#A4161A] text-white' : 'bg-white dark:bg-[#1E293B] text-gray-500'
+        }`}
+      >
+        Heatmap {showHeatmap ? 'ON' : 'OFF'}
+      </button>
 
       {/* Map Content Canvas: Grayscale Grid style */}
       <div className="flex-1 relative overflow-hidden bg-slate-100 dark:bg-[#0A0F1D] z-0">
+        {/* Heatmap overlay */}
+        <HeatmapOverlay active={showHeatmap} />
+
         {/* SVG Road Layout / Topology (Grayscale) */}
         <svg className="w-full h-full opacity-30 dark:opacity-10" viewBox="0 0 1000 600" preserveAspectRatio="none">
           <path d="M 0,100 L 1000,150 M 200,0 L 250,600 M 0,400 L 1000,380 M 800,0 L 750,600 M 450,200 L 550,500" fill="none" stroke="currentColor" className="text-gray-400 dark:text-slate-600" strokeWidth="4" />
@@ -187,39 +118,11 @@ export default function BloodAvailabilityMap() {
 
         {/* Markers */}
         {filteredMarkers.map((marker) => (
-          <button
+          <MapMarker
             key={marker.id}
+            marker={marker}
             onClick={() => setSelectedMarker(marker)}
-            style={{ top: marker.y, left: marker.x }}
-            className="absolute z-10 -translate-x-1/2 -translate-y-1/2 focus:outline-none group"
-          >
-            <div className="relative flex items-center justify-center">
-              {marker.type === 'hospital' && (
-                <div className="relative flex h-8 w-8 items-center justify-center">
-                  {/* SOS Ring */}
-                  {marker.requestsCount && marker.requestsCount > 0 && (
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-60"></span>
-                  )}
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500/20"></span>
-                  <div className="relative w-5 h-5 rounded-full bg-emerald-600 border border-white flex items-center justify-center text-white">
-                    <Cross className="w-2.5 h-2.5 rotate-45" />
-                  </div>
-                </div>
-              )}
-
-              {marker.type === 'bank' && (
-                <div className="relative flex h-8 w-8 items-center justify-center">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-[#A4161A]/20"></span>
-                  <MapPin className="relative w-5 h-5 text-[#A4161A] fill-[#A4161A]" />
-                </div>
-              )}
-
-              {/* Tooltip on hover */}
-              <div className="absolute bottom-full mb-1.5 hidden group-hover:block bg-black/80 text-white text-[9px] px-2 py-0.5 rounded shadow whitespace-nowrap">
-                {marker.name}
-              </div>
-            </div>
-          </button>
+          />
         ))}
       </div>
 
