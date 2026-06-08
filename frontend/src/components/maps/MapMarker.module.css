@@ -1,0 +1,92 @@
+.markerWrapper {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pin {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--crimson);
+  border: 2px solid var(--ink);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  z-index: 5;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.markerWrapper:hover .pin {
+  transform: scale(1.2);
+}
+
+.criticalPin {
+  background-color: var(--status-critical);
+}
+
+.lowPin {
+  background-color: var(--status-low);
+}
+
+.adequatePin {
+  background-color: var(--status-adequate);
+}
+
+/* Heartbeat pulse animation ring overlay */
+.pulseRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  margin-left: -20px;
+  border-radius: 50%;
+  border: 1px solid var(--status-critical);
+  opacity: 0;
+  animation: heartbeat 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  pointer-events: none;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.pulseRingUrgent {
+  border-color: var(--status-low);
+}
+
+/* Tooltip popup info */
+.popup {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--canvas-overlay);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  box-shadow: var(--shadow-modal);
+  z-index: 10;
+  width: 160px;
+  pointer-events: auto;
+  font-family: var(--font-ui);
+  text-align: left;
+}
+
+.popupTitle {
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.popupMeta {
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+}
