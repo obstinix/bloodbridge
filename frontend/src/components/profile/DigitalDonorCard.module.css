@@ -1,0 +1,166 @@
+.perspective {
+  perspective: 1000px;
+  width: 320px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.flipCardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.flipCardFront,
+.flipCardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.flipCardFront {
+  background: linear-gradient(135deg, #1A0508 0%, #0A0A0A 60%, #0F0508 100%);
+  border: 1px solid var(--hairline-mid);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-4);
+}
+
+.flipCardBack {
+  background: linear-gradient(135deg, #0A0A0A 0%, #1A0508 60%, #080808 100%);
+  border: 1px solid var(--hairline-mid);
+  color: var(--ink);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-4);
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.logoIcon {
+  color: var(--crimson);
+}
+
+.logoText {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+}
+
+.logoTextItalic {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--crimson);
+}
+
+.bloodType {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-style: italic;
+  color: var(--crimson);
+  line-height: 0.8;
+}
+
+.bottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.donorMeta {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.name {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--status-adequate);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.expirySection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.expiryLabel {
+  font-size: var(--text-micro);
+  color: var(--ink-subtle);
+  text-transform: uppercase;
+}
+
+.expiryDate {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+}
+
+.backContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 100%;
+}
+
+.qrWrapper {
+  background-color: var(--ink);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donorId {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+}
+
+.bgDropPattern {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 150px;
+  height: 150px;
+  opacity: 0.04;
+  color: var(--crimson);
+  pointer-events: none;
+}
