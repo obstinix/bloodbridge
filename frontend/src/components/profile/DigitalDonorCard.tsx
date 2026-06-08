@@ -1,106 +1,81 @@
+'use client';
+
 import React, { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { motion } from 'framer-motion';
+import styles from './DigitalDonorCard.module.css';
 
 interface DigitalDonorCardProps {
   donorId: string;
   name: string;
-  bloodGroup: string;
-  donationCount: number;
-  streak: number;
+  bloodType: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+  expiryDate?: string;
+  className?: string;
 }
 
 export default function DigitalDonorCard({
   donorId,
   name,
-  bloodGroup,
-  donationCount,
-  streak,
+  bloodType,
+  expiryDate = '12/28',
+  className = '',
 }: DigitalDonorCardProps) {
-  const [isFlipped, setIsFlipped] = useState(false);
-
-  const qrData = `bloodbridge://donor/${donorId}/${bloodGroup}`;
+  const [flipped, setFlipped] = useState(false);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      {/* 3D Card Container */}
-      <div 
-        onClick={() => setIsFlipped(!isFlipped)}
-        className="w-[340px] h-[215px] cursor-pointer perspective-1000 relative"
+    <div
+      className={`${styles.perspective} ${className}`}
+      onClick={() => setFlipped(!flipped)}
+    >
+      <div
+        className={`${styles.flipCardInner} ${
+          flipped ? styles.flipped : ''
+        }`}
       >
-        <motion.div
-          animate={{ rotateY: isFlipped ? 180 : 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full h-full transform-style-3d relative"
-        >
-          {/* FRONT */}
-          <div className="absolute inset-0 backface-hidden bg-white dark:bg-[#1E293B] border border-border dark:border-border-dk rounded-[8px] border-l-[4px] border-l-[#A4161A] p-4 flex flex-col justify-between shadow-md">
-            <div className="flex justify-between items-start">
-              <div>
-                <span className="font-heading font-bold text-xs text-[#A4161A]">BloodBridge</span>
-                <span className="block text-[8px] font-mono text-gray-400">DONOR CARD</span>
-              </div>
-              <span className="font-display font-bold text-3xl text-[#A4161A] leading-none">
-                {bloodGroup}
+        {/* FRONT SIDE */}
+        <div className={styles.flipCardFront}>
+          <svg className={styles.bgDropPattern} viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+          </svg>
+
+          <div className={styles.topRow}>
+            <div className={styles.logoArea}>
+              <svg className={styles.logoIcon} width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+              </svg>
+              <span className={styles.logoText}>
+                <span className={styles.logoTextItalic}>Blood</span>Bridge
               </span>
             </div>
-            
-            <div className="text-center my-2">
-              <h3 className="font-heading font-semibold text-sm text-[var(--color-text)] dark:text-white truncate">
-                {name}
-              </h3>
-              <span className="text-[9px] font-mono text-gray-400 block mt-0.5">Donor ID: {donorId}</span>
-            </div>
-
-            <div className="flex justify-between items-end">
-              <div className="text-[8px] font-mono text-gray-400">
-                <span>VOLUNTEER RESPONSE NETWORK</span>
-              </div>
-              <div className="bg-white p-1 rounded border border-border/60">
-                <QRCodeSVG value={qrData} size={45} />
-              </div>
-            </div>
+            <span className={styles.bloodType}>{bloodType}</span>
           </div>
 
-          {/* BACK */}
-          <div className="absolute inset-0 backface-hidden bg-[#FAFAFA] dark:bg-[#263548] border border-border dark:border-border-dk rounded-[8px] p-4 flex flex-col justify-between shadow-md rotate-y-180">
-            <div>
-              <span className="font-heading font-bold text-[9px] text-gray-400 uppercase tracking-wider block mb-2">
-                Donation Ledger
-              </span>
-              <div className="grid grid-cols-2 gap-4 text-xs font-mono">
-                <div>
-                  <span className="text-gray-400 block text-[8px]">DONATIONS</span>
-                  <span className="font-bold text-[var(--color-text)] dark:text-white">{donationCount} Times</span>
-                </div>
-                <div>
-                  <span className="text-gray-400 block text-[8px]">CURRENT STREAK</span>
-                  <span className="font-bold text-[var(--color-text)] dark:text-white">{streak} Months</span>
-                </div>
-              </div>
+          <div className={styles.bottomRow}>
+            <div className={styles.donorMeta}>
+              <span className={styles.name}>{name}</span>
+              <span className={styles.badge}>Verified Donor</span>
             </div>
-
-            <div className="border-t border-border/60 dark:border-border-dk/60 pt-2 text-center text-[8px] font-mono text-gray-400">
-              <p>Compatibility: Safe for O+/A+/B+/AB+</p>
-              <p className="mt-1 text-[#A4161A] font-semibold">Emergency Desk: 1800-XXX-XXXX</p>
+            <div className={styles.expirySection}>
+              <span className={styles.expiryLabel}>Expires</span>
+              <span className={styles.expiryDate}>{expiryDate}</span>
             </div>
           </div>
-        </motion.div>
-      </div>
+        </div>
 
-      <div className="flex gap-2">
-        <button
-          onClick={(e) => { e.stopPropagation(); alert('Donor card download triggered.'); }}
-          className="px-3 py-1.5 border border-border dark:border-border-dk bg-white dark:bg-[#1E293B] rounded-[6px] text-[10px] font-semibold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
-        >
-          Download PDF
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); alert('Share link generated.'); }}
-          className="px-3 py-1.5 border border-border dark:border-border-dk bg-white dark:bg-[#1E293B] rounded-[6px] text-[10px] font-semibold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
-        >
-          Share Profile
-        </button>
+        {/* BACK SIDE */}
+        <div className={styles.flipCardBack}>
+          <div className={styles.backContent}>
+            <div className={styles.qrWrapper}>
+              <QRCodeSVG
+                value={`https://bloodbridge.net/verify/donor/${donorId}`}
+                size={80}
+                bgColor="#FFFFFF"
+                fgColor="#080808"
+                level="M"
+              />
+            </div>
+            <span className={styles.donorId}>{donorId}</span>
+          </div>
+        </div>
       </div>
     </div>
   );
