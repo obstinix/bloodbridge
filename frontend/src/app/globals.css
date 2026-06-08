@@ -1,77 +1,218 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=JetBrains+Mono:wght@400;600&display=swap');
 
 :root {
-  --color-primary:        #A4161A;
-  --color-secondary:      #660708;
-  --color-accent:         #E5383B;
-  --color-background:     #F5F3F4;
-  --color-surface:        #FFFFFF;
-  --color-surface-raised: #FAFAFA;
-  --color-text:           #161A1D;
-  --color-text-muted:     #6B7280;
-  --color-text-subtle:    #9CA3AF;
-  --color-border:         #E2DCDC;
-  --color-border-strong:  #C9C1C1;
-  --color-success:        #2D6A4F;
-  --color-success-bg:     #D1FAE5;
-  --color-warning:        #F77F00;
-  --color-warning-bg:     #FEF3C7;
-  --color-info:           #1D4ED8;
-  --color-critical:       #DC2626;
+  /* --- BRAND ACCENT --- */
+  --crimson: #C41E3A;
+  --crimson-deep: #9B1530;
+  --crimson-soft: #E8304C;
+  --crimson-ghost: rgba(196, 30, 58, 0.12);
+  --crimson-ghost-strong: rgba(196, 30, 58, 0.25);
 
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-heading: 'Space Grotesk', sans-serif;
-  --font-body:    'DM Sans', sans-serif;
-  --font-mono:    'JetBrains Mono', monospace;
+  /* --- CANVAS (dark-first surfaces) --- */
+  --canvas: #080808;          
+  --canvas-raised: #111111;   
+  --canvas-high: #181818;     
+  --canvas-overlay: #202020;  
+  --canvas-light: #FFFFFF;    
+  --surface-soft-light: #F8F6F4; 
+
+  /* --- HAIRLINES & BORDERS --- */
+  --hairline: #1E1E1E;        
+  --hairline-mid: #2A2A2A;    
+  --hairline-strong: #383838; 
+  --hairline-light: #E2DDD9;  
+
+  /* --- TEXT HIERARCHY (dark surfaces) --- */
+  --ink: #F4F0EC;             
+  --ink-body: #BFBAB4;        
+  --ink-muted: #7A7570;       
+  --ink-subtle: #4A4540;      
+  --ink-on-crimson: #FFFFFF;  
+
+  /* --- TEXT (light surfaces) --- */
+  --ink-on-light: #1A1610;    
+  --ink-muted-on-light: #6B6560; 
+
+  /* --- BLOOD TYPE SEMANTIC COLORS --- */
+  --blood-a: #E8A838;         
+  --blood-b: #38A8E8;         
+  --blood-ab: #9B59E8;        
+  --blood-o: #C41E3A;         
+  --blood-positive: rgba(255,255,255,0.9);
+  --blood-negative: rgba(255,255,255,0.55);
+
+  /* --- SEMANTIC FEEDBACK --- */
+  --status-critical: #C41E3A;    
+  --status-low: #E8821A;         
+  --status-adequate: #27AE60;    
+  --status-surplus: #2980B9;     
+  --status-info: #3B8BEB;        
+
+  /* --- TYPOGRAPHY SCALE --- */
+  --font-display: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+  --font-ui: 'Bricolage Grotesque', 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Font sizes */
+  --text-mega: 72px;       
+  --text-display: 48px;    
+  --text-headline: 32px;   
+  --text-title: 22px;      
+  --text-subtitle: 18px;   
+  --text-body: 16px;       
+  --text-small: 14px;      
+  --text-caption: 12px;    
+  --text-micro: 11px;      
+
+  /* Font weights */
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Letter spacing */
+  --tracking-tight: -0.03em;   
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;     
+  --tracking-wider: 0.08em;    
+  --tracking-widest: 0.12em;   
+
+  /* Line heights */
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  /* --- SPACING (8px base grid) --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* --- BORDER RADIUS --- */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;    
+  --radius-md: 6px;    
+  --radius-lg: 10px;   
+  --radius-xl: 16px;   
+  --radius-pill: 9999px; 
+
+  /* --- SHADOWS --- */
+  --shadow-card: 0 1px 0 var(--hairline), 0 2px 8px rgba(0,0,0,0.4);
+  --shadow-elevated: 0 0 0 1px var(--hairline-mid), 0 8px 32px rgba(0,0,0,0.6);
+  --shadow-modal: 0 0 0 1px var(--hairline-strong), 0 24px 64px rgba(0,0,0,0.8);
+  --shadow-crimson-glow: 0 0 20px rgba(196, 30, 58, 0.35);
+
+  /* --- MOTION --- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 400ms;
+
+  /* --- LAYOUT --- */
+  --nav-height: 60px;
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 64px;
+  --content-max: 1280px;
+  --content-narrow: 860px;
 }
 
-.dark {
-  --color-background:     #0F172A;
-  --color-surface:        #1E293B;
-  --color-surface-raised: #263548;
-  --color-text:           #F8FAFC;
-  --color-text-muted:     #94A3B8;
-  --color-text-subtle:    #64748B;
-  --color-border:         rgba(255,255,255,0.08);
-  --color-border-strong:  rgba(255,255,255,0.14);
-  --color-primary:        #DC2626;
-  --color-accent:         #F87171;
+/* Reduced motion: suppress all transitions */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  font-family: var(--font-body);
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: 3px; }
-
-/* JetBrains Mono for all numeric stat elements */
-.stat-number {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
+body {
+  background-color: var(--canvas);
+  color: var(--ink-body);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading-normal);
+  min-height: 100vh;
 }
 
-/* Pulse animation for SOS alerts */
+/* Selection */
+::selection {
+  background: var(--crimson-ghost-strong);
+  color: var(--ink);
+}
+
+/* Scrollbar (dark, thin) */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--canvas); }
+::-webkit-scrollbar-thumb { background: var(--hairline-strong); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-subtle); }
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font-family: var(--font-ui); }
+img { max-width: 100%; display: block; }
+
+/* KEYFRAME ANIMATIONS */
+
+/* Pulsing live dot */
 @keyframes pulse-ring {
-  0%   { transform: scale(0.8); opacity: 1; }
-  100% { transform: scale(2.4); opacity: 0; }
+  0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(39, 174, 96, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
 }
 
-@keyframes count-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Critical blood shortage pulse on bars */
+@keyframes pulse-crimson {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
 }
 
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(16px); }
-  to   { opacity: 1; transform: translateX(0); }
+/* Emergency banner slide in */
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Cards stagger in */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ticker marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Inventory bar fill */
+@keyframes fillBar {
+  from { width: 0%; }
+  to { width: var(--target-width); }
+}
+
+/* Shimmer skeleton */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
