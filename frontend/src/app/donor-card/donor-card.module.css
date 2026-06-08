@@ -1,0 +1,148 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--canvas);
+}
+
+.content {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: calc(var(--space-8) + var(--nav-height)) var(--space-5) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  color: var(--ink);
+  font-style: italic;
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-subtitle);
+  color: var(--ink-muted);
+}
+
+.cardWrapper {
+  margin: var(--space-4) 0;
+  transform: scale(1.1);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+@media (max-width: 480px) {
+  .cardWrapper {
+    transform: scale(0.9);
+  }
+}
+
+.btnRow {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+/* Metadata summary */
+.infoSummary {
+  width: 100%;
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  text-align: left;
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.infoLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+
+.infoVal {
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+/* Guide */
+.guideSection {
+  width: 100%;
+  border-top: 1px solid var(--hairline);
+  padding-top: var(--space-6);
+  margin-top: var(--space-4);
+}
+
+.guideTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-title);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-4);
+}
+
+.guideGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  text-align: left;
+}
+
+.guideCard {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.guideNum {
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--crimson);
+  font-weight: var(--weight-bold);
+}
+
+.guideCardTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  color: var(--ink);
+}
+
+.guideCardDesc {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  line-height: var(--leading-normal);
+}
+
+@media (max-width: 640px) {
+  .infoSummary {
+    grid-template-columns: 1fr;
+  }
+  .guideGrid {
+    grid-template-columns: 1fr;
+  }
+}
