@@ -4,43 +4,98 @@
   align-items: center;
   gap: var(--space-4);
   width: 100%;
-  max-width: 340px;
 }
 
 .card {
-  width: 320px;
-  height: 200px;
-  background: linear-gradient(135deg, #1A0508 0%, #0A0A0A 60%, #0F0508 100%);
-  border: 1px solid var(--hairline-mid);
+  position: relative;
+  width: 360px;
+  height: 220px;
   border-radius: var(--radius-lg);
+  border: 1px solid var(--hairline-mid);
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
   overflow: hidden;
-  transition: transform var(--duration-base) var(--ease-out),
-              box-shadow var(--duration-base) var(--ease-out),
-              border-color var(--duration-base) var(--ease-out);
+  background:
+    url("data:image/svg+xml,%3Csvg width='40' height='46' viewBox='0 0 40 46' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 3L37 13v20L20 43 3 33V13z' fill='none' stroke='%23C41E3A' stroke-opacity='0.06' stroke-width='1'/%3E%3C/svg%3E") repeat,
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(30,5,8,1) 0%, rgba(8,8,8,1) 100%);
+  background-color: var(--canvas-raised);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--duration-base) var(--ease-out), transform 400ms var(--ease-out);
 }
 
 .card:hover {
-  transform: translateY(-2px);
   box-shadow: var(--shadow-crimson-glow);
-  border-color: var(--crimson-soft);
+}
+
+/* Red vertical stripe on the left */
+.cardStripe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background-color: var(--crimson);
+  z-index: 10;
+}
+
+/* Giant watermark */
+.watermark {
+  position: absolute;
+  right: var(--space-4);
+  bottom: calc(-1 * var(--space-4));
+  font-family: var(--font-display);
+  font-size: 130px;
+  font-style: italic;
+  font-weight: 700;
+  color: rgba(196, 30, 58, 0.08);
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+  line-height: 1;
+}
+
+/* Holographic Overlay */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    transparent 30%,
+    rgba(196, 30, 58, 0.04) 40%,
+    rgba(196, 30, 58, 0.08) 50%,
+    rgba(244, 240, 236, 0.04) 60%,
+    transparent 70%
+  );
+  background-size: 300% 300%;
+  animation: holoSheen 6s ease infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Content Elements */
+.contentLayer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
 }
 
 .topRow {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  z-index: 2;
+  align-items: center;
 }
 
 .logoArea {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-2);
 }
 
 .logoIcon {
@@ -49,103 +104,127 @@
 
 .logoText {
   font-family: var(--font-ui);
-  font-size: var(--text-small);
+  font-size: 11px;
   font-weight: var(--weight-bold);
-  color: var(--ink);
+  color: var(--ink-muted);
 }
 
 .logoTextItalic {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: var(--weight-normal);
-  color: var(--crimson);
-}
-
-.bloodTypeDisplay {
-  font-family: var(--font-display);
-  font-size: var(--text-mega);
-  font-style: italic;
-  color: var(--crimson);
-  line-height: 0.8;
+  color: var(--ink);
 }
 
 .centerRow {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
-
-.qrWrapper {
-  background-color: var(--ink);
-  padding: var(--space-2);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-}
-
-.bottomRow {
-  display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  z-index: 2;
+  align-items: center;
 }
 
-.donorInfo {
+.leftDetails {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
 .name {
-  font-family: var(--font-ui);
-  font-size: var(--text-small);
-  font-weight: var(--weight-semibold);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
   color: var(--ink);
+  font-weight: var(--weight-normal);
+  line-height: 1.2;
 }
 
-.badge {
+.verifiedLabel {
   font-family: var(--font-mono);
-  font-size: var(--text-micro);
-  font-weight: var(--weight-bold);
+  font-size: 10px;
   color: var(--status-adequate);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
+  font-weight: var(--weight-bold);
 }
 
-.expiryInfo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.expiryLabel {
-  font-size: var(--text-micro);
-  color: var(--ink-subtle);
-  text-transform: uppercase;
-}
-
-.expiryDate {
+.statsLabel {
   font-family: var(--font-mono);
-  font-size: var(--text-micro);
+  font-size: 10px;
   color: var(--ink-muted);
 }
 
-/* Background blood drop path overlay */
-.bgDropPattern {
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  width: 150px;
-  height: 150px;
-  opacity: 0.04;
-  color: var(--crimson);
-  pointer-events: none;
-  z-index: 1;
+.rightDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.qrWrapper {
+  border: 1px solid var(--hairline-strong);
+  padding: 4px;
+  background-color: transparent;
+}
+
+.serial {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--ink-subtle);
+}
+
+.bottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.validThru {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-subtle);
+}
+
+.bloodTypeLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-muted);
 }
 
 .downloadBtn {
-  width: 100%;
+  font-family: var(--font-ui);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+
+/* Mobile responsive scaling */
+@media (max-width: 480px) {
+  .card {
+    width: 300px;
+    height: 184px;
+    padding: var(--space-3);
+  }
+  .watermark {
+    font-size: 100px;
+  }
+  .name {
+    font-size: 18px;
+  }
+}
+
+/* Media print isolation */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .card, .card * {
+    visibility: visible;
+  }
+  .card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1.5) !important;
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+  .downloadBtn {
+    display: none !important;
+  }
 }
