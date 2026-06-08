@@ -1,0 +1,204 @@
+.header {
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  color: var(--ink);
+  margin-bottom: var(--space-1);
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+/* Row 1: Platform Stats */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+/* Row 2: Forecast Chart */
+.forecastSection {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.sectionTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-title);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-4);
+}
+
+/* Row 3: Split (Activity + System Alerts) */
+.rowSplit {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+  align-items: start;
+}
+
+.activityPanel {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  position: relative;
+  padding-left: var(--space-4);
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background-color: var(--hairline-strong);
+}
+
+.timelineItem {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: var(--space-1);
+}
+
+.timelineMarker {
+  position: absolute;
+  left: -17px;
+  top: 6px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--crimson);
+}
+
+.timelineHeader {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.timelineContent {
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink-body);
+}
+
+.alertsPanel {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.alertItem {
+  border-left: 3px solid var(--status-critical);
+  background-color: var(--canvas);
+  padding: var(--space-3);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.alertHeader {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+}
+
+.alertDesc {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-body);
+}
+
+/* Row 4: Management Tables */
+.tabsSection {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+
+.tabHeader {
+  display: flex;
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--hairline-mid);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.tabBtn {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-muted);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.tabBtn:hover {
+  color: var(--ink);
+}
+
+.tabBtnActive {
+  background-color: var(--crimson-ghost);
+  color: var(--ink);
+  border: 1px solid var(--crimson-ghost-strong);
+}
+
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .rowSplit {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  .tabHeader {
+    flex-wrap: wrap;
+  }
+}
