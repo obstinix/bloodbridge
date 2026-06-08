@@ -1,12 +1,30 @@
 import { useState, useEffect } from 'react';
 import { MOCK_INVENTORY, MOCK_EMERGENCY_REQUESTS } from './mockData';
 
-export function useRealTimeInventory() {
-  const [inventory, setInventory] = useState(MOCK_INVENTORY);
+export interface SimulatedInventoryItem {
+  bloodType: string;
+  units: number;
+  maxCapacity: number;
+  lastUpdated: string;
+}
+
+export interface SimulatedEmergencyRequest {
+  id: string;
+  bloodType: string;
+  unitsNeeded: number;
+  urgency: string;
+  hospital: string;
+  location: string;
+  distance: number;
+  postedAt: string;
+}
+
+export function useRealTimeInventory(): SimulatedInventoryItem[] {
+  const [inventory, setInventory] = useState<SimulatedInventoryItem[]>(MOCK_INVENTORY as any);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setInventory(prev =>
+      setInventory((prev) =>
         prev.map(item => ({
           ...item,
           units: Math.max(
@@ -26,13 +44,13 @@ export function useRealTimeInventory() {
   return inventory;
 }
 
-export function useRealTimeRequests() {
-  const [requests, setRequests] = useState(MOCK_EMERGENCY_REQUESTS);
+export function useRealTimeRequests(): SimulatedEmergencyRequest[] {
+  const [requests, setRequests] = useState<SimulatedEmergencyRequest[]>(MOCK_EMERGENCY_REQUESTS as any);
 
   useEffect(() => {
     const delay = 25000 + Math.random() * 20000;
     const timeout = setTimeout(() => {
-      const newReq = {
+      const newReq: SimulatedEmergencyRequest = {
         id: `req-${Date.now()}`,
         bloodType: (['O-', 'A+', 'B-', 'AB+'] as const)[
           Math.floor(Math.random() * 4)
