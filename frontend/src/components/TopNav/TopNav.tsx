@@ -54,7 +54,7 @@ export default function TopNav() {
         </Link>
 
         {/* Center menu (Logged In only) */}
-        {isLoggedIn && (
+        {isLoggedIn ? (
           <div className={styles.centerMenu}>
             <Link
               href="/dashboard"
@@ -87,6 +87,33 @@ export default function TopNav() {
               }`}
             >
               Analytics
+            </Link>
+            <Link
+              href="/compatibility"
+              className={`${styles.navLink} ${
+                isActive('/compatibility') ? styles.activeLink : ''
+              }`}
+            >
+              Compatibility
+            </Link>
+          </div>
+        ) : (
+          <div className={styles.centerMenu}>
+            <Link
+              href="/leaderboard"
+              className={`${styles.navLink} ${
+                isActive('/leaderboard') ? styles.activeLink : ''
+              }`}
+            >
+              Leaderboard
+            </Link>
+            <Link
+              href="/rare-blood"
+              className={`${styles.navLink} ${
+                isActive('/rare-blood') ? styles.activeLink : ''
+              }`}
+            >
+              Rare Blood
             </Link>
           </div>
         )}
@@ -173,15 +200,38 @@ export default function TopNav() {
             >
               Analytics
             </Link>
+            <Link
+              href="/compatibility"
+              onClick={toggleMenu}
+              className={styles.mobileDrawerLink}
+            >
+              Compatibility
+            </Link>
           </>
         ) : (
-          <Link
-            href="/login"
-            onClick={toggleMenu}
-            className={styles.mobileDrawerLink}
-          >
-            Sign In
-          </Link>
+          <>
+            <Link
+              href="/leaderboard"
+              onClick={toggleMenu}
+              className={styles.mobileDrawerLink}
+            >
+              Leaderboard
+            </Link>
+            <Link
+              href="/rare-blood"
+              onClick={toggleMenu}
+              className={styles.mobileDrawerLink}
+            >
+              Rare Blood
+            </Link>
+            <Link
+              href="/login"
+              onClick={toggleMenu}
+              className={styles.mobileDrawerLink}
+            >
+              Sign In
+            </Link>
+          </>
         )}
       </div>
     </nav>
