@@ -1,0 +1,252 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--canvas);
+}
+
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  margin-top: var(--nav-height);
+}
+
+/* Sidebar History */
+.sidebar {
+  width: 280px;
+  background-color: var(--canvas-raised);
+  border-right: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  gap: var(--space-4);
+}
+
+.newChatBtn {
+  font-family: var(--font-ui);
+  font-weight: var(--weight-bold);
+  width: 100%;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.historyItem {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.historyItem:hover {
+  background-color: var(--canvas-high);
+}
+
+.historyItemActive {
+  background-color: var(--canvas-high);
+  border-color: var(--hairline-mid);
+}
+
+.historyTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyTime {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--ink-subtle);
+}
+
+/* Chat Main Area */
+.chatArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--canvas);
+  position: relative;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.messageRow {
+  display: flex;
+  width: 100%;
+}
+
+.userRow {
+  justify-content: flex-end;
+}
+
+.botRow {
+  justify-content: flex-start;
+}
+
+.bubble {
+  max-width: 60%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--leading-normal);
+}
+
+.userBubble {
+  background-color: var(--crimson);
+  color: white;
+  border-bottom-right-radius: var(--radius-none);
+}
+
+.botBubble {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  color: var(--ink-body);
+  border-bottom-left-radius: var(--radius-none);
+}
+
+/* Structured response cards */
+.queryResultCard {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--crimson-ghost-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 320px;
+}
+
+.queryCardTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  color: var(--crimson);
+}
+
+.queryStats {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.queryStatsRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.queryBtnGroup {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Typing Indicator */
+.typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--ink-muted);
+  border-radius: 50%;
+  animation: typingDot 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(2) { animation-delay: 200ms; }
+.dot:nth-child(3) { animation-delay: 400ms; }
+
+@keyframes typingDot {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Input Area */
+.inputSection {
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.promptRow {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.promptChip {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  color: var(--ink-body);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.promptChip:hover {
+  border-color: var(--hairline-strong);
+  color: var(--ink);
+}
+
+.inputBox {
+  display: flex;
+  gap: var(--space-3);
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+}
+
+.textarea {
+  flex: 1;
+  background-color: transparent;
+  border: none;
+  resize: none;
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink);
+  outline: none;
+  height: 40px;
+  padding: var(--space-2) 0;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+  .bubble {
+    max-width: 85%;
+  }
+}
