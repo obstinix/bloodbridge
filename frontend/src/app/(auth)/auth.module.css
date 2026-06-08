@@ -1,0 +1,255 @@
+.splitLayout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--canvas);
+}
+
+.leftPanel {
+  flex: 9;
+  background: linear-gradient(160deg, #1A0304, #0A0A0A);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-8);
+  border-right: 1px solid var(--hairline);
+  position: relative;
+}
+
+.leftContent {
+  max-width: 360px;
+  text-align: center;
+}
+
+.logoMark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-style: italic;
+  color: var(--ink);
+}
+
+.logoIcon {
+  color: var(--crimson);
+}
+
+.tagline {
+  font-family: var(--font-ui);
+  font-size: var(--text-subtitle);
+  color: var(--ink-body);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-6);
+}
+
+.miniStats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  text-align: left;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+}
+
+.statVal {
+  color: var(--ink);
+  font-weight: var(--weight-bold);
+}
+
+.rightPanel {
+  flex: 11;
+  background-color: var(--canvas-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.formTitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-headline);
+  color: var(--ink);
+}
+
+.formDesc {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  margin-top: -8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-medium);
+  color: var(--ink-muted);
+}
+
+.input {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-sm);
+  height: 48px;
+  padding: 0 var(--space-4);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink-body);
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.input:focus {
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 3px var(--crimson-ghost-strong);
+}
+
+.inputError {
+  border-color: var(--status-critical);
+}
+
+.errorText {
+  font-size: var(--text-caption);
+  color: var(--status-critical);
+}
+
+/* Role Selector */
+.roleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.roleCard {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.roleCard:hover {
+  border-color: var(--hairline-strong);
+}
+
+.roleCardActive {
+  border-color: var(--crimson);
+  background-color: var(--crimson-ghost);
+}
+
+.roleIcon {
+  color: var(--ink-muted);
+}
+
+.roleCardActive .roleIcon {
+  color: var(--crimson);
+}
+
+.roleLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-muted);
+}
+
+.roleCardActive .roleLabel {
+  color: var(--ink);
+}
+
+/* Blood Type Selector Grid */
+.bloodGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.bloodPill {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.bloodPill:hover {
+  border-color: var(--hairline-strong);
+}
+
+.bloodPillActive {
+  border-color: var(--crimson);
+  background-color: var(--crimson-ghost);
+  color: var(--ink);
+}
+
+.footerLink {
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.footerLink a {
+  color: var(--crimson);
+  font-weight: var(--weight-semibold);
+}
+
+.footerLink a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .splitLayout {
+    flex-direction: column;
+  }
+  .leftPanel {
+    flex: none;
+    padding: var(--space-6) var(--space-4);
+    border-right: none;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .rightPanel {
+    padding: var(--space-6) var(--space-4);
+  }
+}
