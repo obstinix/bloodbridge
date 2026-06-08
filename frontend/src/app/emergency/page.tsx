@@ -24,7 +24,7 @@ export default function EmergencyPage() {
       return matchUrgency && matchBlood && matchDistance;
     }).sort((a, b) => {
       // Urgent urgency ordering: critical, then urgent, then standard
-      const score = { critical: 3, urgent: 2, standard: 1 };
+      const score: Record<string, number> = { critical: 3, urgent: 2, standard: 1 };
       return score[b.urgency] - score[a.urgency];
     });
   }, [requests, selectedUrgency, selectedBloodType, maxDistance]);

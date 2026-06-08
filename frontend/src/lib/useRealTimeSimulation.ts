@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { MOCK_INVENTORY, MOCK_EMERGENCY_REQUESTS } from './mockData';
+import { BloodType } from '@/components/BloodTypeBadge/BloodTypeBadge';
 
 export interface SimulatedInventoryItem {
-  bloodType: string;
+  bloodType: BloodType;
   units: number;
   maxCapacity: number;
   lastUpdated: string;
@@ -10,7 +11,7 @@ export interface SimulatedInventoryItem {
 
 export interface SimulatedEmergencyRequest {
   id: string;
-  bloodType: string;
+  bloodType: BloodType;
   unitsNeeded: number;
   urgency: string;
   hospital: string;
