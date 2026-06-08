@@ -1,104 +1,140 @@
-import React from 'react';
-import { X, Sliders } from 'lucide-react';
-import { BloodGroup } from '@/constants/bloodGroups';
+'use client';
+
+import React, { useState } from 'react';
+import { X, SlidersHorizontal } from 'lucide-react';
+import { BloodType } from '../BloodTypeBadge/BloodTypeBadge';
+import styles from './MapFilterPanel.module.css';
 
 interface MapFilterPanelProps {
-  showFilters: boolean;
-  setShowFilters: (val: boolean) => void;
-  filterGroup: BloodGroup | 'all';
-  setFilterGroup: (val: BloodGroup | 'all') => void;
-  filterType: 'all' | 'bank' | 'hospital';
-  setFilterType: (val: 'all' | 'bank' | 'hospital') => void;
+  onFilterChange?: (filters: {
+    selectedTypes: BloodType[];
+    radius: number;
+    urgency: string;
+  }) => void;
+  className?: string;
 }
 
 export default function MapFilterPanel({
-  showFilters,
-  setShowFilters,
-  filterGroup,
-  setFilterGroup,
-  filterType,
-  setFilterType,
+  onFilterChange,
+  className = '',
 }: MapFilterPanelProps) {
-  if (!showFilters) {
-    return (
-      <button
-        onClick={() => setShowFilters(true)}
-        className="absolute top-4 left-4 z-10 p-2 bg-white dark:bg-[#1E293B] border border-border dark:border-border-dk rounded-card shadow-lift text-gray-500"
-      >
-        <Sliders className="w-4 h-4" />
-      </button>
-    );
-  }
+  const [collapsed, setCollapsed] = useState(false);
+  const [selectedTypes, setSelectedTypes] = useState<BloodType[]>([]);
+  const [radius, setRadius] = useState(10);
+  const [urgency, setUrgency] = useState<string>('all');
+
+  const bloodTypes: BloodType[] = ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'];
+
+  const handleTypeClick = (type: BloodType) => {
+    let updated = [...selectedTypes];
+    if (updated.includes(type)) {
+      updated = updated.filter((t) => t !== type);
+    } else {
+      updated.push(type);
+    }
+    setSelectedTypes(updated);
+    triggerChange(updated, radius, urgency);
+  };
+
+  const handleRadiusChange = (val: number) => {
+    setRadius(val);
+    triggerChange(selectedTypes, val, urgency);
+  };
+
+  const handleUrgencyChange = (val: string) => {
+    setUrgency(val);
+    triggerChange(selectedTypes, radius, val);
+  };
+
+  const triggerChange = (types: BloodType[], rad: number, urg: string) => {
+    if (onFilterChange) {
+      onFilterChange({ selectedTypes: types, radius: rad, urgency: urg });
+    }
+  };
 
   return (
-    <div className="absolute top-4 left-4 z-10 w-72 bg-white dark:bg-[#1E293B] border border-border dark:border-border-dk rounded-card shadow-lift p-4 flex flex-col gap-4 max-h-[calc(100%-2rem)] overflow-y-auto">
-      <div className="flex justify-between items-center">
-        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider font-heading">
-          Map Query Coordinates
-        </h3>
-        <button onClick={() => setShowFilters(false)} className="text-gray-400 hover:text-gray-600">
-          <X className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Filter Type */}
-      <div>
-        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
-          Location Type
-        </label>
-        <div className="grid grid-cols-3 gap-1 bg-gray-100 dark:bg-slate-800 p-0.5 rounded border border-border dark:border-border-dk">
-          {(['all', 'bank', 'hospital'] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setFilterType(t)}
-              className={`py-1 text-[9px] font-bold rounded capitalize ${
-                filterType === t
-                  ? 'bg-white dark:bg-[#1E293B] text-[var(--color-text)] dark:text-white shadow-sm'
-                  : 'text-gray-500'
-              }`}
-            >
-              {t === 'all' ? 'All' : t === 'bank' ? 'Banks' : 'Hospitals'}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Filter Blood Group */}
-      <div>
-        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">
-          Select Blood Group
-        </label>
-        <select
-          value={filterGroup}
-          onChange={(e) => setFilterGroup(e.target.value as any)}
-          className="w-full text-xs border border-border dark:border-border-dk bg-white dark:bg-[#1E293B] rounded p-2 outline-none text-gray-700 dark:text-white"
+    <>
+      {collapsed && (
+        <button
+          onClick={() => setCollapsed(false)}
+          className={styles.expandBtn}
+          aria-label="Open filter panel"
         >
-          <option value="all">All Groups</option>
-          <option value="A+">A+</option>
-          <option value="A-">A-</option>
-          <option value="B+">B+</option>
-          <option value="B-">B-</option>
-          <option value="AB+">AB+</option>
-          <option value="AB-">AB-</option>
-          <option value="O+">O+</option>
-          <option value="O-">O-</option>
-        </select>
-      </div>
+          <SlidersHorizontal size={18} />
+        </button>
+      )}
 
-      {/* Range Distance */}
-      <div>
-        <div className="flex justify-between text-[10px] text-gray-400 font-bold uppercase mb-1">
-          <span>Proximity Range</span>
-          <span>25 km</span>
+      <div
+        className={`${styles.panel} ${
+          collapsed ? styles.collapsed : ''
+        } ${className}`}
+      >
+        <div className={styles.header}>
+          <span className={styles.title}>Filter Map</span>
+          <button
+            onClick={() => setCollapsed(true)}
+            className={styles.closeBtn}
+            aria-label="Collapse panel"
+          >
+            <X size={16} />
+          </button>
         </div>
-        <input
-          type="range"
-          min="5"
-          max="100"
-          defaultValue="25"
-          className="w-full accent-[#A4161A]"
-        />
+
+        {/* Blood types grid */}
+        <div className={styles.section}>
+          <span className={styles.sectionLabel}>Blood Type</span>
+          <div className={styles.typeGrid}>
+            {bloodTypes.map((type) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => handleTypeClick(type)}
+                className={`${styles.typeChip} ${
+                  selectedTypes.includes(type) ? styles.activeType : ''
+                }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Proximity range slider */}
+        <div className={styles.section}>
+          <div className={styles.rangeMeta}>
+            <span className={styles.sectionLabel}>Proximity Range</span>
+            <span>{radius} km</span>
+          </div>
+          <input
+            type="range"
+            min="1"
+            max="50"
+            value={radius}
+            onChange={(e) => handleRadiusChange(Number(e.target.value))}
+            className={styles.rangeSlider}
+          />
+        </div>
+
+        {/* Urgency selection */}
+        <div className={styles.section}>
+          <span className={styles.sectionLabel}>Urgency</span>
+          <div className={styles.typeGrid} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+            {['all', 'critical', 'urgent', 'standard'].map((u) => (
+              <button
+                key={u}
+                type="button"
+                onClick={() => handleUrgencyChange(u)}
+                className={`${styles.typeChip} ${
+                  urgency === u ? styles.activeType : ''
+                }`}
+                style={{ textTransform: 'capitalize' }}
+              >
+                {u}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
