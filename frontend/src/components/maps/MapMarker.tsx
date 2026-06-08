@@ -1,57 +1,56 @@
-import React from 'react';
-import { MapPin, Cross } from 'lucide-react';
-import { BloodGroup } from '@/constants/bloodGroups';
+'use client';
 
-export interface MarkerData {
-  id: string;
-  name: string;
-  type: 'bank' | 'hospital' | 'sos';
-  address: string;
-  phone: string;
-  x: string; // SVG coordinate percent
-  y: string;
-  requestsCount?: number;
-  inventory: Record<BloodGroup, number>;
-}
+import React, { useState } from 'react';
+import styles from './MapMarker.module.css';
 
 interface MapMarkerProps {
-  marker: MarkerData;
-  onClick: () => void;
+  lat: number;
+  lng: number;
+  title: string;
+  subtitle?: string;
+  urgency: 'critical' | 'urgent' | 'standard';
+  className?: string;
 }
 
-export default function MapMarker({ marker, onClick }: MapMarkerProps) {
+export default function MapMarker({
+  title,
+  subtitle,
+  urgency,
+  className = '',
+}: MapMarkerProps) {
+  const [showPopup, setShowPopup] = useState(false);
+
+  let pinClass = styles.adequatePin;
+  let pulseClass = '';
+
+  if (urgency === 'critical') {
+    pinClass = styles.criticalPin;
+    pulseClass = styles.pulseRing;
+  } else if (urgency === 'urgent') {
+    pinClass = styles.lowPin;
+    pulseClass = `${styles.pulseRing} ${styles.pulseRingUrgent}`;
+  }
+
   return (
-    <button
-      onClick={onClick}
-      style={{ top: marker.y, left: marker.x }}
-      className="absolute z-10 -translate-x-1/2 -translate-y-1/2 focus:outline-none group"
+    <div
+      className={`${styles.markerWrapper} ${className}`}
+      onMouseEnter={() => setShowPopup(true)}
+      onMouseLeave={() => setShowPopup(false)}
+      onClick={() => setShowPopup(!showPopup)}
     >
-      <div className="relative flex items-center justify-center">
-        {marker.type === 'hospital' && (
-          <div className="relative flex h-8 w-8 items-center justify-center">
-            {/* SOS Ring */}
-            {marker.requestsCount && marker.requestsCount > 0 && (
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-60"></span>
-            )}
-            <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500/20"></span>
-            <div className="relative w-5 h-5 rounded-full bg-emerald-600 border border-white flex items-center justify-center text-white">
-              <Cross className="w-2.5 h-2.5 rotate-45" />
-            </div>
-          </div>
-        )}
+      {/* Heartbeat pulse ring */}
+      {pulseClass && <div className={pulseClass} />}
 
-        {marker.type === 'bank' && (
-          <div className="relative flex h-8 w-8 items-center justify-center">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-[#A4161A]/20"></span>
-            <MapPin className="relative w-5 h-5 text-[#A4161A] fill-[#A4161A]" />
-          </div>
-        )}
+      {/* Main Pin */}
+      <div className={`${styles.pin} ${pinClass}`} />
 
-        {/* Tooltip on hover */}
-        <div className="absolute bottom-full mb-1.5 hidden group-hover:block bg-black/80 text-white text-[9px] px-2 py-0.5 rounded shadow whitespace-nowrap">
-          {marker.name}
+      {/* Tooltip Popup */}
+      {showPopup && (
+        <div className={styles.popup}>
+          <div className={styles.popupTitle}>{title}</div>
+          {subtitle && <div className={styles.popupMeta}>{subtitle}</div>}
         </div>
-      </div>
-    </button>
+      )}
+    </div>
   );
 }
