@@ -1,38 +1,78 @@
-import React from 'react';
-import { BADGE_DEFINITIONS } from '@/constants/badges';
+'use client';
 
-interface BadgeGridProps {
-  unlockedBadges: string[];
+import React from 'react';
+import { Award, ShieldAlert, Star, Trophy, Flame } from 'lucide-react';
+import styles from './BadgeGrid.module.css';
+
+interface Badge {
+  id: string;
+  name: string;
+  description: string;
+  unlocked: boolean;
+  icon: React.ReactNode;
 }
 
-export default function BadgeGrid({ unlockedBadges }: BadgeGridProps) {
+interface BadgeGridProps {
+  className?: string;
+}
+
+export default function BadgeGrid({ className = '' }: BadgeGridProps) {
+  const badges: Badge[] = [
+    {
+      id: 'badge-1',
+      name: 'First Drop',
+      description: 'Completed your first blood donation',
+      unlocked: true,
+      icon: <Star size={20} />,
+    },
+    {
+      id: 'badge-2',
+      name: 'Life Saver',
+      description: 'Helped save up to 15 lives',
+      unlocked: true,
+      icon: <Award size={20} />,
+    },
+    {
+      id: 'badge-3',
+      name: 'Streak Hero',
+      description: 'Maintained 3 consecutive cycles',
+      unlocked: true,
+      icon: <Flame size={20} />,
+    },
+    {
+      id: 'badge-4',
+      name: 'Red Cross Elite',
+      description: 'Completed 10 total donations',
+      unlocked: false,
+      icon: <Trophy size={20} />,
+    },
+    {
+      id: 'badge-5',
+      name: 'Rare Champion',
+      description: 'Universal or rare type routing champion',
+      unlocked: false,
+      icon: <ShieldAlert size={20} />,
+    },
+  ];
+
   return (
-    <div className="bg-surface dark:bg-[#1E293B] border border-border dark:border-border-dk rounded-card p-6 shadow-sm">
-      <h3 className="font-heading font-semibold text-sm text-[var(--color-text)] dark:text-white uppercase tracking-wider mb-4">
-        Achievement Badges
-      </h3>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {BADGE_DEFINITIONS.map((badge) => {
-          const isUnlocked = unlockedBadges.includes(badge.id);
-          return (
-            <div 
-              key={badge.id} 
-              className={`p-3 rounded border text-center flex flex-col items-center gap-1.5 transition-all ${
-                isUnlocked 
-                  ? 'border-red-200 dark:border-red-950/30 bg-red-50/50 dark:bg-red-950/10' 
-                  : 'border-border dark:border-border-dk opacity-40 grayscale'
-              }`}
-            >
-              <span className="text-2xl">{badge.icon}</span>
-              <span className="text-[10px] font-bold text-[var(--color-text)] dark:text-white block truncate w-full">
-                {badge.name}
-              </span>
-              <span className="text-[8px] font-mono text-gray-400 block">
-                {badge.tier} Tier
-              </span>
+    <div className={`${styles.container} ${className}`}>
+      <h3 className={styles.title}>Achievements & Milestones</h3>
+      <div className={styles.grid}>
+        {badges.map((badge) => (
+          <div
+            key={badge.id}
+            className={`${styles.card} ${
+              badge.unlocked ? styles.unlocked : styles.locked
+            }`}
+          >
+            <div className={styles.iconWrapper}>
+              {badge.icon}
             </div>
-          );
-        })}
+            <span className={styles.name}>{badge.name}</span>
+            <span className={styles.desc}>{badge.description}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
