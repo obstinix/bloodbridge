@@ -1,0 +1,268 @@
+.container {
+  max-width: var(--content-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  color: var(--ink);
+}
+
+.section {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionHeader {
+  border-bottom: 1px solid var(--hairline-mid);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.sectionTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-widest);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-medium);
+  color: var(--ink-muted);
+}
+
+.input {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-sm);
+  height: 48px;
+  padding: 0 var(--space-4);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink-body);
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.input:focus {
+  border-color: var(--crimson);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Blood Type Picker Grid */
+.bloodGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--space-2);
+}
+
+.bloodPill {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.bloodPill:hover {
+  border-color: var(--hairline-strong);
+}
+
+.bloodPillActive {
+  border-color: var(--crimson);
+  background-color: var(--crimson-ghost);
+  color: var(--ink);
+}
+
+/* Notification Toggles */
+.toggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.toggleRow:last-child {
+  border-bottom: none;
+}
+
+.toggleMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toggleLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink);
+  font-weight: var(--weight-medium);
+}
+
+.toggleDesc {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+/* Custom CSS Toggle Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--canvas-high);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--duration-base) var(--ease-out);
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--ink-muted);
+  border-radius: 50%;
+  transition: transform var(--duration-base) var(--ease-out), background-color var(--duration-base) var(--ease-out);
+}
+
+.switch input:checked + .slider {
+  background-color: var(--crimson-ghost-strong);
+  border-color: var(--crimson);
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(24px);
+  background-color: var(--crimson);
+}
+
+/* Range Slider */
+.sliderMeta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--ink);
+  margin-bottom: var(--space-2);
+}
+
+.rangeInput {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--canvas);
+  outline: none;
+}
+
+.rangeInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--crimson);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.rangeInput::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Tooltip zone */
+.tooltipContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipText {
+  visibility: hidden;
+  width: 180px;
+  background-color: var(--canvas-overlay);
+  color: var(--ink);
+  text-align: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--hairline-strong);
+  padding: var(--space-2);
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+}
+
+.tooltipContainer:hover .tooltipText {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  .bloodGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

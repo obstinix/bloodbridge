@@ -66,14 +66,15 @@ export default function DashboardSidebar({
           { icon: <Database size={20} />, label: 'Inventory', path: '/inventory' },
           { icon: <History size={20} />, label: 'Requests', path: '/emergency' },
           { icon: <BarChart3 size={20} />, label: 'Demand Forecast', path: '/analytics' },
-          { icon: <Activity size={20} />, label: 'System Alerts', path: '/dashboard/alerts' },
+          { icon: <Activity size={20} />, label: 'Predictive Alerts', path: '/dashboard/admin/alerts' },
+          { icon: <MessageSquarePlus size={20} />, label: 'Embed Widget', path: '/widget' },
           { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
         ];
       case 'hospital':
         return [
           { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/dashboard/hospital' },
           { icon: <Database size={20} />, label: 'Blood Inventory', path: '/inventory' },
-          { icon: <MessageSquarePlus size={20} />, label: 'Submit Request', path: '/dashboard/hospital/request' },
+          { icon: <MessageSquarePlus size={20} />, label: 'Submit Request', path: '/dashboard/hospital/submit-request' },
           { icon: <History size={20} />, label: 'Request History', path: '/emergency' },
           { icon: <BarChart3 size={20} />, label: 'Analytics', path: '/analytics' },
           { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
@@ -85,6 +86,8 @@ export default function DashboardSidebar({
           { icon: <HeartHandshake size={20} />, label: 'Donate Now', path: '/dashboard/donor/donate' },
           { icon: <History size={20} />, label: 'My History', path: '/dashboard/donor/history' },
           { icon: <Contact2 size={20} />, label: 'My Donor Card', path: '/donor-card' },
+          { icon: <Activity size={20} />, label: 'Impact Tracker', path: '/dashboard/donor/impact' },
+          { icon: <BarChart3 size={20} />, label: 'Schedule', path: '/dashboard/donor/schedule' },
           { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
         ];
     }

@@ -1,0 +1,267 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.formSection {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.sectionTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-title);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.label {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-medium);
+  color: var(--ink-muted);
+}
+
+/* Blood Type Picker Grid */
+.bloodGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--space-2);
+}
+
+.bloodPill {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-bold);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.bloodPill:hover {
+  border-color: var(--hairline-strong);
+}
+
+.bloodPillActive {
+  border-color: var(--crimson);
+  background-color: var(--crimson-ghost);
+  color: var(--ink);
+}
+
+/* Stepper Input */
+.stepperWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stepperBtn {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-subtitle);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.stepperBtn:hover {
+  border-color: var(--hairline-strong);
+  background-color: var(--canvas-high);
+}
+
+.stepperInput {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  font-weight: var(--weight-bold);
+  text-align: center;
+  width: 80px;
+  height: 44px;
+  outline: none;
+}
+
+/* Urgency cards grid */
+.urgencyGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.urgencyCard {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) 0;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.urgencyCardActive {
+  border-color: var(--crimson);
+  background-color: var(--crimson-ghost);
+  color: var(--ink);
+}
+
+.urgencyCardCriticalActive {
+  border-color: var(--status-critical);
+  background-color: rgba(196, 30, 58, 0.08);
+  color: var(--status-critical);
+}
+
+.urgencyCardUrgentActive {
+  border-color: var(--status-low);
+  background-color: rgba(232, 130, 26, 0.08);
+  color: var(--status-low);
+}
+
+.urgencyCardStandardActive {
+  border-color: var(--status-adequate);
+  background-color: rgba(39, 174, 150, 0.08);
+  color: var(--status-adequate);
+}
+
+.inputRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.input {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-sm);
+  height: 44px;
+  padding: 0 var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink-body);
+  outline: none;
+}
+
+.textarea {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink-body);
+  min-height: 80px;
+  resize: vertical;
+  outline: none;
+}
+
+/* Right Preview Column */
+.previewSection {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  position: sticky;
+  top: calc(var(--nav-height) + var(--space-4));
+}
+
+.previewMeta {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.previewMetaRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.previewVal {
+  color: var(--ink);
+  font-weight: var(--weight-bold);
+}
+
+.previewValCritical {
+  color: var(--crimson);
+  font-weight: var(--weight-bold);
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .previewSection {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .bloodGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .inputRow {
+    grid-template-columns: 1fr;
+  }
+}
