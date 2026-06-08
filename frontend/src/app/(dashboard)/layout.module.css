@@ -1,0 +1,32 @@
+.dashboardRoot {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--canvas);
+}
+
+.dashboardBody {
+  display: flex;
+  flex: 1;
+  margin-top: 0; /* Nav height is offset inside navigation layout or content container */
+  position: relative;
+}
+
+.mainContent {
+  flex: 1;
+  padding: var(--space-6);
+  overflow-y: auto;
+  min-height: calc(100vh - var(--nav-height));
+  margin-top: var(--nav-height);
+  background-color: var(--canvas);
+}
+
+@media (max-width: 768px) {
+  .dashboardBody {
+    flex-direction: column;
+  }
+  .mainContent {
+    max-width: 100%;
+    margin-top: var(--nav-height);
+  }
+}
