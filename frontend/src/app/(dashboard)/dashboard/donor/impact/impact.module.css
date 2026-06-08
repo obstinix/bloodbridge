@@ -1,0 +1,218 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  color: var(--ink);
+  font-style: italic;
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+/* Row 1: Hero Stats */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+/* Row 2: Split Layout (Timeline + Achievements) */
+.layout {
+  display: grid;
+  grid-template-columns: 4fr 5fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.panel {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.panelTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-title);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+/* Vertical Timeline */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background-color: var(--hairline-strong);
+}
+
+.timelineItem {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: var(--space-1);
+}
+
+.timelineDot {
+  position: absolute;
+  left: -24px;
+  top: 6px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: var(--hairline-strong);
+  border: 2px solid var(--canvas-raised);
+}
+
+.dotEmergency {
+  background-color: var(--crimson);
+  box-shadow: 0 0 8px var(--crimson);
+}
+
+.dotScheduled {
+  background-color: var(--status-adequate);
+}
+
+.dotStored {
+  background-color: var(--hairline-strong);
+}
+
+.timelineMeta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.facility {
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+}
+
+.context {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-body);
+}
+
+/* Achievements Grid */
+.badgesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.badgeCard {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.badgeCard:hover {
+  border-color: var(--hairline-strong);
+}
+
+.badgeIcon {
+  color: var(--crimson);
+}
+
+.badgeName {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.badgeDesc {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  line-height: var(--leading-tight);
+}
+
+.badgeLocked {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+
+/* Milestone Progress */
+.milestoneBox {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.milestoneHeader {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.progressBar {
+  height: 6px;
+  background-color: var(--canvas);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--status-adequate);
+  border-radius: var(--radius-pill);
+  transition: width var(--duration-slow) var(--ease-out);
+}
+
+@media (max-width: 900px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .badgesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
