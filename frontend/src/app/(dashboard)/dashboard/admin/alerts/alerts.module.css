@@ -1,0 +1,252 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  color: var(--ink);
+  font-style: italic;
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+/* Grid Layout */
+.alertsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 600px) {
+  .alertsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.alertCard {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.alertCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--hairline-strong);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.severityChip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+.chipCritical {
+  background-color: rgba(196, 30, 58, 0.12);
+  color: var(--status-critical);
+}
+
+.chipWarning {
+  background-color: rgba(232, 130, 26, 0.12);
+  color: var(--status-low);
+}
+
+.cardBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.metrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.metricLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+.metricValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.sparklineWrapper {
+  width: 120px;
+  height: 40px;
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+/* Modal Styling */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(8, 8, 8, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeIn 200ms var(--ease-out);
+}
+
+.modal {
+  background-color: var(--canvas-overlay);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 500px;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-elevated);
+}
+
+.modalTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-title);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+}
+
+.textarea {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-body);
+  resize: vertical;
+  min-height: 160px;
+  outline: none;
+  line-height: 1.5;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* Reminders Section */
+.remindersSection {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.remindersTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-title);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-4);
+}
+
+.reminderTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.reminderItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.reminderItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.reminderDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--status-low);
+  margin-top: 5px;
+}
+
+.reminderContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.reminderText {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-body);
+}
+
+.reminderMeta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-subtle);
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  color: var(--status-critical);
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  cursor: pointer;
+  padding: 0;
+}
+
+.deleteBtn:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
