@@ -1,0 +1,14 @@
+{
+  "name": "BloodBridge — Emergency Blood Network",
+  "short_name": "BloodBridge",
+  "description": "Real-time blood donor matching for emergency situations",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#C41E3A",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
