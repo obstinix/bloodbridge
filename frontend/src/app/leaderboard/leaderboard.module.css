@@ -1,0 +1,172 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--canvas);
+}
+
+.content {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: calc(var(--space-6) + var(--nav-height)) var(--space-5) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-4);
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  color: var(--ink);
+  font-style: italic;
+}
+
+.subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+/* Podium Layout */
+.podium {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+  padding-bottom: var(--space-4);
+}
+
+.podiumCard {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 220px;
+  position: relative;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.rank1 {
+  height: 260px;
+  border-color: var(--crimson);
+  box-shadow: var(--shadow-crimson-glow);
+  transform: scale(1.06);
+  z-index: 10;
+}
+
+.rank2 {
+  height: 220px;
+}
+
+.rank3 {
+  height: 200px;
+}
+
+.podiumNumber {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-title);
+  font-weight: var(--weight-bold);
+  color: var(--ink-subtle);
+}
+
+.rank1 .podiumNumber {
+  color: var(--crimson);
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  color: var(--ink);
+  margin-bottom: var(--space-1);
+}
+
+.rank1 .avatar {
+  border-color: var(--crimson);
+  width: 72px;
+  height: 72px;
+  font-size: 26px;
+}
+
+.donorName {
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.donorMetric {
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+}
+
+/* Filter Row */
+.filterRow {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.chip {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.chipActive {
+  background-color: var(--canvas-high);
+  color: var(--ink);
+  border-color: var(--hairline-strong);
+}
+
+/* CTA Card */
+.ctaBox {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .podium {
+    flex-direction: column;
+    align-items: center;
+  }
+  .rank1 {
+    transform: none;
+    height: 200px;
+    order: -1;
+  }
+  .rank2, .rank3 {
+    height: 180px;
+  }
+}
