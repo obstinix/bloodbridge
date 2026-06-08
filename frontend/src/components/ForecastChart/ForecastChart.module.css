@@ -1,0 +1,88 @@
+.container {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-size: var(--text-subtitle);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.subtitle {
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.chip {
+  background-color: var(--canvas-high);
+  border: 1px solid var(--hairline-mid);
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-bold);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--hairline-strong);
+  color: var(--ink);
+}
+
+.activeChip {
+  background-color: var(--crimson-ghost);
+  border-color: var(--crimson);
+  color: var(--crimson-soft);
+}
+
+.chartWrapper {
+  width: 100%;
+  height: 300px;
+  min-height: 250px;
+}
+
+.tooltip {
+  background-color: var(--canvas-overlay);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--ink-body);
+  box-shadow: var(--shadow-modal);
+}
+
+.tooltipTitle {
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+  margin-bottom: var(--space-1);
+}
