@@ -6,12 +6,17 @@ import TopNav from '@/components/TopNav/TopNav';
 import Button from '@/components/Button/Button';
 import BloodInventoryGrid from '@/components/BloodInventoryGrid/BloodInventoryGrid';
 import RequestCard from '@/components/RequestCard/RequestCard';
-import { MOCK_INVENTORY, MOCK_EMERGENCY_REQUESTS } from '@/lib/mockData';
+import { MOCK_EMERGENCY_REQUESTS } from '@/lib/mockData';
+import { useRealTimeInventory } from '@/lib/useRealTimeSimulation';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import styles from './page.module.css';
 
 export default function LandingPage() {
-  // Take 3 requests for preview
+  const inventory = useRealTimeInventory();
   const previewRequests = MOCK_EMERGENCY_REQUESTS.slice(0, 3);
+
+  const inventoryRef = useScrollReveal();
+  const requestFeedRef = useScrollReveal();
 
   return (
     <div className={styles.container}>
@@ -52,7 +57,7 @@ export default function LandingPage() {
         {/* Scrolling Ticker Strip */}
         <div className={styles.ticker}>
           <div className={styles.tickerTrack}>
-            {MOCK_INVENTORY.map((item, idx) => {
+            {inventory.map((item, idx) => {
               const isLow = item.units / item.maxCapacity <= 0.2;
               const isUrgent = item.units / item.maxCapacity > 0.2 && item.units / item.maxCapacity <= 0.4;
               const statusSymbol = isLow ? '🔴' : isUrgent ? '🟡' : '🟢';
@@ -69,7 +74,7 @@ export default function LandingPage() {
               );
             })}
             {/* Duplicate for infinite marquee effect */}
-            {MOCK_INVENTORY.map((item, idx) => {
+            {inventory.map((item, idx) => {
               const isLow = item.units / item.maxCapacity <= 0.2;
               const isUrgent = item.units / item.maxCapacity > 0.2 && item.units / item.maxCapacity <= 0.4;
               const statusSymbol = isLow ? '🔴' : isUrgent ? '🟡' : '🟢';
@@ -90,12 +95,12 @@ export default function LandingPage() {
       </section>
 
       {/* SECTION B: Blood Inventory Snapshot */}
-      <section className={styles.section}>
+      <section ref={inventoryRef as any} className={`${styles.section} reveal`}>
         <div className={styles.sectionCenter}>
           <span className={styles.sectionLabel}>Current Availability</span>
           <h2 className={styles.sectionTitle}>Know Before You Need It.</h2>
         </div>
-        <BloodInventoryGrid inventory={MOCK_INVENTORY} />
+        <BloodInventoryGrid inventory={inventory} />
         <div className={styles.sectionCta}>
           <Link href="/emergency">
             <Button variant="outline">Request Emergency Blood →</Button>
@@ -105,22 +110,22 @@ export default function LandingPage() {
 
       {/* SECTION C: How It Works */}
       <section className={styles.howItWorks}>
-        <div className={styles.howItWorksGrid}>
-          <div className={styles.stepCard}>
+        <div className={`${styles.howItWorksGrid} stagger`}>
+          <div className={`${styles.stepCard} reveal`}>
             <div className={styles.stepNum}>01</div>
             <h3 className={styles.stepTitle}>Register</h3>
             <p className={styles.stepDesc}>
               Create your profile as a donor or hospital. Verify your blood type and credentials securely.
             </p>
           </div>
-          <div className={styles.stepCard}>
+          <div className={`${styles.stepCard} reveal`}>
             <div className={styles.stepNum}>02</div>
             <h3 className={styles.stepTitle}>Match</h3>
             <p className={styles.stepDesc}>
               Our matching engine routes emergency request alerts directly to compatible donors within proximity.
             </p>
           </div>
-          <div className={styles.stepCard}>
+          <div className={`${styles.stepCard} reveal`}>
             <div className={styles.stepNum}>03</div>
             <h3 className={styles.stepTitle}>Donate</h3>
             <p className={styles.stepDesc}>
@@ -131,7 +136,7 @@ export default function LandingPage() {
       </section>
 
       {/* SECTION D: Emergency Request Feed (Live Preview) */}
-      <section className={styles.section}>
+      <section ref={requestFeedRef as any} className={`${styles.section} reveal reveal-scale`}>
         <div className={styles.sectionCenter}>
           <span className={styles.sectionLabel}>Live Requests</span>
           <h2 className={styles.sectionTitle}>Emergency Urgent Demands</h2>
@@ -194,7 +199,13 @@ export default function LandingPage() {
                 <Link href="/donor-card">Digital Donor Card</Link>
               </li>
               <li>
-                <Link href="/chatbot">Donor AI Assistant</Link>
+                <Link href="/dashboard/donor/impact">Donor Impact Tracker</Link>
+              </li>
+              <li>
+                <Link href="/dashboard/donor/schedule">Donation Scheduler</Link>
+              </li>
+              <li>
+                <Link href="/compatibility">Compatibility Reference</Link>
               </li>
             </ul>
           </div>
@@ -205,10 +216,13 @@ export default function LandingPage() {
                 <Link href="/login">Hospital Portal</Link>
               </li>
               <li>
-                <Link href="/emergency">Submit Request</Link>
+                <Link href="/dashboard/hospital/submit-request">Submit Request</Link>
               </li>
               <li>
                 <Link href="/inventory">Global Inventory</Link>
+              </li>
+              <li>
+                <Link href="/widget">Embed Widget Configurator</Link>
               </li>
             </ul>
           </div>
@@ -220,6 +234,14 @@ export default function LandingPage() {
             <p style={{ color: 'var(--crimson)', fontFamily: 'var(--font-mono)', fontWeight: 'bold' }}>
               +1 (800) 555-CRIMSON
             </p>
+            <ul className={styles.footerLinks} style={{ marginTop: 'var(--space-3)' }}>
+              <li>
+                <Link href="/leaderboard">Community Leaderboard</Link>
+              </li>
+              <li>
+                <Link href="/rare-blood">Rare Blood Registry</Link>
+              </li>
+            </ul>
           </div>
         </div>
 

@@ -4,16 +4,17 @@ import React, { useState, useMemo } from 'react';
 import TopNav from '@/components/TopNav/TopNav';
 import RequestCard from '@/components/RequestCard/RequestCard';
 import LiveBadge from '@/components/LiveBadge/LiveBadge';
-import { MOCK_EMERGENCY_REQUESTS } from '@/lib/mockData';
+import { useRealTimeRequests } from '@/lib/useRealTimeSimulation';
 import styles from './emergency.module.css';
 
 export default function EmergencyPage() {
+  const requests = useRealTimeRequests();
   const [selectedUrgency, setSelectedUrgency] = useState<'all' | 'critical' | 'urgent' | 'standard'>('all');
   const [selectedBloodType, setSelectedBloodType] = useState('all');
   const [maxDistance, setMaxDistance] = useState('all');
 
   const filteredRequests = useMemo(() => {
-    return MOCK_EMERGENCY_REQUESTS.filter((req) => {
+    return requests.filter((req) => {
       const matchUrgency = selectedUrgency === 'all' || req.urgency === selectedUrgency;
       const matchBlood = selectedBloodType === 'all' || req.bloodType === selectedBloodType;
       const matchDistance =
@@ -26,10 +27,10 @@ export default function EmergencyPage() {
       const score = { critical: 3, urgent: 2, standard: 1 };
       return score[b.urgency] - score[a.urgency];
     });
-  }, [selectedUrgency, selectedBloodType, maxDistance]);
+  }, [requests, selectedUrgency, selectedBloodType, maxDistance]);
 
   const handleAcceptRequest = (id: string) => {
-    const matched = MOCK_EMERGENCY_REQUESTS.find((r) => r.id === id);
+    const matched = requests.find((r) => r.id === id);
     if (matched) {
       alert(`Thank you! Response submitted for ${matched.hospital}. Direct matching notifications dispatched.`);
     }

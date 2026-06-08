@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import BloodTypeBadge, { BloodType } from '../BloodTypeBadge/BloodTypeBadge';
 import styles from './InventoryBar.module.css';
 
@@ -18,6 +18,17 @@ export default function InventoryBar({
   className = '',
 }: InventoryBarProps) {
   const percent = Math.min(Math.round((units / maxCapacity) * 100), 100);
+  const [updated, setUpdated] = useState(false);
+  const prevUnitsRef = useRef(units);
+
+  useEffect(() => {
+    if (prevUnitsRef.current !== units) {
+      setUpdated(true);
+      const timer = setTimeout(() => setUpdated(false), 650);
+      prevUnitsRef.current = units;
+      return () => clearTimeout(timer);
+    }
+  }, [units]);
 
   let statusClass = styles.adequate;
   if (percent <= 20) {
@@ -42,7 +53,7 @@ export default function InventoryBar({
 
       <div className={styles.track}>
         <div
-          className={`${styles.fill} ${statusClass}`}
+          className={`${styles.fill} ${statusClass} ${updated ? 'barUpdated' : ''}`}
           style={fillStyle}
         />
       </div>

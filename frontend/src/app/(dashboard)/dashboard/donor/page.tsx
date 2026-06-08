@@ -71,15 +71,17 @@ export default function DonorDashboard() {
       </div>
 
       {/* Row 1 — Stats */}
-      <div className={styles.statsGrid}>
-        <StatsCard value={stats.totalDonations} label="Total Donations" status="adequate" />
-        <StatsCard value={`${stats.lifetimeLiters}L`} label="Lifetime Donated" status="adequate" />
-        <StatsCard
-          value={stats.daysUntilEligible === 0 ? 'Eligible Now' : `${stats.daysUntilEligible} days`}
-          label="Days Until Eligible"
-          status={stats.daysUntilEligible === 0 ? 'adequate' : 'low'}
-        />
-        <StatsCard value={stats.livesSaved} label="Lives Saved (Est.)" status="critical" />
+      <div className={`${styles.statsGrid} stagger`}>
+        <div className="reveal"><StatsCard value={stats.totalDonations} label="Total Donations" status="adequate" /></div>
+        <div className="reveal"><StatsCard value={`${stats.lifetimeLiters}L`} label="Lifetime Donated" status="adequate" /></div>
+        <div className="reveal">
+          <StatsCard
+            value={stats.daysUntilEligible === 0 ? 'Eligible Now' : `${stats.daysUntilEligible} days`}
+            label="Days Until Eligible"
+            status={stats.daysUntilEligible === 0 ? 'adequate' : 'low'}
+          />
+        </div>
+        <div className="reveal"><StatsCard value={stats.livesSaved} label="Lives Saved (Est.)" status="critical" /></div>
       </div>
 
       {/* Row 2 — Split Layout */}

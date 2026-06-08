@@ -4,15 +4,16 @@ import React, { useState, useMemo } from 'react';
 import TopNav from '@/components/TopNav/TopNav';
 import BloodInventoryGrid from '@/components/BloodInventoryGrid/BloodInventoryGrid';
 import LiveBadge from '@/components/LiveBadge/LiveBadge';
-import { MOCK_INVENTORY } from '@/lib/mockData';
+import { useRealTimeInventory } from '@/lib/useRealTimeSimulation';
 import styles from './inventory.module.css';
 
 export default function InventoryPage() {
+  const inventory = useRealTimeInventory();
   const [selectedGroup, setSelectedGroup] = useState<'all' | 'O' | 'A' | 'B' | 'AB'>('all');
   const [facility, setFacility] = useState('all');
 
   const filteredInventory = useMemo(() => {
-    return MOCK_INVENTORY.filter((item) => {
+    return inventory.filter((item) => {
       if (selectedGroup === 'all') return true;
       if (selectedGroup === 'O') return item.bloodType.startsWith('O');
       if (selectedGroup === 'A') return item.bloodType.startsWith('A') && !item.bloodType.startsWith('AB');
@@ -20,11 +21,11 @@ export default function InventoryPage() {
       // AB
       return item.bloodType.startsWith('AB');
     });
-  }, [selectedGroup]);
+  }, [inventory, selectedGroup]);
 
   // Aggregate Units
-  const totalUnits = MOCK_INVENTORY.reduce((sum, item) => sum + item.units, 0);
-  const criticalShortagesCount = MOCK_INVENTORY.filter(
+  const totalUnits = inventory.reduce((sum, item) => sum + item.units, 0);
+  const criticalShortagesCount = inventory.filter(
     (item) => item.units / item.maxCapacity <= 0.2
   ).length;
 
@@ -123,7 +124,7 @@ export default function InventoryPage() {
             <div className={styles.panel}>
               <h3 className={styles.panelTitle}>Critical Shortages</h3>
               {criticalShortagesCount > 0 ? (
-                MOCK_INVENTORY.filter((item) => item.units / item.maxCapacity <= 0.2).map((item) => (
+                inventory.filter((item) => item.units / item.maxCapacity <= 0.2).map((item) => (
                   <div key={item.bloodType} className={styles.alertCard}>
                     <div className={styles.alertTitle}>Type {item.bloodType} Warning</div>
                     <p className={styles.alertDesc}>

@@ -6,7 +6,8 @@ import BloodInventoryGrid from '@/components/BloodInventoryGrid/BloodInventoryGr
 import DataTable from '@/components/DataTable/DataTable';
 import Button from '@/components/Button/Button';
 import { BloodType } from '@/components/BloodTypeBadge/BloodTypeBadge';
-import { MOCK_INVENTORY, MOCK_EMERGENCY_REQUESTS } from '@/lib/mockData';
+import { useRealTimeInventory } from '@/lib/useRealTimeSimulation';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import styles from './hospital.module.css';
 
 interface RequestItem {
@@ -20,6 +21,7 @@ interface RequestItem {
 }
 
 export default function HospitalDashboard() {
+  const inventory = useRealTimeInventory();
   const [user, setUser] = useState({ name: 'City General Hospital', email: 'hospital@example.com' });
   const [bloodType, setBloodType] = useState<BloodType>('O-');
   const [units, setUnits] = useState(4);
@@ -30,6 +32,9 @@ export default function HospitalDashboard() {
     { id: '2', bloodType: 'A+', unitsNeeded: 12, urgency: 'urgent', postedAt: '2 hours ago', status: 'In Transit', matchedDonors: 8 },
     { id: '3', bloodType: 'B-', unitsNeeded: 3, urgency: 'standard', postedAt: '1 day ago', status: 'Completed', matchedDonors: 4 },
   ]);
+
+  const inventoryRef = useScrollReveal();
+  const tableRef = useScrollReveal();
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -157,9 +162,9 @@ export default function HospitalDashboard() {
       </div>
 
       {/* Row 2 — Current Inventory */}
-      <div className={styles.inventorySection}>
+      <div ref={inventoryRef as any} className={`${styles.inventorySection} reveal`}>
         <h2 className={styles.sectionTitle}>Hospital Blood Supply Reserve</h2>
-        <BloodInventoryGrid inventory={MOCK_INVENTORY} />
+        <BloodInventoryGrid inventory={inventory} />
       </div>
 
       {/* Row 3 — Split Section */}
@@ -255,7 +260,7 @@ export default function HospitalDashboard() {
         </div>
 
         {/* Right: Active Requests Table */}
-        <div className={styles.tableContainer}>
+        <div ref={tableRef as any} className={`${styles.tableContainer} reveal`}>
           <h2 className={styles.sectionTitle}>Active Emergency Broadcasts</h2>
           <DataTable data={requestsList} columns={columns} />
         </div>
