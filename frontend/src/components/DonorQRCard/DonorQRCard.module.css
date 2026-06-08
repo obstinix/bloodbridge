@@ -1,0 +1,151 @@
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 340px;
+}
+
+.card {
+  width: 320px;
+  height: 200px;
+  background: linear-gradient(135deg, #1A0508 0%, #0A0A0A 60%, #0F0508 100%);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              border-color var(--duration-base) var(--ease-out);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-crimson-glow);
+  border-color: var(--crimson-soft);
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.logoIcon {
+  color: var(--crimson);
+}
+
+.logoText {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.logoTextItalic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--weight-normal);
+  color: var(--crimson);
+}
+
+.bloodTypeDisplay {
+  font-family: var(--font-display);
+  font-size: var(--text-mega);
+  font-style: italic;
+  color: var(--crimson);
+  line-height: 0.8;
+}
+
+.centerRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.qrWrapper {
+  background-color: var(--ink);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.bottomRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 2;
+}
+
+.donorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  color: var(--ink);
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-bold);
+  color: var(--status-adequate);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.expiryInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.expiryLabel {
+  font-size: var(--text-micro);
+  color: var(--ink-subtle);
+  text-transform: uppercase;
+}
+
+.expiryDate {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+}
+
+/* Background blood drop path overlay */
+.bgDropPattern {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 150px;
+  height: 150px;
+  opacity: 0.04;
+  color: var(--crimson);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.downloadBtn {
+  width: 100%;
+}
