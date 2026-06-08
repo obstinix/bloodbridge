@@ -1,0 +1,109 @@
+.embedContainer {
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-sizing: border-box;
+}
+
+.embedContainerLight {
+  background-color: #F5F3F4;
+  border: 1px solid #D3D3D3;
+  color: #161A1D;
+}
+
+.logoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-2);
+}
+
+.logoRowLight {
+  border-bottom-color: #D3D3D3;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.brandLight {
+  color: #161A1D;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  background-color: var(--canvas-high);
+  color: var(--ink-muted);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.badgeLight {
+  background-color: #E0E0E0;
+  color: #555555;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.miniBar {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.barHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.barLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+}
+
+.barValue {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+
+.barValueLight {
+  color: #555555;
+}
+
+.track {
+  height: 6px;
+  background-color: var(--canvas-high);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.trackLight {
+  background-color: #E0E0E0;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 2px;
+}
