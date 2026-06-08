@@ -1,26 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
-import { useInView } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
 
-export function useCountUp(target: number, duration = 1200) {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref as any, { once: true });
+export function useCountUp(target: number, duration = 1200, trigger = true) {
   const [count, setCount] = useState(0);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const step = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [isInView, target, duration]);
+    if (!trigger) return;
+    const start = performance.now();
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * target));
+      if (progress < 1) rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target, duration, trigger]);
 
-  return { ref, count };
+  return count;
 }

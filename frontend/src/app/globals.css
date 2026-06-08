@@ -216,3 +216,88 @@ img { max-width: 100%; display: block; }
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+
+/* ============================================================
+   PHASE 2 — SCROLL REVEAL SYSTEM
+   ============================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+.reveal.is-revealed { opacity: 1; transform: translateY(0); }
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+.reveal-left.is-revealed { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+.reveal-right.is-revealed { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+.reveal-scale.is-revealed { opacity: 1; transform: scale(1); }
+
+/* Stagger delays — apply .stagger to parent */
+.stagger > *:nth-child(1) { transition-delay: 0ms; }
+.stagger > *:nth-child(2) { transition-delay: 80ms; }
+.stagger > *:nth-child(3) { transition-delay: 160ms; }
+.stagger > *:nth-child(4) { transition-delay: 240ms; }
+.stagger > *:nth-child(5) { transition-delay: 320ms; }
+.stagger > *:nth-child(6) { transition-delay: 400ms; }
+.stagger > *:nth-child(7) { transition-delay: 480ms; }
+.stagger > *:nth-child(8) { transition-delay: 560ms; }
+
+.tilt-card {
+  transition: transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ============================================================
+   PHASE 2 — ADDITIONAL KEYFRAMES
+   ============================================================ */
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes borderPulse {
+  0%, 100% { border-color: var(--crimson); }
+  50%       { border-color: var(--crimson-ghost-strong); }
+}
+
+@keyframes flashUpdate {
+  0%, 100% { opacity: 1; }
+  25%       { opacity: 0.4; }
+  50%       { opacity: 1; }
+  75%       { opacity: 0.6; }
+}
+
+.barUpdated {
+  animation: flashUpdate 600ms var(--ease-out);
+}
+
+/* holographic sheen — used on donor card only */
+@keyframes holoSheen {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
