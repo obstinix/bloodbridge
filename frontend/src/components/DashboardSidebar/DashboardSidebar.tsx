@@ -1,0 +1,159 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import {
+  LayoutDashboard,
+  HeartHandshake,
+  History,
+  Contact2,
+  Settings,
+  BarChart3,
+  Database,
+  MessageSquarePlus,
+  Activity,
+  Users,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
+import styles from './DashboardSidebar.module.css';
+
+interface DashboardSidebarProps {
+  className?: string;
+}
+
+export default function DashboardSidebar({
+  className = '',
+}: DashboardSidebarProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [collapsed, setCollapsed] = useState(false);
+  const [userRole, setUserRole] = useState<'donor' | 'hospital' | 'admin'>('donor');
+  const [user, setUser] = useState({ name: 'John Doe', email: 'john@example.com' });
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsed = JSON.parse(storedUser);
+        setUser({
+          name: parsed.name || 'John Doe',
+          email: parsed.email || 'john@example.com',
+        });
+        setUserRole(parsed.role || 'donor');
+      } catch (e) {
+        // Fallback
+      }
+    }
+  }, [pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    router.push('/login');
+  };
+
+  const isActive = (path: string) => pathname === path;
+
+  // Define menu items by role
+  const getMenuItems = () => {
+    switch (userRole) {
+      case 'admin':
+        return [
+          { icon: <LayoutDashboard size={20} />, label: 'Overview', path: '/dashboard/admin' },
+          { icon: <Users size={20} />, label: 'Users', path: '/dashboard/admin/users' },
+          { icon: <Database size={20} />, label: 'Inventory', path: '/inventory' },
+          { icon: <History size={20} />, label: 'Requests', path: '/emergency' },
+          { icon: <BarChart3 size={20} />, label: 'Demand Forecast', path: '/analytics' },
+          { icon: <Activity size={20} />, label: 'System Alerts', path: '/dashboard/alerts' },
+          { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
+        ];
+      case 'hospital':
+        return [
+          { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/dashboard/hospital' },
+          { icon: <Database size={20} />, label: 'Blood Inventory', path: '/inventory' },
+          { icon: <MessageSquarePlus size={20} />, label: 'Submit Request', path: '/dashboard/hospital/request' },
+          { icon: <History size={20} />, label: 'Request History', path: '/emergency' },
+          { icon: <BarChart3 size={20} />, label: 'Analytics', path: '/analytics' },
+          { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
+        ];
+      case 'donor':
+      default:
+        return [
+          { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/dashboard/donor' },
+          { icon: <HeartHandshake size={20} />, label: 'Donate Now', path: '/dashboard/donor/donate' },
+          { icon: <History size={20} />, label: 'My History', path: '/dashboard/donor/history' },
+          { icon: <Contact2 size={20} />, label: 'My Donor Card', path: '/donor-card' },
+          { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
+        ];
+    }
+  };
+
+  const menuItems = getMenuItems();
+  const initials = user.name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  return (
+    <aside
+      className={`${styles.sidebar} ${
+        collapsed ? styles.collapsed : styles.expanded
+      } ${className}`}
+    >
+      <div className={styles.topSection}>
+        {/* User Card */}
+        <div className={styles.userInfo}>
+          <div className={styles.avatar}>{initials}</div>
+          {!collapsed && (
+            <div className={styles.userMeta}>
+              <span className={styles.userName}>{user.name}</span>
+              <span className={styles.userRole}>{userRole}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Navigation items */}
+        <nav className={styles.nav}>
+          {menuItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.path}
+              className={`${styles.navItem} ${
+                isActive(item.path) ? styles.activeItem : ''
+              }`}
+            >
+              <span className={styles.icon}>{item.icon}</span>
+              {!collapsed && <span>{item.label}</span>}
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      <div className={styles.bottomSection}>
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          className={`${styles.navItem} ${styles.logout}`}
+        >
+          <span className={styles.icon}>
+            <LogOut size={20} />
+          </span>
+          {!collapsed && <span>Logout</span>}
+        </button>
+
+        {/* Toggle Collapse */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className={styles.toggleBtn}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </button>
+      </div>
+    </aside>
+  );
+}
