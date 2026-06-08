@@ -1,0 +1,109 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  font-weight: var(--weight-bold);
+  border-radius: var(--radius-none);
+  border: 1px solid transparent;
+  transition: background-color var(--duration-base) var(--ease-out),
+              border-color var(--duration-base) var(--ease-out),
+              filter var(--duration-base) var(--ease-out);
+  cursor: pointer;
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--crimson);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Variants */
+.primary {
+  background-color: var(--crimson);
+  color: var(--ink-on-crimson);
+}
+.primary:hover {
+  filter: brightness(0.88);
+}
+
+.secondary {
+  background-color: var(--canvas-high);
+  color: var(--ink);
+  border-color: var(--hairline-strong);
+}
+.secondary:hover {
+  background-color: var(--canvas-overlay);
+  border-color: var(--ink-muted);
+}
+
+.ghost {
+  background-color: transparent;
+  color: var(--ink);
+}
+.ghost:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.danger {
+  background-color: var(--status-critical);
+  color: var(--ink-on-crimson);
+}
+.danger:hover {
+  filter: brightness(0.88);
+}
+
+.outline {
+  background-color: transparent;
+  color: var(--crimson);
+  border-color: var(--crimson);
+}
+.outline:hover {
+  background-color: var(--crimson-ghost);
+}
+
+/* Sizes */
+.sm {
+  font-size: var(--text-micro);
+  padding: 8px 16px;
+  height: 36px;
+}
+
+.md {
+  font-size: var(--text-caption);
+  padding: 14px 28px;
+  height: 48px;
+}
+
+.lg {
+  font-size: var(--text-small);
+  padding: 18px 40px;
+  height: 56px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
