@@ -1,0 +1,59 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wide);
+  border: 1px solid transparent;
+  text-transform: uppercase;
+}
+
+/* Sizes */
+.sm {
+  font-size: var(--text-micro);
+  padding: 2px 8px;
+}
+
+.md {
+  font-size: var(--text-caption);
+  padding: 3px 10px;
+}
+
+.lg {
+  font-size: var(--text-small);
+  padding: 4px 12px;
+}
+
+/* Blood Type Hues (A, B, AB, O) */
+.typeA {
+  background-color: rgba(232, 168, 56, 0.15);
+  border-color: rgba(232, 168, 56, 0.4);
+  color: var(--blood-a);
+}
+
+.typeB {
+  background-color: rgba(56, 168, 232, 0.15);
+  border-color: rgba(56, 168, 232, 0.4);
+  color: var(--blood-b);
+}
+
+.typeAB {
+  background-color: rgba(155, 89, 232, 0.15);
+  border-color: rgba(155, 89, 232, 0.4);
+  color: var(--blood-ab);
+}
+
+.typeO {
+  background-color: rgba(196, 30, 58, 0.15);
+  border-color: rgba(196, 30, 58, 0.4);
+  color: var(--blood-o);
+}
+
+/* Special: O- universal donor badge */
+.universalDonor {
+  background-color: var(--crimson) !important;
+  border-color: var(--crimson) !important;
+  color: var(--ink-on-crimson) !important;
+}
