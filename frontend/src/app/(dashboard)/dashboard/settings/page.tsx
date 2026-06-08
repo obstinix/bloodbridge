@@ -346,7 +346,7 @@ export default function SettingsPage() {
                 Permanently remove your credentials from the active response registry.
               </p>
               <div className={styles.tooltipContainer}>
-                <Button variant="danger" size="md" disabled style={{ width: '100%' }}>
+                <Button variant="danger" size="md" disabled fullWidth>
                   Deactivate Account
                 </Button>
                 <span className={styles.tooltipText}>Account deletion requires master administrator approval.</span>
