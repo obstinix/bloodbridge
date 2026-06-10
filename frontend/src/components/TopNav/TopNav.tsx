@@ -12,6 +12,7 @@ export default function TopNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInitials, setUserInitials] = useState('JD');
+  const [userRole, setUserRole] = useState<'donor' | 'hospital' | 'admin'>('donor');
 
   useEffect(() => {
     // Check local storage for auth details
@@ -28,6 +29,7 @@ export default function TopNav() {
           .toUpperCase()
           .slice(0, 2);
         setUserInitials(initials);
+        setUserRole(parsed.role || 'donor');
       } catch (e) {
         setUserInitials('JD');
       }
@@ -124,12 +126,12 @@ export default function TopNav() {
 
           {isLoggedIn ? (
             <>
-              <Link href="/emergency">
+              <Link href={userRole === 'hospital' ? '/dashboard/hospital/submit-request' : '/emergency'}>
                 <Button variant="primary" size="sm">
                   Emergency Request
                 </Button>
               </Link>
-              <Link href="/dashboard/profile" className={styles.avatar}>
+              <Link href="/dashboard/settings" className={styles.avatar}>
                 {userInitials}
               </Link>
             </>
