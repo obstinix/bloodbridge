@@ -154,7 +154,9 @@ export default function DonorDashboard() {
             </li>
           </ul>
         </div>
-        <Button variant="primary">Schedule Appointment</Button>
+        <Link href="/dashboard/donor/schedule">
+          <Button variant="primary">Schedule Appointment</Button>
+        </Link>
       </div>
     </div>
   );
