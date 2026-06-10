@@ -142,9 +142,11 @@ export default function DonatePage() {
           <p style={{ fontSize: '11px', opacity: 0.85 }}>
             Verify credentials on scan at check-in. This donation has been logged into your scheduler timeline.
           </p>
-          <Button variant="outline" size="sm" onClick={() => setSuccessCommitment(null)} style={{ alignSelf: 'flex-start' }}>
-            Dismiss Notification
-          </Button>
+          <div style={{ alignSelf: 'flex-start' }}>
+            <Button variant="outline" size="sm" onClick={() => setSuccessCommitment(null)}>
+              Dismiss Notification
+            </Button>
+          </div>
         </div>
       )}
 
