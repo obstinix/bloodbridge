@@ -1,7 +1,4 @@
 .banner {
-  background-color: var(--crimson);
-  color: var(--ink-on-crimson);
-  height: 44px;
   position: fixed;
   top: var(--nav-height);
   left: 0;
@@ -10,12 +7,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 44px;
   padding: 0 var(--space-5);
+  background-color: var(--crimson);
+  color: var(--ink-on-crimson);
   letter-spacing: var(--tracking-wide);
-  animation: slideDown var(--duration-slow) var(--ease-out) forwards;
   box-shadow: 0 4px 12px rgba(196, 30, 58, 0.25);
+  animation:
+    slideDown var(--duration-slow) var(--ease-out) forwards,
+    pulse-crimson 1.5s ease-in-out infinite;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
 }
 
+/* ─── Left: message + CTA ─── */
 .left {
   display: flex;
   align-items: center;
@@ -23,29 +27,41 @@
   font-family: var(--font-ui);
   font-weight: var(--weight-bold);
   font-size: var(--text-small);
+  flex: 1;
+  min-width: 0;
 }
 
-.right {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
+.icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  line-height: 1;
 }
 
-.actionBtn {
-  background-color: var(--ink);
-  color: var(--canvas);
-  font-family: var(--font-ui);
+.separator {
+  opacity: 0.6;
+  margin: 0 var(--space-1);
+}
+
+.ctaLink {
+  color: var(--ink-on-crimson);
+  text-decoration: underline;
+  text-underline-offset: 2px;
   font-weight: var(--weight-bold);
-  font-size: var(--text-micro);
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
+  font-size: var(--text-small);
+  white-space: nowrap;
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
-.actionBtn:hover {
-  opacity: 0.9;
+.ctaLink:hover {
+  opacity: 0.85;
+}
+
+/* ─── Right: dismiss ─── */
+.right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: var(--space-3);
 }
 
 .dismissBtn {
@@ -53,13 +69,13 @@
   color: rgba(255, 255, 255, 0.8);
   font-family: var(--font-ui);
   font-weight: var(--weight-medium);
-  font-size: var(--text-micro);
+  font-size: var(--text-small);
   padding: 4px 10px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: var(--radius-pill);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
+  cursor: pointer;
   transition: all var(--duration-fast) var(--ease-out);
+  line-height: 1;
 }
 
 .dismissBtn:hover {
@@ -68,11 +84,30 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.stackIndicator {
-  background-color: rgba(0, 0, 0, 0.35);
-  font-family: var(--font-mono);
-  font-size: var(--text-micro);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  margin-left: var(--space-2);
+/* ─── Progress bar (drains left→right) ─── */
+.progressTrack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  transform-origin: left center;
+  animation: drain var(--dismiss-duration, 8000ms) linear forwards;
+}
+
+@keyframes drain {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
 }
