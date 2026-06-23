@@ -21,10 +21,10 @@ const MOCK_CENTERS = [
   { id: 'c3', name: 'Bandra Blood Bank Center', distance: '7.5 km' },
 ];
 
-// Calculation of eligibility: 56 days from May 12, 2026 => July 7, 2026
+// Calculation of eligibility: 56 days from May 12, 2026
 const LAST_DONATION_DATE = new Date(2026, 4, 12); // May 12, 2026
 const ELIGIBILITY_DATE = new Date(LAST_DONATION_DATE.getTime() + 56 * 24 * 60 * 60 * 1000);
-const TODAY = new Date(2026, 5, 9); // June 9, 2026
+const TODAY = new Date();
 
 export default function DonationSchedulerPage() {
   const [selectedDate, setSelectedDate] = useState<string>('');
@@ -239,6 +239,23 @@ export default function DonationSchedulerPage() {
         <p className={styles.subtitle}>
           Select an available day cells. A 56-day medical safety deferral period is automatically enforced since your last donation on 12th May 2026.
         </p>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 'var(--space-2)',
+          padding: 'var(--space-1) var(--space-3)',
+          border: `1px solid ${countdownDays === 0 ? 'var(--status-adequate)' : 'var(--hairline-mid)'}`,
+          borderRadius: 'var(--radius-pill)',
+          fontFamily: 'var(--font-mono)',
+          fontSize: 'var(--text-caption)',
+          color: countdownDays === 0 ? 'var(--status-adequate)' : 'var(--ink-muted)',
+          backgroundColor: countdownDays === 0 ? 'rgba(39,174,96,0.1)' : 'transparent',
+          marginBottom: 'var(--space-4)',
+        }}>
+          {countdownDays === 0
+            ? '✓ You are eligible to donate now'
+            : `Next eligible: ${ELIGIBILITY_DATE.toDateString()} (${countdownDays} days)`}
+        </div>
       </div>
 
       {/* 4-Week Timeline Strip + Countdown */}
