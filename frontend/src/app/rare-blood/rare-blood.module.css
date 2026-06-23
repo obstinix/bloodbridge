@@ -186,8 +186,45 @@
 /* Search panel results */
 .searchRow {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-2);
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.resultsBadge {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  background-color: var(--canvas-high);
+  border: 1px solid var(--hairline);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-4);
+  font-weight: var(--weight-medium);
+  width: max-content;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-4);
+  border: 1px solid var(--crimson);
+  border-radius: var(--radius-md);
+  background-color: rgba(196, 30, 58, 0.03);
+  text-align: center;
+}
+
+.emptyText {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 240px;
 }
 
 .resultsList {

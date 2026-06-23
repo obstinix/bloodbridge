@@ -1,9 +1,17 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import Link from 'next/link';
 import Button from '@/components/Button/Button';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import styles from './rare-blood.module.css';
+
+const RARITY_TIERS: Record<string, string> = {
+  'Bombay (Oh)': 'Extremely Rare',
+  'Golden Blood (Rhnull)': 'Extremely Rare',
+  'AB-': 'Rare',
+  'B-': 'Uncommon',
+};
 
 interface RareDonor {
   id: string;
@@ -57,7 +65,8 @@ export default function RareBloodRegistryPage() {
   
   const [searchType, setSearchType] = useState<string>('All');
   const [searchCity, setSearchCity] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<RareDonor[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchTier, setSearchTier] = useState<string>('All');
 
   const revealRefGrid = useScrollReveal();
   const revealRefLayout = useScrollReveal();
@@ -78,7 +87,6 @@ export default function RareBloodRegistryPage() {
       localStorage.setItem('bb_registry', JSON.stringify(MOCK_RARE_DONORS));
     }
     setRegistry(loadedRegistry);
-    setSearchResults(loadedRegistry);
   }, []);
 
   const handleRegister = (e: React.FormEvent) => {
@@ -106,26 +114,39 @@ export default function RareBloodRegistryPage() {
     setFormCity('');
     setFormContact('');
     
-    // Refresh search results
-    setSearchResults(updated);
-    
     alert(`Thank you! You have been successfully registered under the anonymized ID: ${anonName}.`);
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  const searchResults = useMemo(() => {
     let filtered = registry;
 
+    // Unified text search: matches name, blood type, or city
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(d =>
+        d.name.toLowerCase().includes(q) ||
+        d.bloodType.toLowerCase().includes(q) ||
+        d.city.toLowerCase().includes(q)
+      );
+    }
+
+    // Blood type dropdown filter
     if (searchType !== 'All') {
       filtered = filtered.filter(d => d.bloodType === searchType);
     }
-    
+
+    // Rarity tier dropdown filter
+    if (searchTier !== 'All') {
+      filtered = filtered.filter(d => RARITY_TIERS[d.bloodType] === searchTier);
+    }
+
+    // City filter
     if (searchCity.trim()) {
       filtered = filtered.filter(d => d.city.toLowerCase().includes(searchCity.toLowerCase().trim()));
     }
 
-    setSearchResults(filtered);
-  };
+    return filtered;
+  }, [registry, searchQuery, searchType, searchTier, searchCity]);
 
   const handleRequestContact = (donor: RareDonor) => {
     alert(`Emergency Contact Request submitted successfully for ${donor.name} (${donor.bloodType}) in ${donor.city}.\nVerification processes have been initiated with hospital credentials.`);
@@ -251,44 +272,68 @@ export default function RareBloodRegistryPage() {
         {/* Right Column: Search Panel */}
         <div ref={searchSectionRef} className={styles.panel}>
           <h2 className={styles.panelTitle}>Verify Rare Stock Registry</h2>
-          
-          <form className={styles.form} onSubmit={handleSearch}>
-            <div className={styles.searchRow}>
-              <select
-                className={styles.select}
-                value={searchType}
-                onChange={(e) => setSearchType(e.target.value)}
-              >
-                <option value="All">All Types</option>
-                <option value="Bombay (Oh)">Bombay (Oh)</option>
-                <option value="Golden Blood (Rhnull)">Golden Blood (Rhnull)</option>
-                <option value="AB-">AB-</option>
-                <option value="B-">B-</option>
-              </select>
-              
-              <input
-                type="text"
-                className={styles.input}
-                placeholder="City (e.g. Mumbai)"
-                value={searchCity}
-                onChange={(e) => setSearchCity(e.target.value)}
-              />
 
-              <Button type="submit" variant="outline">
-                Search
-              </Button>
-            </div>
-          </form>
+          {/* Unified search bar */}
+          <div className={styles.inputGroup}>
+            <span className={styles.label}>Search donors</span>
+            <input
+              type="text"
+              className={styles.input}
+              placeholder="Search by name, blood type, or region…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
 
-          <h3 className={styles.label} style={{ marginTop: 'var(--space-2)' }}>
-            Search Results ({searchResults.length})
-          </h3>
+          {/* Filter row */}
+          <div className={styles.searchRow}>
+            <select
+              className={styles.select}
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+            >
+              <option value="All">All Types</option>
+              <option value="Bombay (Oh)">Bombay (Oh)</option>
+              <option value="Golden Blood (Rhnull)">Golden Blood (Rhnull)</option>
+              <option value="AB-">AB-</option>
+              <option value="B-">B-</option>
+            </select>
+
+            <select
+              className={styles.select}
+              value={searchTier}
+              onChange={(e) => setSearchTier(e.target.value)}
+            >
+              <option value="All">All Tiers</option>
+              <option value="Extremely Rare">Extremely Rare</option>
+              <option value="Rare">Rare</option>
+              <option value="Uncommon">Uncommon</option>
+            </select>
+
+            <input
+              type="text"
+              className={styles.input}
+              placeholder="City (e.g. Mumbai)"
+              value={searchCity}
+              onChange={(e) => setSearchCity(e.target.value)}
+            />
+          </div>
+
+          {/* Results count badge */}
+          <span className={styles.resultsBadge}>
+            Showing {searchResults.length} of {registry.length} registered rare donors
+          </span>
 
           <div className={styles.resultsList}>
             {searchResults.length === 0 ? (
-              <p style={{ fontFamily: 'var(--font-ui)', color: 'var(--ink-muted)', fontSize: 'var(--text-small)' }}>
-                No registered matching rare donors found in this area.
-              </p>
+              <div className={styles.emptyState}>
+                <p className={styles.emptyText}>
+                  No rare donors match your search. Help us grow the registry.
+                </p>
+                <Link href="/register">
+                  <Button variant="primary">Register as Rare Donor</Button>
+                </Link>
+              </div>
             ) : (
               searchResults.map(donor => (
                 <div key={donor.id} className={styles.resultCard}>
