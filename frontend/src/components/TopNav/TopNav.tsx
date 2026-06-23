@@ -83,6 +83,14 @@ export default function TopNav() {
               Requests
             </Link>
             <Link
+              href="/map"
+              className={`${styles.navLink} ${
+                isActive('/map') ? styles.activeLink : ''
+              }`}
+            >
+              Live Map
+            </Link>
+            <Link
               href="/analytics"
               className={`${styles.navLink} ${
                 isActive('/analytics') ? styles.activeLink : ''
@@ -194,6 +202,13 @@ export default function TopNav() {
               className={styles.mobileDrawerLink}
             >
               Requests
+            </Link>
+            <Link
+              href="/map"
+              onClick={toggleMenu}
+              className={styles.mobileDrawerLink}
+            >
+              Live Map
             </Link>
             <Link
               href="/analytics"

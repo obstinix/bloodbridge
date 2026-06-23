@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--canvas);
+  overflow: hidden;
+}
+
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  margin-top: var(--nav-height);
+}
+
+.sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  background-color: var(--canvas-raised);
+  border-right: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sidebarTitle {
+  font-family: var(--font-ui);
+  font-size: var(--text-subtitle);
+  font-weight: var(--weight-semibold);
+  color: var(--ink);
+}
+
+.sidebarStats {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.statPill {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wider);
+  border: 1px solid var(--hairline-mid);
+  color: var(--ink-muted);
+  border-radius: var(--radius-pill);
+  padding: 2px 10px;
+}
+
+.pinList {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3) 0;
+  flex: 1;
+}
+
+.pinListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-5);
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background-color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+}
+
+.pinListItem:hover {
+  background-color: var(--canvas-high);
+}
+
+.pinListItemActive {
+  background-color: var(--crimson-ghost);
+  border-left-color: var(--crimson);
+}
+
+.pinListLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.pinUrgencyDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.dotCritical { background-color: var(--status-critical); animation: pulse-crimson 1.5s ease-in-out infinite; }
+.dotUrgent   { background-color: var(--status-low); }
+.dotStandard { background-color: var(--status-adequate); }
+
+.pinListName {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-medium);
+  color: var(--ink);
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.pinListTypes {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.mapWrapper {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.mapLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--canvas);
+}
+
+@keyframes pulse-crimson {
+  0% {
+    box-shadow: 0 0 0 0 rgba(196, 30, 58, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(196, 30, 58, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(196, 30, 58, 0);
+  }
+}
