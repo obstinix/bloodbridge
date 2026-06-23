@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Button from '@/components/Button/Button';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 import styles from './schedule.module.css';
@@ -36,6 +36,45 @@ export default function DonationSchedulerPage() {
   const revealRef1 = useScrollReveal();
   const revealRef2 = useScrollReveal();
   const revealRef3 = useScrollReveal();
+  const revealRef4 = useScrollReveal();
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const todayCellRef = useRef<HTMLDivElement>(null);
+
+  // Generate 28-day timeline starting from TODAY
+  const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  const timelineDays = useMemo(() => {
+    const days: { date: Date; label: string; monthLabel: string; dateStr: string }[] = [];
+    for (let i = 0; i < 28; i++) {
+      const d = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + i);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      days.push({
+        date: d,
+        label: String(d.getDate()),
+        monthLabel: MONTH_ABBR[d.getMonth()],
+        dateStr,
+      });
+    }
+    return days;
+  }, []);
+
+  // Countdown: days until eligibility
+  const countdownDays = useMemo(() => {
+    const diff = ELIGIBILITY_DATE.getTime() - TODAY.getTime();
+    const days = Math.ceil(diff / (24 * 60 * 60 * 1000));
+    return days > 0 ? days : 0;
+  }, []);
+
+  // Auto-scroll today cell into view
+  useEffect(() => {
+    if (todayCellRef.current && timelineRef.current) {
+      todayCellRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }, []);
 
   useEffect(() => {
     // Load from localStorage
@@ -200,6 +239,54 @@ export default function DonationSchedulerPage() {
         <p className={styles.subtitle}>
           Select an available day cells. A 56-day medical safety deferral period is automatically enforced since your last donation on 12th May 2026.
         </p>
+      </div>
+
+      {/* 4-Week Timeline Strip + Countdown */}
+      <div ref={revealRef4 as any} className={`${styles.timelineRow} reveal`}>
+        <div className={styles.timelineStrip}>
+          <h2 className={styles.timelineHeading}>Next 4 Weeks</h2>
+          <div className={styles.timelineScroll} ref={timelineRef}>
+            {timelineDays.map((day, idx) => {
+              const isPast = false; // All days start from TODAY, day 0 = today
+              const isToday = idx === 0;
+              const isEligible = day.date >= ELIGIBILITY_DATE;
+              const isSelected = selectedDate === day.dateStr;
+
+              const cellClasses = [
+                styles.timelineCell,
+                isToday ? styles.timelineCellToday : '',
+                isEligible ? styles.timelineCellEligible : styles.timelineCellDimmed,
+                isSelected ? styles.timelineCellSelected : '',
+              ].filter(Boolean).join(' ');
+
+              return (
+                <div
+                  key={day.dateStr}
+                  ref={isToday ? todayCellRef : undefined}
+                  className={cellClasses}
+                  onClick={() => handleDayClick(day.date.getFullYear(), day.date.getMonth(), day.date.getDate(), isEligible)}
+                  title={isEligible ? 'Click to select' : 'Ineligible (56-day deferral)'}
+                >
+                  <span className={styles.timelineDay}>{day.label}</span>
+                  <span className={styles.timelineMonth}>{day.monthLabel}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Countdown Sidebar */}
+        <div className={styles.countdownCard}>
+          <span className={styles.countdownLabel}>
+            {countdownDays > 0 ? 'Next Eligible In' : 'You Are Eligible'}
+          </span>
+          <span className={styles.countdownValue}>
+            {countdownDays > 0 ? countdownDays : '✓'}
+          </span>
+          <span className={styles.countdownUnit}>
+            {countdownDays > 0 ? (countdownDays === 1 ? 'day' : 'days') : 'Donate now'}
+          </span>
+        </div>
       </div>
 
       <div className={styles.layout}>

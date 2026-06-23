@@ -223,8 +223,168 @@
   gap: var(--space-2);
 }
 
+/* ─── 4-Week Timeline Strip ─── */
+.timelineRow {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.timelineStrip {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.timelineHeading {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timelineScroll {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline-strong) transparent;
+}
+
+.timelineScroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.timelineScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.timelineScroll::-webkit-scrollbar-thumb {
+  background-color: var(--hairline-strong);
+  border-radius: var(--radius-pill);
+}
+
+.timelineCell {
+  flex: 0 0 54px;
+  height: 64px;
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.timelineCell:hover {
+  border-color: var(--hairline-strong);
+  background-color: var(--canvas-high);
+}
+
+.timelineCellToday {
+  outline: 2px solid var(--crimson);
+  outline-offset: -1px;
+}
+
+.timelineCellDimmed {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.timelineCellEligible {
+  border-color: rgba(39, 174, 96, 0.4);
+}
+
+.timelineCellEligible:hover {
+  background-color: rgba(39, 174, 96, 0.05);
+  border-color: var(--status-adequate);
+}
+
+.timelineCellSelected {
+  background-color: var(--crimson) !important;
+  border-color: var(--crimson-deep) !important;
+  opacity: 1 !important;
+}
+
+.timelineCellSelected .timelineDay,
+.timelineCellSelected .timelineMonth {
+  color: var(--ink-on-crimson) !important;
+}
+
+.timelineDay {
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.timelineMonth {
+  font-family: var(--font-ui);
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ─── Countdown Card ─── */
+.countdownCard {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.countdownLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.countdownValue {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: var(--weight-bold);
+  color: var(--crimson);
+  font-style: italic;
+  margin: var(--space-1) 0;
+  line-height: 1;
+}
+
+.countdownUnit {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  line-height: 1;
+}
+
 @media (max-width: 900px) {
   .layout {
+    grid-template-columns: 1fr;
+  }
+  .timelineRow {
     grid-template-columns: 1fr;
   }
 }
