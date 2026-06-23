@@ -17,12 +17,12 @@
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  background:
-    url("data:image/svg+xml,%3Csvg width='40' height='46' viewBox='0 0 40 46' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 3L37 13v20L20 43 3 33V13z' fill='none' stroke='%23C41E3A' stroke-opacity='0.06' stroke-width='1'/%3E%3C/svg%3E") repeat,
-    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(30,5,8,1) 0%, rgba(8,8,8,1) 100%);
+  background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(30,5,8,1) 0%, rgba(8,8,8,1) 100%);
   background-color: var(--canvas-raised);
   box-shadow: var(--shadow-card);
   transition: box-shadow var(--duration-base) var(--ease-out), transform 400ms var(--ease-out);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .card:hover {

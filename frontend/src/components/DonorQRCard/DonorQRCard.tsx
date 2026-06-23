@@ -102,6 +102,7 @@ export default function DonorQRCard({
         size="md"
         className={styles.downloadBtn}
         onClick={handlePrint}
+        data-html2canvas-ignore="true"
       >
         Download Card
       </Button>
