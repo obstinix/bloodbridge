@@ -1,0 +1,81 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--canvas);
+  padding: var(--space-5);
+}
+
+.card {
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8) var(--space-7);
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+  box-shadow: var(--shadow-elevated);
+}
+
+.icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--crimson-ghost);
+  border: 1px solid var(--crimson);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-headline);
+  color: var(--ink);
+  margin: 0;
+}
+
+.body {
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  color: var(--ink-body);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--status-low);
+  animation: pulse-crimson 1.5s ease-in-out infinite;
+}
+
+.statusText {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+}
+
+.note {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--ink-subtle);
+  margin: 0;
+}
