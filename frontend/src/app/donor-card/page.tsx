@@ -4,11 +4,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import TopNav from '@/components/TopNav/TopNav';
 import DonorQRCard from '@/components/DonorQRCard/DonorQRCard';
+import DigitalDonorCard from '@/components/profile/DigitalDonorCard';
 import Button from '@/components/Button/Button';
 import styles from './donor-card.module.css';
 
 export default function DonorCardPage() {
   const [user, setUser] = useState({ name: 'John Doe', bloodType: 'O-' });
+  const [cardMode, setCardMode] = useState<'physical' | 'digital'>('physical');
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,16 +68,58 @@ export default function DonorCardPage() {
           <p className={styles.subtitle}>Verified digital identity for emergency matches response.</p>
         </div>
 
-        {/* QR Card */}
-        <div ref={cardRef} className={styles.cardWrapper}>
-          <DonorQRCard name={user.name} bloodType={user.bloodType as any} donorId="DB-98402-OB" />
+        {/* Mode Selector */}
+        <div style={{ display: 'flex', gap: 'var(--space-2)', marginBottom: 'var(--space-5)', justifyContent: 'center' }}>
+          <button
+            onClick={() => setCardMode('physical')}
+            style={{
+              padding: '6px 16px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: 'var(--text-caption)',
+              borderRadius: 'var(--radius-pill)',
+              border: `1px solid ${cardMode === 'physical' ? 'var(--crimson)' : 'var(--hairline-mid)'}`,
+              background: cardMode === 'physical' ? 'var(--crimson-ghost)' : 'transparent',
+              color: cardMode === 'physical' ? 'var(--crimson)' : 'var(--ink-muted)',
+              cursor: 'pointer',
+              transition: 'all 200ms ease',
+            }}>
+            Physical Card
+          </button>
+          <button
+            onClick={() => setCardMode('digital')}
+            style={{
+              padding: '6px 16px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: 'var(--text-caption)',
+              borderRadius: 'var(--radius-pill)',
+              border: `1px solid ${cardMode === 'digital' ? 'var(--crimson)' : 'var(--hairline-mid)'}`,
+              background: cardMode === 'digital' ? 'var(--crimson-ghost)' : 'transparent',
+              color: cardMode === 'digital' ? 'var(--crimson)' : 'var(--ink-muted)',
+              cursor: 'pointer',
+              transition: 'all 200ms ease',
+            }}>
+            Digital Card (Tap to Flip)
+          </button>
         </div>
+
+        {/* QR / Digital Card */}
+        {cardMode === 'physical' ? (
+          <div ref={cardRef} className={styles.cardWrapper}>
+            <DonorQRCard name={user.name} bloodType={user.bloodType as any} donorId="DB-98402-OB" />
+          </div>
+        ) : (
+          <div className={styles.cardWrapper}>
+            <DigitalDonorCard donorId="DB-98402-OB" name={user.name} bloodType={user.bloodType as any} />
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className={styles.btnRow}>
-          <Button variant="primary" size="md" onClick={handleDownload}>
-            Download PNG
-          </Button>
+          {cardMode === 'physical' && (
+            <Button variant="primary" size="md" onClick={handleDownload}>
+              Download PNG
+            </Button>
+          )}
           <Button variant="outline" size="md" onClick={handleShare}>
             Share Verification
           </Button>
