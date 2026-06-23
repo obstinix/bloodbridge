@@ -114,7 +114,7 @@
   display: flex;
   width: max-content;
   white-space: nowrap;
-  animation: marquee 30s linear infinite;
+  animation: marquee 28s linear infinite;
   animation-play-state: running;
   will-change: transform;
 }
