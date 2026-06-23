@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import html2canvas from 'html2canvas';
 import TopNav from '@/components/TopNav/TopNav';
 import DonorQRCard from '@/components/DonorQRCard/DonorQRCard';
 import Button from '@/components/Button/Button';
@@ -8,6 +9,7 @@ import styles from './donor-card.module.css';
 
 export default function DonorCardPage() {
   const [user, setUser] = useState({ name: 'John Doe', bloodType: 'O-' });
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -22,8 +24,22 @@ export default function DonorCardPage() {
     }
   }, []);
 
-  const handleDownload = () => {
-    alert('Preparing high-resolution PNG card download...');
+  const handleDownload = async () => {
+    const node = cardRef.current;
+    if (!node) return;
+    try {
+      const canvas = await html2canvas(node, {
+        backgroundColor: null,
+        scale: 2,
+        useCORS: true,
+      });
+      const link = document.createElement('a');
+      link.download = `bloodbridge-donor-card-${user.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (e) {
+      console.error('Download failed', e);
+    }
   };
 
   const handleShare = () => {
@@ -51,7 +67,7 @@ export default function DonorCardPage() {
         </div>
 
         {/* QR Card */}
-        <div className={styles.cardWrapper}>
+        <div ref={cardRef} className={styles.cardWrapper}>
           <DonorQRCard name={user.name} bloodType={user.bloodType as any} donorId="DB-98402-OB" />
         </div>
 
