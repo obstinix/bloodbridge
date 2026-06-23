@@ -13,6 +13,7 @@ export default function DashboardLayout({
 }) {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -44,8 +45,20 @@ export default function DashboardLayout({
     <div className={styles.dashboardRoot}>
       <TopNav />
       <div className={styles.dashboardBody}>
-        <DashboardSidebar />
-        <main className={styles.mainContent}>{children}</main>
+        <DashboardSidebar
+          collapsed={sidebarCollapsed}
+          onToggle={() => setSidebarCollapsed((c) => !c)}
+        />
+        <main
+          className={styles.mainContent}
+          style={{
+            marginLeft: sidebarCollapsed
+              ? 'var(--sidebar-collapsed)'
+              : 'var(--sidebar-width)',
+          }}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

@@ -173,3 +173,9 @@
   text-overflow: ellipsis;
   line-height: 1.6;
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+  }
+}

@@ -18,7 +18,9 @@
   overflow-y: auto;
   min-height: calc(100vh - var(--nav-height));
   margin-top: var(--nav-height);
+  margin-left: var(--sidebar-width);
   background-color: var(--canvas);
+  transition: margin-left var(--duration-base) var(--ease-out);
 }
 
 @media (max-width: 768px) {
@@ -28,5 +30,6 @@
   .mainContent {
     max-width: 100%;
     margin-top: var(--nav-height);
+    margin-left: 0 !important;
   }
 }

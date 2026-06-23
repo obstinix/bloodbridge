@@ -23,15 +23,18 @@ import {
 import styles from './DashboardSidebar.module.css';
 
 interface DashboardSidebarProps {
+  collapsed: boolean;
+  onToggle: () => void;
   className?: string;
 }
 
 export default function DashboardSidebar({
+  collapsed,
+  onToggle,
   className = '',
 }: DashboardSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [collapsed, setCollapsed] = useState(false);
   const [userRole, setUserRole] = useState<'donor' | 'hospital' | 'admin'>('donor');
   const [user, setUser] = useState({ name: 'John Doe', email: 'john@example.com' });
   const [hasMounted, setHasMounted] = useState(false);
@@ -176,7 +179,7 @@ export default function DashboardSidebar({
 
         {/* Toggle Collapse */}
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={onToggle}
           className={styles.toggleBtn}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
