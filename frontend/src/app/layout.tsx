@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
+import EmergencyBannerWrapper from '@/components/EmergencyBanner/EmergencyBannerWrapper';
 
 export const metadata: Metadata = {
   title: 'BloodBridge — Emergency Blood Response Network',
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ServiceWorkerRegistrar />
+        <EmergencyBannerWrapper />
         {children}
       </body>
     </html>
