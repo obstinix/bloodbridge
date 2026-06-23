@@ -25,6 +25,67 @@ export default function LandingPage() {
       {/* SECTION A: Full-Viewport Hero */}
       <section className={styles.hero}>
         <div className={styles.hexGrid} />
+
+        {/* LOOPING LINE ANIMATION */}
+        <div className={styles.lineCanvas} aria-hidden="true">
+          <svg
+            viewBox="0 0 1440 700"
+            preserveAspectRatio="xMidYMid slice"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Line 1 — upper zone, slow */}
+            <path
+              className={styles.flowLine}
+              d="M -120 160 H 240 L 280 190 H 480 L 520 160 H 840 L 880 190 H 1100 L 1140 160 H 1560"
+              style={{ animationDuration: '9s', animationDelay: '0s' }}
+            />
+            <circle className={styles.flowDot} cx="0" cy="160" r="2.5"
+              style={{ animationDelay: '0s' }}
+            />
+
+            {/* Line 2 — mid upper, faster, offset */}
+            <path
+              className={styles.flowLine}
+              d="M -200 280 H 160 L 200 310 H 380 L 420 280 H 700 L 740 310 H 980 L 1020 280 H 1340 L 1380 310 H 1640"
+              style={{ animationDuration: '7s', animationDelay: '1.5s', strokeWidth: '0.75' }}
+            />
+            <circle className={styles.flowDot} cx="0" cy="280" r="2"
+              style={{ animationDelay: '1.5s', animationDuration: '2.5s' }}
+            />
+
+            {/* Line 3 — center, thicker, slowest */}
+            <path
+              className={styles.flowLine}
+              d="M -80 350 H 300 L 360 390 H 560 L 620 350 H 920 L 980 390 H 1180 L 1240 350 H 1560"
+              style={{ animationDuration: '11s', animationDelay: '3s', strokeWidth: '1.5', opacity: 0.5 }}
+            />
+            <circle className={styles.flowDot} cx="0" cy="350" r="3"
+              style={{ animationDelay: '3s', animationDuration: '1.8s' }}
+            />
+
+            {/* Line 4 — lower mid, fast faint */}
+            <path
+              className={styles.flowLineFaint}
+              d="M -160 430 H 200 L 240 450 H 460 L 500 430 H 780 L 820 450 H 1060 L 1100 430 H 1460"
+              style={{ animationDuration: '6s', animationDelay: '0.8s' }}
+            />
+
+            {/* Line 5 — bottom zone, very faint */}
+            <path
+              className={styles.flowLineFaint}
+              d="M -100 530 H 180 L 220 510 H 500 L 540 530 H 820 L 860 510 H 1100 L 1140 530 H 1560"
+              style={{ animationDuration: '14s', animationDelay: '2.2s' }}
+            />
+
+            {/* Line 6 — upper faint diagonal hint */}
+            <path
+              className={styles.flowLineFaint}
+              d="M -200 100 H 300 L 340 130 H 620 L 660 100 H 980 L 1020 130 H 1280 L 1320 100 H 1640"
+              style={{ animationDuration: '10s', animationDelay: '4.5s' }}
+            />
+          </svg>
+        </div>
+
         <div className={styles.heroContent}>
           <div className={styles.heroBadge}>Live Emergency Network</div>
           <h1 className={styles.headline}>Every Second Counts.</h1>
@@ -93,6 +154,41 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* FLOATING STATS CARDS — bridge between hero and inventory */}
+      <div className={styles.floatCardsSection}>
+        <div className={styles.floatCard}>
+          <div className={styles.floatCardIcon}>🩸</div>
+          <div className={styles.floatCardValue}>
+            {inventory.filter(i => i.units / i.maxCapacity <= 0.2).length}
+          </div>
+          <div className={styles.floatCardLabel}>Critical Types</div>
+          <div className={styles.floatCardSub}>Below 20% capacity</div>
+        </div>
+
+        <div className={styles.floatCard}>
+          <div className={styles.floatCardIcon}>📦</div>
+          <div className={styles.floatCardValue}>
+            {inventory.reduce((sum, i) => sum + i.units, 0).toLocaleString()}
+          </div>
+          <div className={styles.floatCardLabel}>Units Available</div>
+          <div className={styles.floatCardSub}>Across all blood types</div>
+        </div>
+
+        <div className={styles.floatCard}>
+          <div className={styles.floatCardIcon}>⚡</div>
+          <div className={styles.floatCardValue}>847</div>
+          <div className={styles.floatCardLabel}>Partner Hospitals</div>
+          <div className={styles.floatCardSub}>Live network</div>
+        </div>
+
+        <div className={styles.floatCard}>
+          <div className={styles.floatCardIcon}>💉</div>
+          <div className={styles.floatCardValue}>99.2%</div>
+          <div className={styles.floatCardLabel}>Match Rate</div>
+          <div className={styles.floatCardSub}>Emergency fulfillment</div>
+        </div>
+      </div>
 
       {/* SECTION B: Blood Inventory Snapshot */}
       <section ref={inventoryRef as any} className={`${styles.section} reveal`}>

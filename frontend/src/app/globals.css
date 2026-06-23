@@ -301,3 +301,40 @@ img { max-width: 100%; display: block; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* Floating card ambient animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes floatB {
+  0%, 100% { transform: translateY(-4px); }
+  50%       { transform: translateY(4px); }
+}
+
+/* Flowing network line animation */
+@keyframes lineFlow {
+  0%   { stroke-dashoffset: 1000; opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 0.6; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes linePulse {
+  0%, 100% { r: 2; opacity: 0.4; }
+  50%       { r: 4; opacity: 1; }
+}
+
+@keyframes lineFlowSlow {
+  0%   { stroke-dashoffset: 1400; opacity: 0; }
+  8%   { opacity: 0.4; }
+  92%  { opacity: 0.2; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* Vertical scroll feed animation */
+@keyframes scrollUp {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-33.33%); }
+}
