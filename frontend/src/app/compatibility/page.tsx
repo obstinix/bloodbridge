@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import BloodTypeBadge, { BloodType } from '@/components/BloodTypeBadge/BloodTypeBadge';
 import InventoryBar from '@/components/InventoryBar/InventoryBar';
 import { useRealTimeInventory } from '@/lib/useRealTimeSimulation';
@@ -8,6 +8,8 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 import styles from './compatibility.module.css';
 
 const BLOOD_TYPES: BloodType[] = ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'];
+
+type SelectorMode = 'donor' | 'recipient';
 
 // Row (Outer Key) = Donor, Column (Inner Key) = Recipient
 export const COMPATIBILITY_MATRIX: Record<BloodType, Record<BloodType, boolean>> = {
@@ -25,6 +27,48 @@ export default function CompatibilityPage() {
   const [selectedRecipient, setSelectedRecipient] = useState<BloodType>('O-');
   const [hoveredRow, setHoveredRow] = useState<BloodType | null>(null);
   const [hoveredCol, setHoveredCol] = useState<BloodType | null>(null);
+
+  // Selector state
+  const [selectorMode, setSelectorMode] = useState<SelectorMode>('donor');
+  const [selectorType, setSelectorType] = useState<BloodType | null>(null);
+
+  const handleSelectorClick = useCallback((type: BloodType) => {
+    setSelectorType(prev => (prev === type ? null : type));
+  }, []);
+
+  const toggleMode = useCallback(() => {
+    setSelectorMode(prev => (prev === 'donor' ? 'recipient' : 'donor'));
+    setSelectorType(null);
+  }, []);
+
+  // Derive which rows/cols should be highlighted from the selector
+  const isRowHighlighted = (donorRow: BloodType): boolean => {
+    if (!selectorType) return false;
+    if (selectorMode === 'donor') {
+      // Donor mode: highlight the row of the selected donor
+      return donorRow === selectorType;
+    }
+    // Recipient mode: highlight donor rows that CAN donate to the selected recipient
+    return COMPATIBILITY_MATRIX[donorRow][selectorType];
+  };
+
+  const isColHighlighted = (recipientCol: BloodType): boolean => {
+    if (!selectorType) return false;
+    if (selectorMode === 'recipient') {
+      // Recipient mode: highlight the column of the selected recipient
+      return recipientCol === selectorType;
+    }
+    // Donor mode: highlight recipient columns that CAN receive from the selected donor
+    return COMPATIBILITY_MATRIX[selectorType][recipientCol];
+  };
+
+  const isCellSelectorMatch = (donorRow: BloodType, recipientCol: BloodType): boolean => {
+    if (!selectorType) return false;
+    if (selectorMode === 'donor') {
+      return donorRow === selectorType && COMPATIBILITY_MATRIX[selectorType][recipientCol];
+    }
+    return recipientCol === selectorType && COMPATIBILITY_MATRIX[donorRow][selectorType];
+  };
 
   const inventory = useRealTimeInventory();
   
@@ -45,6 +89,49 @@ export default function CompatibilityPage() {
         </p>
       </div>
 
+      {/* Selector Panel */}
+      <div className={styles.selectorPanel}>
+        <div className={styles.selectorRow}>
+          <span className={styles.selectorLabel}>I am blood type</span>
+          <div className={styles.pillGroup}>
+            {BLOOD_TYPES.map(type => (
+              <button
+                key={`sel-${type}`}
+                className={[
+                  styles.pill,
+                  selectorType === type ? styles.pillActive : '',
+                ].filter(Boolean).join(' ')}
+                onClick={() => handleSelectorClick(type)}
+                aria-pressed={selectorType === type}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.selectorRow}>
+          <span className={styles.selectorLabel}>Show me</span>
+          <button
+            className={styles.modeToggle}
+            onClick={toggleMode}
+            aria-label={`Currently showing ${selectorMode === 'donor' ? 'who I can donate to' : 'who can donate to me'}. Click to switch.`}
+          >
+            <span className={`${styles.modeOption} ${selectorMode === 'donor' ? styles.modeOptionActive : ''}`}>
+              Who I can donate to
+            </span>
+            <span className={`${styles.modeOption} ${selectorMode === 'recipient' ? styles.modeOptionActive : ''}`}>
+              Who can donate to me
+            </span>
+          </button>
+          {selectorType && (
+            <button className={styles.clearBtn} onClick={() => setSelectorType(null)}>
+              Clear
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Section A: Interactive Matrix */}
       <div ref={revealRef1 as any} className={`${styles.section} reveal`}>
         <h2 className={styles.sectionTitle}>Interactive Compatibility Matrix</h2>
@@ -59,11 +146,12 @@ export default function CompatibilityPage() {
                   const isOMinus = donor === 'O-';
                   const isABPlus = donor === 'AB+';
                   const isHovered = hoveredCol === donor;
+                  const colSel = isColHighlighted(donor);
                   
                   return (
                     <th 
                       key={`col-${donor}`} 
-                      className={`${styles.th} ${isOMinus ? styles.highlightUniversalDonor : ''} ${isABPlus ? styles.highlightUniversalRecipient : ''} ${isHovered ? styles.highlightHovered : ''}`}
+                      className={`${styles.th} ${isOMinus ? styles.highlightUniversalDonor : ''} ${isABPlus ? styles.highlightUniversalRecipient : ''} ${isHovered ? styles.highlightHovered : ''} ${colSel ? styles.selectorColHighlight : ''}`}
                       onMouseEnter={() => setHoveredCol(donor)}
                       onMouseLeave={() => setHoveredCol(null)}
                     >
@@ -78,11 +166,12 @@ export default function CompatibilityPage() {
                 const isOMinusRecipient = recipient === 'O-';
                 const isABPlusRecipient = recipient === 'AB+';
                 const isRowHovered = hoveredRow === recipient;
+                const rowSel = isRowHighlighted(recipient);
 
                 return (
-                  <tr key={`row-${recipient}`}>
+                  <tr key={`row-${recipient}`} className={rowSel ? styles.selectorRowHighlight : ''}>
                     <td 
-                      className={`${styles.td} ${styles.th} ${isOMinusRecipient ? styles.highlightUniversalDonor : ''} ${isABPlusRecipient ? styles.highlightUniversalRecipient : ''} ${isRowHovered ? styles.highlightHovered : ''}`}
+                      className={`${styles.td} ${styles.th} ${isOMinusRecipient ? styles.highlightUniversalDonor : ''} ${isABPlusRecipient ? styles.highlightUniversalRecipient : ''} ${isRowHovered ? styles.highlightHovered : ''} ${rowSel ? styles.selectorRowHighlight : ''}`}
                       onMouseEnter={() => setHoveredRow(recipient)}
                       onMouseLeave={() => setHoveredRow(null)}
                       style={{ textAlign: 'left', fontWeight: 'bold' }}
@@ -95,12 +184,15 @@ export default function CompatibilityPage() {
                       const isOMinusDonor = donor === 'O-';
                       const isABPlusRecipientCell = recipient === 'AB+';
                       
+                      const selMatch = isCellSelectorMatch(donor, recipient);
+
                       const cellClass = [
                         styles.td,
                         isCompatible ? styles.cellCompatible : styles.cellIncompatible,
                         isOMinusDonor ? styles.highlightUniversalDonor : '',
                         isABPlusRecipientCell ? styles.highlightUniversalRecipient : '',
                         hoveredRow === recipient || hoveredCol === donor ? styles.highlightHovered : '',
+                        selMatch ? styles.selectorCellMatch : '',
                       ].filter(Boolean).join(' ');
 
                       return (

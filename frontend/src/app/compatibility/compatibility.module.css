@@ -228,3 +228,142 @@
   color: var(--ink-muted);
   line-height: 1.5;
 }
+
+/* ============================================================
+   SELECTOR PANEL — Donor/Recipient Picker
+   ============================================================ */
+
+.selectorPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+
+.selectorRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.selectorLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  color: var(--ink);
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+/* Pill buttons group */
+.pillGroup {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.pill {
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  color: var(--ink-muted);
+  background-color: var(--canvas);
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+  user-select: none;
+}
+
+.pill:hover {
+  color: var(--ink);
+  border-color: var(--hairline-strong);
+  background-color: var(--canvas-high);
+}
+
+.pillActive {
+  color: var(--ink-on-crimson);
+  background-color: var(--crimson);
+  border-color: var(--crimson);
+  box-shadow: var(--shadow-crimson-glow);
+}
+
+.pillActive:hover {
+  background-color: var(--crimson-soft);
+  border-color: var(--crimson-soft);
+}
+
+/* Mode toggle — segmented control */
+.modeToggle {
+  display: inline-flex;
+  border: 1px solid var(--hairline-mid);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--canvas);
+  padding: 0;
+}
+
+.modeOption {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  padding: var(--space-2) var(--space-4);
+  color: var(--ink-muted);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+}
+
+.modeOptionActive {
+  background-color: var(--crimson);
+  color: var(--ink-on-crimson);
+}
+
+/* Clear button */
+.clearBtn {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline-mid);
+  background-color: var(--canvas);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.clearBtn:hover {
+  background-color: var(--canvas-high);
+  color: var(--ink);
+}
+
+/* ============================================================
+   MATRIX SELECTOR HIGHLIGHTS
+   ============================================================ */
+
+.selectorRowHighlight {
+  background-color: rgba(196, 30, 58, 0.08);
+}
+
+.selectorColHighlight {
+  background-color: rgba(196, 30, 58, 0.08);
+}
+
+.selectorCellMatch {
+  background-color: rgba(39, 174, 96, 0.28) !important;
+  box-shadow: inset 0 0 0 2px var(--status-adequate);
+  color: var(--status-adequate) !important;
+  font-weight: var(--weight-bold);
+}
