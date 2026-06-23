@@ -20,21 +20,48 @@ interface LeaderboardUser {
 export default function LeaderboardPage() {
   const [timeframe, setTimeframe] = useState<'all' | 'year' | 'month'>('all');
 
-  const top3 = [
-    { rank: 2, name: 'Donor A***1', bloodType: 'O-' as BloodType, donations: 18, livesSaved: 54, badgesEarned: 4, styleClass: styles.rank2 },
-    { rank: 1, name: 'Donor O***9', bloodType: 'AB-' as BloodType, donations: 24, livesSaved: 72, badgesEarned: 5, styleClass: styles.rank1 },
-    { rank: 3, name: 'Donor X***7', bloodType: 'B+' as BloodType, donations: 15, livesSaved: 45, badgesEarned: 4, styleClass: styles.rank3 },
-  ];
+  const getLeaderboardData = (tf: 'all' | 'year' | 'month') => {
+    const allTop3 = [
+      { rank: 2, name: 'Donor A***1', bloodType: 'O-' as BloodType, donations: 18, livesSaved: 54, badgesEarned: 4, styleClass: styles.rank2 },
+      { rank: 1, name: 'Donor O***9', bloodType: 'AB-' as BloodType, donations: 24, livesSaved: 72, badgesEarned: 5, styleClass: styles.rank1 },
+      { rank: 3, name: 'Donor X***7', bloodType: 'B+' as BloodType, donations: 15, livesSaved: 45, badgesEarned: 4, styleClass: styles.rank3 },
+    ];
+    const yearTop3 = [
+      { rank: 2, name: 'Donor M***2', bloodType: 'A+' as BloodType, donations: 8, livesSaved: 24, badgesEarned: 2, styleClass: styles.rank2 },
+      { rank: 1, name: 'Donor A***1', bloodType: 'O-' as BloodType, donations: 11, livesSaved: 33, badgesEarned: 3, styleClass: styles.rank1 },
+      { rank: 3, name: 'Donor K***5', bloodType: 'O+' as BloodType, donations: 7, livesSaved: 21, badgesEarned: 2, styleClass: styles.rank3 },
+    ];
+    const monthTop3 = [
+      { rank: 2, name: 'Donor L***4', bloodType: 'O-' as BloodType, donations: 2, livesSaved: 6, badgesEarned: 1, styleClass: styles.rank2 },
+      { rank: 1, name: 'Donor P***8', bloodType: 'A-' as BloodType, donations: 3, livesSaved: 9, badgesEarned: 1, styleClass: styles.rank1 },
+      { rank: 3, name: 'Donor J***0', bloodType: 'AB+' as BloodType, donations: 1, livesSaved: 3, badgesEarned: 1, styleClass: styles.rank3 },
+    ];
 
-  const leaderboardRows: LeaderboardUser[] = [
-    { rank: 4, name: 'Donor M***2', bloodType: 'A+' as BloodType, donations: 12, livesSaved: 36, badgesEarned: 3 },
-    { rank: 5, name: 'Donor K***5', bloodType: 'O+' as BloodType, donations: 11, livesSaved: 33, badgesEarned: 3 },
-    { rank: 6, name: 'Donor P***8', bloodType: 'A-' as BloodType, donations: 9, livesSaved: 27, badgesEarned: 2 },
-    { rank: 7, name: 'Donor R***3', bloodType: 'B-' as BloodType, donations: 8, livesSaved: 24, badgesEarned: 2 },
-    { rank: 8, name: 'Donor J***0', bloodType: 'AB+' as BloodType, donations: 7, livesSaved: 21, badgesEarned: 2 },
-    { rank: 9, name: 'Donor L***4', bloodType: 'O-' as BloodType, donations: 6, livesSaved: 18, badgesEarned: 1 },
-    { rank: 10, name: 'Donor H***6', bloodType: 'A+' as BloodType, donations: 5, livesSaved: 15, badgesEarned: 1 },
-  ];
+    const allRows: LeaderboardUser[] = [
+      { rank: 4, name: 'Donor M***2', bloodType: 'A+' as BloodType, donations: 12, livesSaved: 36, badgesEarned: 3 },
+      { rank: 5, name: 'Donor K***5', bloodType: 'O+' as BloodType, donations: 11, livesSaved: 33, badgesEarned: 3 },
+      { rank: 6, name: 'Donor P***8', bloodType: 'A-' as BloodType, donations: 9, livesSaved: 27, badgesEarned: 2 },
+      { rank: 7, name: 'Donor R***3', bloodType: 'B-' as BloodType, donations: 8, livesSaved: 24, badgesEarned: 2 },
+      { rank: 8, name: 'Donor J***0', bloodType: 'AB+' as BloodType, donations: 7, livesSaved: 21, badgesEarned: 2 },
+      { rank: 9, name: 'Donor L***4', bloodType: 'O-' as BloodType, donations: 6, livesSaved: 18, badgesEarned: 1 },
+      { rank: 10, name: 'Donor H***6', bloodType: 'A+' as BloodType, donations: 5, livesSaved: 15, badgesEarned: 1 },
+    ];
+    const yearRows: LeaderboardUser[] = [
+      { rank: 4, name: 'Donor X***7', bloodType: 'B+' as BloodType, donations: 6, livesSaved: 18, badgesEarned: 2 },
+      { rank: 5, name: 'Donor R***3', bloodType: 'B-' as BloodType, donations: 5, livesSaved: 15, badgesEarned: 1 },
+      { rank: 6, name: 'Donor H***6', bloodType: 'A+' as BloodType, donations: 4, livesSaved: 12, badgesEarned: 1 },
+    ];
+    const monthRows: LeaderboardUser[] = [
+      { rank: 4, name: 'Donor R***3', bloodType: 'B-' as BloodType, donations: 1, livesSaved: 3, badgesEarned: 1 },
+      { rank: 5, name: 'Donor H***6', bloodType: 'A+' as BloodType, donations: 1, livesSaved: 3, badgesEarned: 0 },
+    ];
+
+    if (tf === 'year') return { top3: yearTop3, rows: yearRows };
+    if (tf === 'month') return { top3: monthTop3, rows: monthRows };
+    return { top3: allTop3, rows: allRows };
+  };
+
+  const { top3, rows: leaderboardRows } = getLeaderboardData(timeframe);
 
   const columns = [
     {
