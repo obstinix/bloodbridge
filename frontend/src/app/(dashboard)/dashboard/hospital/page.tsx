@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import StatsCard from '@/components/StatsCard/StatsCard';
 import BloodInventoryGrid from '@/components/BloodInventoryGrid/BloodInventoryGrid';
 import DataTable from '@/components/DataTable/DataTable';
@@ -260,9 +261,47 @@ export default function HospitalDashboard() {
         </div>
 
         {/* Right: Active Requests Table */}
-        <div ref={tableRef as any} className={`${styles.tableContainer} reveal`}>
+        <div ref={tableRef as any} className={`${styles.tableContainer} reveal`} style={{ minWidth: 0 }}>
           <h2 className={styles.sectionTitle}>Active Emergency Broadcasts</h2>
-          <DataTable data={requestsList} columns={columns} />
+          {requestsList.length === 0 ? (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 'var(--space-9) var(--space-5)',
+              gap: 'var(--space-4)',
+              border: '1px dashed var(--hairline-strong)',
+              borderRadius: 'var(--radius-lg)',
+              textAlign: 'center',
+            }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+                stroke="var(--ink-subtle)" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              <div>
+                <p style={{ fontFamily: 'var(--font-ui)', fontWeight: 'var(--weight-semibold)',
+                  color: 'var(--ink)', marginBottom: 'var(--space-1)' }}>
+                  No active requests
+                </p>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: 'var(--text-small)',
+                  color: 'var(--ink-muted)' }}>
+                  Submit your first emergency blood request to begin tracking fulfillment.
+                </p>
+              </div>
+              <Button variant="primary" size="sm" onClick={() => {
+                // Focus on the first input inside form container as a fallback action
+                const inputEl = document.querySelector('select');
+                if (inputEl) inputEl.focus();
+              }}>
+                Start Request →
+              </Button>
+            </div>
+          ) : (
+            <DataTable data={requestsList} columns={columns} />
+          )}
         </div>
       </div>
     </div>
