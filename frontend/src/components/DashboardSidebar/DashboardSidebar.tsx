@@ -62,7 +62,7 @@ export default function DashboardSidebar({
       case 'admin':
         return [
           { icon: <LayoutDashboard size={20} />, label: 'Overview', path: '/dashboard/admin' },
-          { icon: <Users size={20} />, label: 'Users', path: '/dashboard/admin/users' },
+          { icon: <Users size={20} />, label: 'Users', path: '/dashboard/admin' },
           { icon: <Database size={20} />, label: 'Inventory', path: '/inventory' },
           { icon: <History size={20} />, label: 'Requests', path: '/emergency' },
           { icon: <BarChart3 size={20} />, label: 'Demand Forecast', path: '/analytics' },
