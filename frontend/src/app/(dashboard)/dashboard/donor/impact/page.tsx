@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import StatsCard from '@/components/StatsCard/StatsCard';
 import { useCountUp } from '@/hooks/useCountUp';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
@@ -48,6 +48,26 @@ export default function DonorImpactPage() {
   // Animate counters
   const animatedLives = useCountUp(donationsCount * 3, 1500, triggerCount);
   const animatedDonations = useCountUp(donationsCount, 1200, triggerCount);
+  const animatedUnits = useCountUp(donationsCount * 450, 1400, triggerCount);
+  const animatedStreak = useCountUp(14, 1000, triggerCount);
+
+  // SVG progress ring
+  const RING_RADIUS = 90;
+  const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+  const LIVES_TARGET = 75;
+  const livesTotal = donationsCount * 3;
+  const ringPercent = Math.min(livesTotal / LIVES_TARGET, 1);
+  const targetOffset = RING_CIRCUMFERENCE * (1 - ringPercent);
+  const [dashOffset, setDashOffset] = useState(RING_CIRCUMFERENCE);
+
+  useEffect(() => {
+    if (!triggerCount) return;
+    // Delay slightly so the initial full-offset renders first
+    const raf = requestAnimationFrame(() => {
+      setDashOffset(targetOffset);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [triggerCount, targetOffset]);
 
   const revealRef1 = useScrollReveal();
   const revealRef2 = useScrollReveal();
@@ -161,6 +181,66 @@ export default function DonorImpactPage() {
       <div className={styles.header}>
         <h1 className={styles.title}>Your Impact Journey</h1>
         <p className={styles.subtitle}>Supervise your active achievements and logged donations history.</p>
+      </div>
+
+      {/* Progress Ring */}
+      <div className={styles.ringSection}>
+        <div className={styles.ringWrapper}>
+          <svg
+            className={styles.ringSvg}
+            width="220"
+            height="220"
+            viewBox="0 0 220 220"
+            aria-label={`Impact score: ${livesTotal} lives contributed out of ${LIVES_TARGET} target`}
+          >
+            {/* Track */}
+            <circle
+              className={styles.ringTrack}
+              cx="110"
+              cy="110"
+              r={RING_RADIUS}
+              fill="none"
+              strokeWidth="12"
+            />
+            {/* Progress */}
+            <circle
+              className={styles.ringProgress}
+              cx="110"
+              cy="110"
+              r={RING_RADIUS}
+              fill="none"
+              strokeWidth="12"
+              strokeLinecap="round"
+              strokeDasharray={RING_CIRCUMFERENCE}
+              strokeDashoffset={dashOffset}
+              transform="rotate(-90 110 110)"
+            />
+          </svg>
+          <div className={styles.ringCenter}>
+            <span className={styles.ringValue}>{animatedLives}</span>
+            <span className={styles.ringLabel}>lives impacted</span>
+          </div>
+        </div>
+
+        {/* Breakdown Row */}
+        <div className={styles.breakdownRow}>
+          <div className={styles.breakdownItem}>
+            <span className={styles.breakdownValue}>{animatedDonations}</span>
+            <span className={styles.breakdownLabel}>Total Donations</span>
+          </div>
+          <div className={styles.breakdownItem}>
+            <span className={styles.breakdownValue}>{animatedUnits}<small className={styles.breakdownUnit}>ml</small></span>
+            <span className={styles.breakdownLabel}>Total Units</span>
+          </div>
+          <div className={styles.breakdownItem}>
+            <span className={styles.breakdownValue}>{animatedLives}</span>
+            <span className={styles.breakdownLabel}>Lives Impacted</span>
+          </div>
+          <div className={styles.breakdownItem}>
+            <span className={styles.breakdownValue}>{animatedStreak}<small className={styles.breakdownUnit}>d</small></span>
+            <span className={styles.breakdownLabel}>Streak</span>
+          </div>
+        </div>
       </div>
 
       {/* Row 1: Hero Stats */}

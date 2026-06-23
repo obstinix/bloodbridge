@@ -205,6 +205,110 @@
   transition: width var(--duration-slow) var(--ease-out);
 }
 
+/* ─── Progress Ring Section ─── */
+.ringSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  background-color: var(--canvas-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-5);
+}
+
+.ringWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 220px;
+}
+
+.ringSvg {
+  display: block;
+}
+
+.ringTrack {
+  stroke: var(--hairline-mid);
+}
+
+.ringProgress {
+  stroke: var(--crimson);
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 0 6px var(--crimson));
+}
+
+.ringCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ringValue {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+  line-height: 1;
+  font-style: italic;
+}
+
+.ringLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: var(--space-1);
+}
+
+/* ─── Breakdown Row ─── */
+.breakdownRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.breakdownItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.breakdownValue {
+  font-family: var(--font-display);
+  font-size: var(--text-headline);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+  font-style: italic;
+  line-height: 1.1;
+}
+
+.breakdownUnit {
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  font-weight: var(--weight-normal, 400);
+  color: var(--ink-muted);
+  font-style: normal;
+  margin-left: 2px;
+}
+
+.breakdownLabel {
+  font-family: var(--font-ui);
+  font-size: var(--text-caption);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 @media (max-width: 900px) {
   .statsGrid {
     grid-template-columns: 1fr;
@@ -213,6 +317,9 @@
     grid-template-columns: 1fr;
   }
   .badgesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .breakdownRow {
     grid-template-columns: repeat(2, 1fr);
   }
 }
