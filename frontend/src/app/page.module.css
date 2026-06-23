@@ -498,13 +498,15 @@
 
 .inventorySection {
   padding: var(--space-9) var(--space-5);
-  max-width: var(--content-max);
-  margin: 0 auto;
-  width: 100%;
+  background-color: var(--canvas-raised);
   border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  width: 100%;
 }
 
 .inventorySplit {
+  max-width: var(--content-max);
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: var(--space-8);
@@ -553,7 +555,7 @@
 
 .requestsSection {
   padding: var(--space-9) var(--space-5);
-  background-color: var(--canvas-raised);
+  background-color: var(--canvas);
   border-top: 1px solid var(--hairline);
   border-bottom: 1px solid var(--hairline);
 }
@@ -594,16 +596,18 @@
 
 .awarenessSection {
   padding: var(--space-9) var(--space-5);
-  max-width: var(--content-max);
-  margin: 0 auto;
+  background-color: var(--canvas-raised);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
   width: 100%;
 }
 
 .awarenessGrid {
+  max-width: var(--content-max);
+  margin: 0 auto var(--space-6) auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-3);
-  margin-bottom: var(--space-6);
 }
 
 .awarenessCard {
@@ -660,7 +664,7 @@
 /* ─── SECTION G: SOCIAL PROOF ─── */
 
 .proofSection {
-  background-color: var(--canvas-raised);
+  background-color: var(--canvas);
   border-top: 1px solid var(--hairline);
   padding: var(--space-9) var(--space-5);
 }
