@@ -32,6 +32,7 @@ export default function DashboardSidebar({
   const [collapsed, setCollapsed] = useState(false);
   const [userRole, setUserRole] = useState<'donor' | 'hospital' | 'admin'>('donor');
   const [user, setUser] = useState({ name: 'John Doe', email: 'john@example.com' });
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -47,6 +48,7 @@ export default function DashboardSidebar({
         // Fallback
       }
     }
+    setHasMounted(true);
   }, [pathname]);
 
   const handleLogout = () => {
@@ -110,11 +112,11 @@ export default function DashboardSidebar({
       <div className={styles.topSection}>
         {/* User Card */}
         <div className={styles.userInfo}>
-          <div className={styles.avatar}>{initials}</div>
+          <div className={styles.avatar}>{hasMounted ? initials : '—'}</div>
           {!collapsed && (
             <div className={styles.userMeta}>
-              <span className={styles.userName}>{user.name}</span>
-              <span className={styles.userRole}>{userRole}</span>
+              <span className={styles.userName}>{hasMounted ? user.name : ''}</span>
+              <span className={styles.userRole}>{hasMounted ? userRole : ''}</span>
             </div>
           )}
         </div>
