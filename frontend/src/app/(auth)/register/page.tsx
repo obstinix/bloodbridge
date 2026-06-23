@@ -49,9 +49,29 @@ export default function RegisterPage() {
     <div className={styles.splitLayout}>
       {/* Left Info Panel */}
       <div className={styles.leftPanel}>
+        <svg
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.12, pointerEvents: 'none' }}
+          viewBox="0 0 400 700" preserveAspectRatio="xMidYMid slice"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="none" stroke="var(--crimson)" strokeWidth="1"
+            strokeDasharray="80 600" strokeLinecap="round"
+            d="M -80 200 H 120 L 160 240 H 280 L 320 200 H 480"
+            style={{ animation: 'lineFlow 9s linear infinite' }}
+          />
+          <path
+            fill="none" stroke="var(--crimson)" strokeWidth="0.6"
+            strokeDasharray="50 800" strokeLinecap="round"
+            d="M -60 350 H 100 L 140 380 H 300 L 340 350 H 480"
+            style={{ animation: 'lineFlow 12s linear infinite 2s', opacity: 0.5 }}
+          />
+        </svg>
         <div className={styles.leftContent}>
           <div className={styles.logoMark}>
-            <span className={styles.logoIcon}>🩸</span>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--crimson)">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+            </svg>
             <span>BloodBridge</span>
           </div>
           <p className={styles.tagline}>
