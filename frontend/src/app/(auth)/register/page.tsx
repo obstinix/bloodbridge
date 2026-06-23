@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'donor' | 'hospital' | 'admin'>('donor');
+  const [role, setRole] = useState<'donor' | 'hospital'>('donor');
   const [bloodType, setBloodType] = useState<BloodType>('O-');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -143,16 +143,6 @@ export default function RegisterPage() {
                 >
                   <span className={styles.roleIcon}>🏥</span>
                   <span className={styles.roleLabel}>Hospital</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole('admin')}
-                  className={`${styles.roleCard} ${
-                    role === 'admin' ? styles.roleCardActive : ''
-                  }`}
-                >
-                  <span className={styles.roleIcon}>⚙️</span>
-                  <span className={styles.roleLabel}>Admin</span>
                 </button>
               </div>
             </div>
