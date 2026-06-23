@@ -136,10 +136,10 @@ export default function LeaderboardPage() {
               <span className={styles.donorName}>{donor.name}</span>
               <BloodTypeBadge type={donor.bloodType} size="sm" />
               <div className={styles.donorMetric} style={{ marginTop: 'auto' }}>
-                <span style={{ color: 'var(--ink)', fontWeight: 'bold' }}>{donor.donations}</span> Donations
+                <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', color: 'var(--ink)', fontWeight: 'bold' }}>{donor.donations}</span> Donations
               </div>
               <div className={styles.donorMetric} style={{ fontSize: '10px' }}>
-                <span style={{ color: 'var(--crimson)', fontWeight: 'bold' }}>{donor.livesSaved}</span> Lives Saved
+                <span style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', color: 'var(--crimson)', fontWeight: 'bold' }}>{donor.livesSaved}</span> Lives Saved
               </div>
             </div>
           ))}
