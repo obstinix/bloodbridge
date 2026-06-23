@@ -10,6 +10,8 @@ export default function SettingsPage() {
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('Mumbai');
   const [bloodType, setBloodType] = useState<BloodType>('O-');
+  const [showToast, setShowToast] = useState(false);
+  const [saveLabel, setSaveLabel] = useState('Save Changes');
 
   // Notifications state
   const [emergencyAlerts, setEmergencyAlerts] = useState(true);
@@ -84,7 +86,12 @@ export default function SettingsPage() {
       } catch (e) {}
     }
 
-    alert('Profile settings saved successfully.');
+    setShowToast(true);
+    setSaveLabel('✓ Saved');
+    setTimeout(() => {
+      setShowToast(false);
+      setSaveLabel('Save Changes');
+    }, 2400);
   };
 
   const handleDownloadData = () => {
@@ -184,7 +191,7 @@ export default function SettingsPage() {
 
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button variant="primary" size="md" type="submit">
-              Save Profile Settings
+              {saveLabel}
             </Button>
           </div>
         </form>
@@ -355,6 +362,30 @@ export default function SettingsPage() {
           </div>
         </div>
       </section>
+
+      {/* Sliding toast */}
+      {showToast && (
+        <div style={{
+          position: 'fixed',
+          bottom: 'var(--space-6)',
+          right: 'var(--space-6)',
+          backgroundColor: 'var(--canvas-overlay)',
+          border: '1px solid var(--status-adequate)',
+          borderRadius: 'var(--radius-lg)',
+          padding: 'var(--space-3) var(--space-5)',
+          fontFamily: 'var(--font-ui)',
+          fontSize: 'var(--text-small)',
+          color: 'var(--status-adequate)',
+          boxShadow: 'var(--shadow-elevated)',
+          animation: 'slideInRight 300ms var(--ease-out)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--space-2)',
+        }}>
+          <span>✓</span> Settings saved successfully
+        </div>
+      )}
     </div>
   );
 }
