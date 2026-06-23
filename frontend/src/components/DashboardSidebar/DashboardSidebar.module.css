@@ -145,3 +145,31 @@
 .toggleBtn:hover {
   color: var(--ink);
 }
+
+/* ── Live Activity Feed ────────────────────────── */
+
+.activityFeed {
+  height: 80px;
+  overflow: hidden;
+  border-top: 1px solid var(--hairline-mid);
+  background-color: var(--canvas-high, rgba(0, 0, 0, 0.15));
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+.activityTrack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  animation: scrollUp 8s linear infinite;
+}
+
+.activityItem {
+  font-size: var(--text-micro);
+  font-family: var(--font-mono);
+  color: var(--ink-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.6;
+}

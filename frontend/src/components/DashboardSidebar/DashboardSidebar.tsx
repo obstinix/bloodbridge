@@ -1,5 +1,7 @@
 'use client';
 
+import { MOCK_EMERGENCY_REQUESTS } from '@/lib/mockData';
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -95,6 +97,15 @@ export default function DashboardSidebar({
     }
   };
 
+  /* Derive 6 activity events from mock data (3 templates × first 3 items) */
+  const activityEvents = MOCK_EMERGENCY_REQUESTS.slice(0, 3).flatMap((r) => [
+    `● ${r.bloodType} request matched — ${r.postedAt}`,
+    `● ${r.bloodType} inventory updated — ${r.postedAt}`,
+    `● New donor registered — ${r.postedAt}`,
+  ]);
+  /* Duplicate for seamless infinite scroll */
+  const feedItems = [...activityEvents, ...activityEvents];
+
   const menuItems = getMenuItems();
   const initials = user.name
     .split(' ')
@@ -139,6 +150,19 @@ export default function DashboardSidebar({
       </div>
 
       <div className={styles.bottomSection}>
+        {/* Live Activity Feed */}
+        {!collapsed && (
+          <div className={styles.activityFeed}>
+            <div className={styles.activityTrack}>
+              {feedItems.map((evt, i) => (
+                <span key={i} className={styles.activityItem}>
+                  {evt}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Logout */}
         <button
           onClick={handleLogout}
