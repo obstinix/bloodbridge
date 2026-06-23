@@ -112,9 +112,11 @@
 
 .tickerTrack {
   display: flex;
+  width: max-content;
   white-space: nowrap;
   animation: marquee 30s linear infinite;
-  padding-left: 100%;
+  animation-play-state: running;
+  will-change: transform;
 }
 
 .tickerItem {
