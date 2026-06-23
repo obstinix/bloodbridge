@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ResponsiveContainer,
   BarChart,
@@ -16,6 +16,7 @@ import {
   Tooltip,
   ReferenceLine,
 } from 'recharts';
+import { useRouter } from 'next/navigation';
 import TopNav from '@/components/TopNav/TopNav';
 import StatsCard from '@/components/StatsCard/StatsCard';
 import ForecastChart from '@/components/ForecastChart/ForecastChart';
@@ -62,8 +63,28 @@ function RoundedBar(props: any) {
 }
 
 export default function AnalyticsPage() {
+  const router = useRouter();
+  const [authorized, setAuthorized] = useState(false);
   const [dateRange, setDateRange] = useState('Last 30 Days');
   const [activePieIndex, setActivePieIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('user');
+    if (!stored) {
+      router.replace('/login');
+      return;
+    }
+    try {
+      const parsed = JSON.parse(stored);
+      if (parsed.role !== 'admin') {
+        router.replace('/dashboard/donor');
+        return;
+      }
+    } catch {}
+    setAuthorized(true);
+  }, [router]);
+
+  if (!authorized) return null;
 
   const revealRef1 = useScrollReveal({ threshold: 0.1 });
   const revealRef2 = useScrollReveal({ threshold: 0.1 });
